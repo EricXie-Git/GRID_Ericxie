@@ -1,3 +1,5 @@
+# This is GRID modified by EricXie
+
 import os
 import time
 import logging
