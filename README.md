@@ -121,6 +121,24 @@ overrides. User IDs are preserved, 0 is PAD, and the trailing source special
 node is excluded. Known user ranges come from `config.py`; for other datasets,
 the fallback assumes a square graph of size `real_users + 2`.
 
+For the supplied Weibo layout, use:
+
+```bash
+python data_preprocess.py --dataset weibo --dry-run
+python data_preprocess.py --dataset weibo
+```
+
+This reads only `dataset/origin_data/Weibo/cascade_train.json` and `graph.txt`,
+then writes `dataset/weibo`. The single JSON file is treated as a cascade pool:
+it is cleaned, sorted by cascade start time, and split using `--split-ratios`.
+The TXT graph must contain two integer user IDs per nonempty line. Its direction
+is preserved, duplicate edges and self-loops are removed, and no relation-bit
+filter is applied. Non-default `--graph-relation-bit` values are rejected for
+Weibo. Its real user range is `1..31061` from `config.py` (overridable with
+`--max-user-id`); `graph.pt` includes 31062 node slots including PAD.
+Profiles, prompts, `gt.json`, bias attention, and co-occurrence edges are not
+used. Dataset arguments `weibo`, `Weibo`, and `WEIBO` select the same preset.
+
 Training records receive up to `--neg-num 100` distinct negatives sampled with
 `--seed 21`, excluding the entire cleaned cascade and special IDs. Complete
 histories, targets, and timestamps are saved. `preprocess_report.json` records
@@ -131,7 +149,9 @@ source file and zero-based index.
 **Training compatibility:** the current loader still truncates histories to
 `--max_len` (default 200) and targets to 20. For full-target experiments, change
 the loader to dynamically pad labels and choose a history limit large enough
-(500 covers the supplied datasets). Preprocessing does not change the loader
+(500 covers the supplied Twitter/Douban/Android/Christian data; the supplied
+Weibo data needs up to 7369 observed users and 819 target users under the paper
+preset). Preprocessing does not change the loader
 or fix the existing test-set-based early stopping. Android and Christian also
 need entries in `config.py`; the report provides the required `user_num`.
 

@@ -1,0 +1,113 @@
+{
+  "dataset": "weibo",
+  "protocol_preset": "paper",
+  "input_dir": "D:\\研究生\\研究\\2026参考代码\\GRID_Ericxie\\dataset\\origin_data\\Weibo",
+  "output_dir": "D:\\研究生\\研究\\2026参考代码\\GRID_Ericxie\\dataset\\weibo",
+  "paper_reference": "https://www.comp.hkbu.edu.hk/~xinhuang/publications/pdfs/WWW2026-Diffusion.pdf",
+  "observed_ratio": "9/10",
+  "min_cascade_len": 10,
+  "split_ratios": [
+    "3/5",
+    "1/10",
+    "3/10"
+  ],
+  "boundary_rule": "floor N*train and N*(train+valid); floor L*observed_ratio",
+  "max_user_id": 31061,
+  "user_num": 31062,
+  "id_range_source": "config.py",
+  "neg_num": 100,
+  "seed": 21,
+  "negative_sampling": "uniform without replacement from 1..max_user_id excluding full cleaned cascade",
+  "source_sha256": {
+    "cascade_train.json": "d93bb7fcb4c9d8736017a225bf0b8241fe6d75da37bad70bc047fb9a4978c639",
+    "graph.txt": "f5c0350fbe7cb10e6bbe71d554ac2af0b35ec4e4312a157de57f701a02cc9815"
+  },
+  "versions": {
+    "python": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+    "torch": "2.14.0+cpu",
+    "torch_geometric": "2.8.0.post1"
+  },
+  "cleaning": {
+    "cascade_train.json": 1910,
+    "reordered_cascades": 0,
+    "removed_repeat_adoptions": 0,
+    "cascades_with_repeat_adoptions": 0,
+    "filtered_short_cascades": 574,
+    "retained_cascades": 1336,
+    "duplicate_records_retained": 0
+  },
+  "splits": {
+    "cascade_train_neg.json": {
+      "count": 801,
+      "observed_length": {
+        "min": 9,
+        "max": 7369,
+        "mean": 283.17228464419475
+      },
+      "label_length": {
+        "min": 1,
+        "max": 819,
+        "mean": 31.983770287141073
+      },
+      "observed_over_200": 121,
+      "labels_over_20": 127
+    },
+    "cascade_val.json": {
+      "count": 134,
+      "observed_length": {
+        "min": 9,
+        "max": 980,
+        "mean": 123.35074626865672
+      },
+      "label_length": {
+        "min": 1,
+        "max": 109,
+        "mean": 14.253731343283581
+      },
+      "observed_over_200": 18,
+      "labels_over_20": 20
+    },
+    "cascade_test.json": {
+      "count": 401,
+      "observed_length": {
+        "min": 9,
+        "max": 2851,
+        "mean": 139.84538653366585
+      },
+      "label_length": {
+        "min": 1,
+        "max": 317,
+        "mean": 16.037406483790523
+      },
+      "observed_over_200": 37,
+      "labels_over_20": 39
+    }
+  },
+  "graph": {
+    "source_shape": [
+      31062,
+      31062
+    ],
+    "source_nonzero_entries": 294755,
+    "relation_value_counts": {
+      "1": 294755
+    },
+    "relation_bit": null,
+    "num_nodes_including_pad": 31062,
+    "edge_count": 293661,
+    "is_undirected": false,
+    "self_loops_removed": 1094,
+    "source_format": "two-column edge list"
+  },
+  "warnings": [
+    "60/10/30 is a repository-derived default, not a verified paper dataset-split requirement.",
+    "Current dataLoader.py truncates labels to 20: use dynamic label padding for full-target evaluation.",
+    "Current --max_len=200 truncates histories; increase it to the reported maximum or use dynamic padding."
+  ],
+  "output_sha256": {
+    "cascade_train_neg.json": "698cf6077eeeb37a10bcaa593242bc532b0c3eec3d036fec4000671ba4ffce19",
+    "cascade_val.json": "85dffaad60380a68dd123885734573534477be52cc22e1a0c8232919697f1d91",
+    "cascade_test.json": "9036851950d694334283dcfac86b6e1a864ddccb12b45ee24b54dea0cae5959d",
+    "graph.pt": "e5add6a74b729c3e0cb146a251ee5a268779dc5e080ba15c9a24a95992e31d8c"
+  }
+}

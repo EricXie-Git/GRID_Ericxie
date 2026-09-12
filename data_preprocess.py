@@ -1,4 +1,4 @@
-r"""将完整传播级联 JSON 和稀疏关系图 NPZ 转换成 GRID 的输入文件。
+r"""将完整传播级联 JSON 和关系图（NPZ 或 Weibo 的 TXT）转换成 GRID 输入。
 
 使用示例（默认路径以本脚本所在的项目根目录为基准）：
 
@@ -8,6 +8,8 @@ r"""将完整传播级联 JSON 和稀疏关系图 NPZ 转换成 GRID 的输入�
     python data_preprocess.py --dataset douban
     # 输出目录已存在时，显式允许替换本脚本生成的文件，保留其他文件
     python data_preprocess.py --dataset douban --overwrite
+    # Weibo：读取 origin_data/Weibo 下的单个级联文件和 graph.txt
+    python data_preprocess.py --dataset weibo
     # 使用仓库兼容协议，将 Twitter 输出到另一个目录
     python data_preprocess.py --dataset twitter --protocol repository \
         --output-dir dataset/twitter_reprocessed
@@ -26,6 +28,8 @@ r"""将完整传播级联 JSON 和稀疏关系图 NPZ 转换成 GRID 的输入�
 
 图转换默认提取最低位关系（value & 1），删除自环，保留原始边方向。
 该规则能还原仓库 Twitter 的边集合；其他数据集的关系含义需结合来源建图代码确认。
+Weibo 的 graph.txt 是两列整数的普通边列表，直接读取，不进行关系位筛选。
+Weibo 仅读取 cascade_train.json，将其作为待划分的级联池，不混入 gt/prompt 等文件。
 用户 ID 不重新编号，0 留给 PAD，原图末尾的特殊节点不进入真实用户范围。
 此脚本不截断观测或标签，也不合成超长级联；模型加载器仍有其自身的长度限制。
 
@@ -95,6 +99,9 @@ def parse_args(argv=None):
     args = parser.parse_args(argv)
     if not args.dataset or Path(args.dataset).name != args.dataset or args.dataset in (".", ".."):
         parser.error("--dataset must be a simple directory name")
+    # 配置和输出目录使用小写 weibo；兼容命令行传入 Weibo/WEIBO。
+    if args.dataset.lower() == "weibo":
+        args.dataset = "weibo"
     # 手动指定的参数优先；未指定时才采用 paper/repository 的默认值。
     args.observed_ratio = (args.observed_ratio if args.observed_ratio is not None
                            else Fraction(9 if args.protocol == "paper" else 8, 10))
@@ -112,7 +119,11 @@ def parse_args(argv=None):
         parser.error("--graph-relation-bit must be a power of two (1, 2, 4, ...)")
     if args.max_user_id is not None and args.max_user_id < 1:
         parser.error("--max-user-id must be positive")
-    args.input_dir = (args.input_dir or ROOT / "dataset/origin_data" / args.dataset).resolve()
+    if args.dataset == "weibo" and args.graph_relation_bit != 1:
+        parser.error("Weibo graph.txt has no relation bits; do not override --graph-relation-bit")
+    # 原始目录实际命名为 Weibo，显式保留大小写以兼容 Linux。
+    source_name = "Weibo" if args.dataset == "weibo" else args.dataset
+    args.input_dir = (args.input_dir or ROOT / "dataset/origin_data" / source_name).resolve()
     args.output_dir = (args.output_dir or ROOT / "dataset" / args.dataset).resolve()
     # 防止输出覆盖原始数据；只读预检允许检查已经生成过的数据集。
     if (args.output_dir == args.input_dir or args.output_dir.is_relative_to(args.input_dir)
@@ -158,17 +169,18 @@ def checksum(path):
     return digest.hexdigest()
 
 
-def load_cascades(input_dir, max_user_id, min_length):
-    """合并原始三个集合，按时间清洗每条级联，再按级联开始时间排序。
+def load_cascades(input_dir, max_user_id, min_length, input_files=INPUT_FILES):
+    """读取指定的级联文件，按时间清洗每条级联，再按级联开始时间排序。
 
     返回 rows（清洗后的用户、时间及原始位置）和 stats（清洗数量统计）。
     此处不沿用原来的训练/验证/测试边界，后续由 make_splits 重新划分。
+    默认合并三个集合；Weibo 传入单个 cascade_train.json，其他流程相同。
     """
     rows = []
     stats = Counter()
     # 以完整的“用户-时间”序列统计重复记录，仅报告，不在这里删除整条样本。
     fingerprints = Counter()
-    for name in INPUT_FILES:
+    for name in input_files:
         with (input_dir / name).open(encoding="utf-8") as stream:
             records = json.load(stream)
         if not isinstance(records, list):
@@ -255,11 +267,40 @@ def make_splits(rows, ratios, observed_ratio, max_user_id, neg_num, seed):
     return outputs, provenance
 
 
+def load_text_graph(path, max_user_id):
+    """读取 Weibo 两列边列表（起点、终点），跳过空行，检查编号，不添加反向边。"""
+    import numpy as np
+    import scipy.sparse as sparse
+
+    edges = []
+    with path.open(encoding="utf-8-sig") as stream:
+        for line_number, line in enumerate(stream, 1):
+            fields = line.split()
+            if not fields:
+                continue
+            if len(fields) != 2:
+                raise ValueError(f"{path.name}:{line_number}: expected two integer user IDs")
+            try:
+                source, target = map(int, fields)
+            except ValueError as exc:
+                raise ValueError(f"{path.name}:{line_number}: user IDs must be integers") from exc
+            if not (1 <= source <= max_user_id and 1 <= target <= max_user_id):
+                raise ValueError(f"{path.name}:{line_number}: user IDs must be in 1..{max_user_id}")
+            edges.append((source, target))
+    if not edges:
+        raise ValueError(f"No edges found in {path}")
+    # 使用 COO 保留重复边，交给 convert_graph 统一去重；不能先求和成多关系编码。
+    indices = np.asarray(edges, dtype=np.int64)
+    return sparse.coo_matrix((np.ones(len(edges), dtype=np.int64), (indices[:, 0], indices[:, 1])),
+                             shape=(max_user_id + 1, max_user_id + 1))
+
+
 def convert_graph(adj, max_user_id, relation_bit):
     """将稀疏关系矩阵转为 PyG Data，返回图对象和统计信息。
 
     输入边值是关系编码，输出 edge_attr 统一为 1；不将编码本身当作边权。
     保留原始行→列方向，不自动补反向边，也不转成占用大量内存的稠密矩阵。
+    relation_bit=None 表示来自普通 TXT 边列表，不执行按位筛选。
     """
     import numpy as np
     import torch
@@ -275,7 +316,9 @@ def convert_graph(adj, max_user_id, relation_bit):
     values = coo.data.astype(np.int64)
     # 按位筛选关系：当 relation_bit=1 时，值为 1、3、5、7 的边均会保留。
     # 不能只判断 values == 1，否则会丢掉同时带有其他关系位的边。再去除自环。
-    selected = ((values & relation_bit) != 0) & (coo.row != coo.col)
+    selected = coo.row != coo.col
+    if relation_bit is not None:
+        selected &= (values & relation_bit) != 0
     valid = ((coo.row >= 1) & (coo.row <= max_user_id)
              & (coo.col >= 1) & (coo.col <= max_user_id))
     # 选中关系若连接了真实用户范围外的节点，说明编号假设可能有误，直接报错。
@@ -284,7 +327,7 @@ def convert_graph(adj, max_user_id, relation_bit):
     # 先得到 [边数, 2] 并去重，再转置为 PyG 要求的 [2, 边数]。
     edges = np.unique(np.stack((coo.row[selected], coo.col[selected]), axis=1), axis=0)
     if not len(edges):
-        raise ValueError("No graph edges remain; check --graph-relation-bit")
+        raise ValueError("No graph edges remain after filtering/self-loop removal")
     edge_index = torch.from_numpy(edges.T.copy()).long()
     # num_nodes 包含编号 0 的 PAD 槽位；即使某个真实用户没有边，也保留其编号空间。
     graph = Data(edge_index=edge_index, edge_attr=torch.ones(len(edges)), num_nodes=max_user_id + 1)
@@ -313,13 +356,16 @@ def run(args):
                            "python -m pip install numpy scipy torch torch-geometric") from exc
     from config import DATASET_CONFIGS
 
-    # 第一步：确认三个级联文件和图文件齐全，并读取稀疏图。
-    sources = [args.input_dir / f for f in (*INPUT_FILES, "graph.npz")]
+    # 第一步：明确数据来源。Weibo 不要求原目录存在验证/测试文件，稍后统一划分。
+    is_weibo = args.dataset == "weibo"
+    input_files = ("cascade_train.json",) if is_weibo else INPUT_FILES
+    graph_name = "graph.txt" if is_weibo else "graph.npz"
+    sources = [args.input_dir / f for f in (*input_files, graph_name)]
     for path in sources:
         if not path.is_file():
             raise FileNotFoundError(f"Missing required input: {path}")
-    adj = sparse.load_npz(sources[-1])
-    if adj.shape[0] != adj.shape[1]:
+    adj = None if is_weibo else sparse.load_npz(sources[-1])
+    if adj is not None and adj.shape[0] != adj.shape[1]:
         raise ValueError("Source graph must be square")
     # 第二步：确定真实用户编号上限。优先级：命令行 > config.py > 图大小减 2。
     # “减 2”假定来源图额外包含 PAD 和末尾特殊节点；未知数据集应核对或手动指定。
@@ -327,15 +373,21 @@ def run(args):
     max_id = args.max_user_id
     id_source = "--max-user-id"
     if max_id is None:
+        if is_weibo and config is None:
+            raise ValueError("Weibo TXT graph needs a config.py preset or --max-user-id")
         max_id = config.user_num - 1 if config else adj.shape[0] - 2
         id_source = "config.py" if config else "graph size minus PAD and final special node (assumption)"
+    # TXT 无矩阵维度，使用配置的 31061 个真实用户建图，额外保留 PAD=0 槽位。
+    if is_weibo:
+        adj = load_text_graph(sources[-1], max_id)
     if not 1 <= max_id < adj.shape[0]:
         raise ValueError("max_user_id must fit within the source graph")
     # 第三步：执行实际的数据转换；下方报告部分不再改变这些样本或图。
-    rows, cleaning = load_cascades(args.input_dir, max_id, args.min_cascade_len)
+    rows, cleaning = load_cascades(args.input_dir, max_id, args.min_cascade_len, input_files)
     outputs, provenance = make_splits(rows, args.split_ratios, args.observed_ratio,
                                      max_id, args.neg_num, args.seed)
-    graph, graph_stats = convert_graph(adj, max_id, args.graph_relation_bit)
+    graph, graph_stats = convert_graph(adj, max_id, None if is_weibo else args.graph_relation_bit)
+    graph_stats["source_format"] = "two-column edge list" if is_weibo else "relation-coded NPZ"
     # 第四步：统计输入/标签长度，提示现有加载器的 200/20 上限会影响多少条样本。
     split_stats = {}
     for name, records in outputs.items():
@@ -344,9 +396,10 @@ def run(args):
                              "label_length": length_stats([len(r["label"]) for r in records]),
                              "observed_over_200": sum(len(r["observed"]) > 200 for r in records),
                              "labels_over_20": sum(len(r["label"]) > 20 for r in records)}
-    warnings = ["60/10/30 is a repository-derived default, not a verified paper dataset-split requirement.",
-                "Relation bit 1 matches shipped Twitter; verify relation semantics for other source datasets."]
-    if args.graph_relation_bit != 1:
+    warnings = ["60/10/30 is a repository-derived default, not a verified paper dataset-split requirement."]
+    if not is_weibo:
+        warnings.append("Relation bit 1 matches shipped Twitter; verify relation semantics for other source datasets.")
+    if not is_weibo and args.graph_relation_bit != 1:
         warnings.append("Custom graph relation selected; this differs from the shipped Twitter graph rule.")
     if cleaning["duplicate_records_retained"]:
         warnings.append("Identical complete cascades were retained; inspect provenance before comparing splits.")
@@ -387,7 +440,8 @@ def run(args):
         payload = staging / "payload"
         payload.mkdir()
         for name, records in outputs.items():
-            (payload / name).write_text(json.dumps(records, ensure_ascii=False), encoding="utf-8")
+            # 使用两空格缩进，便于直接查看级联、标签和负样本。
+            (payload / name).write_text(json.dumps(records, ensure_ascii=False, indent=2), encoding="utf-8")
         torch.save(graph, payload / "graph.pt")
         # 这里只重新读取本脚本刚保存的图，检查序列化前后的节点数、边和边属性一致。
         restored = torch.load(payload / "graph.pt", map_location="cpu", weights_only=False)
