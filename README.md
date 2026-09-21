@@ -155,6 +155,75 @@ preset). Preprocessing does not change the loader
 or fix the existing test-set-based early stopping. Android and Christian also
 need entries in `config.py`; the report provides the required `user_num`.
 
+## Graph Structure Analysis
+
+`data_analyse.py` analyses the **social graph**, not a cascade transmission tree.
+User sequences alone do not specify who infected whom. Install the analysis
+dependencies in your Python environment:
+
+```bash
+pip install numpy scipy networkx matplotlib
+python data_analyse.py --dataset weibo
+python data_analyse.py --dataset douban --no-plots
+python data_analyse.py --dataset twitter
+```
+
+Twitter is supported by the same analysis pipeline: by default it reads
+`dataset/origin_data/twitter/graph.npz`, selects relation bit 1, and uses real
+user IDs 1 through 12627 from `config.py`. No preprocessing is required.
+Results are saved to `analysis/twitter/`. To analyse the training graph instead,
+use `python data_analyse.py --dataset twitter --graph-path dataset/twitter/graph.pt`.
+
+Inputs are automatically located under `dataset/origin_data`, `dataset/origin`,
+then `dataset`, preferring raw TXT/NPZ files to PT. Use `--graph-path` to select
+a specific file. PT requires `torch` and `torch-geometric` and must come from a
+trusted source. NPZ selects relation bit 1 by default; TXT/PT do not use bit
+filtering. PAD/special nodes, self-loops and duplicate edges are removed.
+Known user ranges come from `config.py`; specify `--max-user-id` for other
+numbering conventions. All metrics use unweighted simple graphs.
+
+The output directory defaults to `analysis/<dataset>` and contains:
+
+- `summary.md`: Chinese explanation of results and limitations.
+- `analysis.json`: all metrics, distributions, parameters and source hash.
+- `diagnostics.png`: degree CCDF, clustering by degree, core numbers and BFS levels
+  (unless `--no-plots` is used).
+- `degree_distribution_linear.png`: empirical degree probabilities on linear axes,
+  including zero-degree nodes.
+- `degree_distribution_loglog.png`: the same probabilities on log-log axes;
+  zero-degree nodes are omitted and their fraction is annotated. Both plots use
+  all nodes as the denominator, without binning or fitting. Directed graphs have
+  separate panels for undirected projection degree, in-degree and out-degree.
+  `--no-plots` skips all three PNG files. Exact counts are stored in each
+  distribution's `degree_histogram` in `analysis.json`.
+
+Hierarchy diagnostics include k-core decomposition, sampled clustering versus
+degree, and, for directed graphs, strongly connected components and condensation
+DAG levels. Tree diagnostics use the undirected projection: leaves, bridges,
+tree components and cycle rank `m - n + components`. BFS layers depend on the
+selected root; condensation is always a DAG. Neither proves causal hierarchy.
+`--direction auto` treats a completely reciprocal edge set as undirected; use
+`--direction directed` or `undirected` to override that convention.
+
+Degree tails are fitted with discrete maximum likelihood, choosing `xmin` by
+minimum discrete KS distance over at most 64 candidate thresholds. The report
+also compares the fitted tail to a discrete exponential distribution. This
+comparison alone does not establish a power law. By default goodness-of-fit
+bootstrap runs **1000 simulations** (each simulated sample is refitted).
+Use `--bootstrap 0` to skip it for a quick structural analysis. For example:
+
+```bash
+python data_analyse.py --dataset weibo --bootstrap 1000 --overwrite
+```
+
+`--min-tail`, `--max-xmin-candidates` (0 searches all), `--clustering-samples`
+(0 uses all nodes), and `--seed` control the analysis. A non-rejected power-law
+tail is not proof of a power law, and network degrees violate strict iid
+assumptions. See [Clauset et al.](https://arxiv.org/abs/0706.1062) and
+[Ravasz and Barabasi](https://arxiv.org/abs/cond-mat/0206130) for the statistical
+and clustering-scaling background. Existing reports require `--overwrite`;
+other files in the output directory are preserved.
+
 ## Training and Testing
 
 Run training with:

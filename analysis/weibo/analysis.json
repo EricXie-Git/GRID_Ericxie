@@ -1,0 +1,4831 @@
+{
+  "dataset": "weibo",
+  "input": {
+    "path": "D:\\研究生\\研究\\2026参考代码\\GRID_Ericxie\\dataset\\origin_data\\Weibo\\graph.txt",
+    "format": ".txt",
+    "user_id_source": "config.py",
+    "max_user_id": 31061,
+    "selected_raw_edge_records": 294755,
+    "special_node_records_removed": 0,
+    "real_user_self_loop_records_removed": 1094,
+    "duplicate_nonloop_records_removed": 0,
+    "relation_bit": null,
+    "all_edges_reciprocal": false,
+    "direction_option": "auto",
+    "analysed_as_directed": true,
+    "weights_used": false,
+    "sha256": "f5c0350fbe7cb10e6bbe71d554ac2af0b35ec4e4312a157de57f701a02cc9815"
+  },
+  "seed": 21,
+  "parameters": {
+    "min_tail": 50,
+    "max_xmin_candidates": 64,
+    "bootstrap": 1000,
+    "clustering_samples": 1000
+  },
+  "versions": {
+    "numpy": "2.5.3",
+    "networkx": "3.6.1"
+  },
+  "tree_structure": {
+    "projection": "simple undirected, no loops",
+    "nodes": 31061,
+    "edges": 293119,
+    "components": 3,
+    "isolates": 0,
+    "leaves": 1415,
+    "leaf_fraction_nonisolated": 0.04555551978365152,
+    "is_tree": false,
+    "is_forest": false,
+    "independent_cycles": 262061,
+    "min_edge_removal_fraction_to_forest": 0.8940430337166816,
+    "bridges": 1419,
+    "bridge_fraction": 0.004841037257905492,
+    "tree_components_including_singletons": 2,
+    "tree_components_excluding_singletons": 2,
+    "nodes_in_nontrivial_tree_components": 4,
+    "largest_component_nodes": 31057,
+    "component_size_histogram": {
+      "2": 2,
+      "31057": 1
+    }
+  },
+  "hierarchy": {
+    "max_core": 47,
+    "core_histogram": {
+      "1": 1421,
+      "2": 2127,
+      "3": 2595,
+      "4": 2667,
+      "5": 2592,
+      "6": 2375,
+      "7": 2107,
+      "8": 1926,
+      "9": 1604,
+      "10": 1438,
+      "11": 1117,
+      "12": 1025,
+      "13": 902,
+      "14": 812,
+      "15": 633,
+      "16": 663,
+      "17": 563,
+      "18": 492,
+      "19": 413,
+      "20": 413,
+      "21": 307,
+      "22": 244,
+      "23": 243,
+      "24": 197,
+      "25": 275,
+      "26": 161,
+      "27": 180,
+      "28": 197,
+      "29": 162,
+      "30": 105,
+      "31": 76,
+      "32": 53,
+      "33": 123,
+      "34": 65,
+      "35": 119,
+      "36": 258,
+      "37": 90,
+      "38": 48,
+      "39": 5,
+      "40": 58,
+      "41": 105,
+      "44": 2,
+      "45": 5,
+      "46": 50,
+      "47": 48
+    },
+    "bfs_largest_component": {
+      "root": 15729,
+      "root_rule": "highest degree, smallest ID breaks ties",
+      "max_distance": 4,
+      "level_sizes": {
+        "0": 1,
+        "1": 18385,
+        "2": 10999,
+        "3": 1653,
+        "4": 19
+      },
+      "note": "Distances from one selected root, NOT tree depth or graph diameter."
+    },
+    "clustering": {
+      "sampled_nodes": 1000,
+      "population_nodes": 31061,
+      "mean": 0.3091131586910753,
+      "by_degree": [
+        {
+          "degree": 1,
+          "mean_clustering": 0.0,
+          "sample_nodes": 49
+        },
+        {
+          "degree": 2,
+          "mean_clustering": 0.4426229508196721,
+          "sample_nodes": 61
+        },
+        {
+          "degree": 3,
+          "mean_clustering": 0.38961038961038963,
+          "sample_nodes": 77
+        },
+        {
+          "degree": 4,
+          "mean_clustering": 0.3553921568627451,
+          "sample_nodes": 68
+        },
+        {
+          "degree": 5,
+          "mean_clustering": 0.38101265822784813,
+          "sample_nodes": 79
+        },
+        {
+          "degree": 6,
+          "mean_clustering": 0.36296296296296293,
+          "sample_nodes": 72
+        },
+        {
+          "degree": 7,
+          "mean_clustering": 0.2947454844006568,
+          "sample_nodes": 58
+        },
+        {
+          "degree": 8,
+          "mean_clustering": 0.33962264150943405,
+          "sample_nodes": 53
+        },
+        {
+          "degree": 9,
+          "mean_clustering": 0.2962962962962963,
+          "sample_nodes": 48
+        },
+        {
+          "degree": 10,
+          "mean_clustering": 0.28030303030303033,
+          "sample_nodes": 44
+        },
+        {
+          "degree": 11,
+          "mean_clustering": 0.3085399449035813,
+          "sample_nodes": 33
+        },
+        {
+          "degree": 12,
+          "mean_clustering": 0.31122031122031124,
+          "sample_nodes": 37
+        },
+        {
+          "degree": 13,
+          "mean_clustering": 0.3218864468864468,
+          "sample_nodes": 28
+        },
+        {
+          "degree": 14,
+          "mean_clustering": 0.3191808191808192,
+          "sample_nodes": 22
+        },
+        {
+          "degree": 15,
+          "mean_clustering": 0.23386243386243388,
+          "sample_nodes": 18
+        },
+        {
+          "degree": 16,
+          "mean_clustering": 0.308974358974359,
+          "sample_nodes": 13
+        },
+        {
+          "degree": 17,
+          "mean_clustering": 0.3067226890756303,
+          "sample_nodes": 21
+        },
+        {
+          "degree": 18,
+          "mean_clustering": 0.28355957767722473,
+          "sample_nodes": 13
+        },
+        {
+          "degree": 19,
+          "mean_clustering": 0.2838915470494418,
+          "sample_nodes": 11
+        },
+        {
+          "degree": 20,
+          "mean_clustering": 0.2866396761133603,
+          "sample_nodes": 13
+        },
+        {
+          "degree": 21,
+          "mean_clustering": 0.2671428571428572,
+          "sample_nodes": 10
+        },
+        {
+          "degree": 22,
+          "mean_clustering": 0.26022126022126024,
+          "sample_nodes": 9
+        },
+        {
+          "degree": 23,
+          "mean_clustering": 0.18379446640316205,
+          "sample_nodes": 8
+        },
+        {
+          "degree": 24,
+          "mean_clustering": 0.18196457326892113,
+          "sample_nodes": 9
+        },
+        {
+          "degree": 25,
+          "mean_clustering": 0.13,
+          "sample_nodes": 2
+        },
+        {
+          "degree": 26,
+          "mean_clustering": 0.19487179487179487,
+          "sample_nodes": 3
+        },
+        {
+          "degree": 27,
+          "mean_clustering": 0.2111111111111111,
+          "sample_nodes": 10
+        },
+        {
+          "degree": 28,
+          "mean_clustering": 0.3227513227513228,
+          "sample_nodes": 7
+        },
+        {
+          "degree": 29,
+          "mean_clustering": 0.33620689655172414,
+          "sample_nodes": 8
+        },
+        {
+          "degree": 30,
+          "mean_clustering": 0.22327586206896552,
+          "sample_nodes": 8
+        },
+        {
+          "degree": 31,
+          "mean_clustering": 0.47168458781362005,
+          "sample_nodes": 3
+        },
+        {
+          "degree": 32,
+          "mean_clustering": 0.4,
+          "sample_nodes": 5
+        },
+        {
+          "degree": 33,
+          "mean_clustering": 0.12168560606060606,
+          "sample_nodes": 4
+        },
+        {
+          "degree": 34,
+          "mean_clustering": 0.1889483065953654,
+          "sample_nodes": 6
+        },
+        {
+          "degree": 35,
+          "mean_clustering": 0.3126050420168067,
+          "sample_nodes": 5
+        },
+        {
+          "degree": 36,
+          "mean_clustering": 0.19523809523809524,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 37,
+          "mean_clustering": 0.31268768768768773,
+          "sample_nodes": 4
+        },
+        {
+          "degree": 39,
+          "mean_clustering": 0.3499132446500867,
+          "sample_nodes": 7
+        },
+        {
+          "degree": 40,
+          "mean_clustering": 0.5701923076923078,
+          "sample_nodes": 4
+        },
+        {
+          "degree": 41,
+          "mean_clustering": 0.07804878048780488,
+          "sample_nodes": 2
+        },
+        {
+          "degree": 42,
+          "mean_clustering": 0.4831591173054588,
+          "sample_nodes": 2
+        },
+        {
+          "degree": 43,
+          "mean_clustering": 0.44462901439645625,
+          "sample_nodes": 2
+        },
+        {
+          "degree": 44,
+          "mean_clustering": 0.19661733615221988,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 45,
+          "mean_clustering": 0.19494949494949496,
+          "sample_nodes": 2
+        },
+        {
+          "degree": 46,
+          "mean_clustering": 0.3010628019323671,
+          "sample_nodes": 5
+        },
+        {
+          "degree": 47,
+          "mean_clustering": 0.12580943570767808,
+          "sample_nodes": 2
+        },
+        {
+          "degree": 50,
+          "mean_clustering": 0.10938775510204082,
+          "sample_nodes": 2
+        },
+        {
+          "degree": 51,
+          "mean_clustering": 0.5840522875816992,
+          "sample_nodes": 3
+        },
+        {
+          "degree": 53,
+          "mean_clustering": 0.11320754716981132,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 54,
+          "mean_clustering": 0.7386443046820406,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 55,
+          "mean_clustering": 0.4632996632996633,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 56,
+          "mean_clustering": 0.15616883116883118,
+          "sample_nodes": 2
+        },
+        {
+          "degree": 58,
+          "mean_clustering": 0.12159709618874773,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 60,
+          "mean_clustering": 0.4966101694915254,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 61,
+          "mean_clustering": 0.1879781420765027,
+          "sample_nodes": 2
+        },
+        {
+          "degree": 62,
+          "mean_clustering": 0.44103648863035433,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 63,
+          "mean_clustering": 0.07270865335381464,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 65,
+          "mean_clustering": 0.2567307692307692,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 67,
+          "mean_clustering": 0.2473993668023519,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 76,
+          "mean_clustering": 0.5547368421052632,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 80,
+          "mean_clustering": 0.06487341772151899,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 81,
+          "mean_clustering": 0.026234567901234566,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 85,
+          "mean_clustering": 0.16442577030812325,
+          "sample_nodes": 2
+        },
+        {
+          "degree": 96,
+          "mean_clustering": 0.27269736842105263,
+          "sample_nodes": 2
+        },
+        {
+          "degree": 98,
+          "mean_clustering": 0.47065011571638965,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 104,
+          "mean_clustering": 0.4624719940253921,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 107,
+          "mean_clustering": 0.45917827543643097,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 109,
+          "mean_clustering": 0.2715766224940537,
+          "sample_nodes": 2
+        },
+        {
+          "degree": 110,
+          "mean_clustering": 0.3843202668890742,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 112,
+          "mean_clustering": 0.37274774774774777,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 126,
+          "mean_clustering": 0.30247619047619045,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 128,
+          "mean_clustering": 0.12918307086614172,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 134,
+          "mean_clustering": 0.33767253955784987,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 139,
+          "mean_clustering": 0.3458450630799708,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 146,
+          "mean_clustering": 0.10155880963627775,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 152,
+          "mean_clustering": 0.2920878354827466,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 165,
+          "mean_clustering": 0.07716186252771619,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 174,
+          "mean_clustering": 0.06757026111221846,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 178,
+          "mean_clustering": 0.05351361645400876,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 187,
+          "mean_clustering": 0.19389339313437984,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 189,
+          "mean_clustering": 0.034898120004502986,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 190,
+          "mean_clustering": 0.028961292119186854,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 192,
+          "mean_clustering": 0.22698516579406633,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 196,
+          "mean_clustering": 0.02857142857142857,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 224,
+          "mean_clustering": 0.02053971812940423,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 442,
+          "mean_clustering": 0.024502108535721982,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 517,
+          "mean_clustering": 0.03198986400371853,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 520,
+          "mean_clustering": 0.0456425077812361,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 845,
+          "mean_clustering": 0.007044504893575255,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 1219,
+          "mean_clustering": 0.010213222229855422,
+          "sample_nodes": 1
+        },
+        {
+          "degree": 2122,
+          "mean_clustering": 0.002359156071794065,
+          "sample_nodes": 1
+        }
+      ],
+      "loglog_trend": {
+        "slope": -0.5456530581281238,
+        "r_squared": 0.43315298215607645,
+        "degree_bins": 90,
+        "note": "Unweighted descriptive fit of positive C(k) means; not proof of hierarchy."
+      }
+    },
+    "directed": {
+      "is_dag_after_loop_removal": false,
+      "strong_components": 8489,
+      "largest_scc_nodes": 22573,
+      "largest_scc_fraction": 0.7267312707253469,
+      "within_scc_edge_fraction": 0.8490776780028673,
+      "condensation_edges": 10322,
+      "condensation_longest_path_edges": 9,
+      "condensation_level_node_counts": {
+        "0": 5300,
+        "1": 602,
+        "2": 158,
+        "3": 31,
+        "4": 6,
+        "5": 22573,
+        "6": 2220,
+        "7": 147,
+        "8": 18,
+        "9": 6
+      },
+      "reciprocity": 0.0036913311607601963,
+      "source_nodes": 5300,
+      "sink_nodes": 2249,
+      "out_arborescence_components_nontrivial": 2,
+      "note": "SCC condensation is always a DAG; its levels alone do not prove the original graph is hierarchical."
+    }
+  },
+  "degree_distributions": {
+    "undirected": {
+      "nodes": 31061,
+      "zeros": 0,
+      "mean": 18.873764527864523,
+      "max": 18385,
+      "gini": 0.6586597043096865,
+      "top_1_percent_degree_share": 0.30763955935985043,
+      "positive_degree_ccdf": [
+        {
+          "degree": 1,
+          "survival": 1.0
+        },
+        {
+          "degree": 2,
+          "survival": 0.9544444802163484
+        },
+        {
+          "degree": 3,
+          "survival": 0.8880267860017386
+        },
+        {
+          "degree": 4,
+          "survival": 0.8094716847493642
+        },
+        {
+          "degree": 5,
+          "survival": 0.72846978526126
+        },
+        {
+          "degree": 6,
+          "survival": 0.6533917130807122
+        },
+        {
+          "degree": 7,
+          "survival": 0.5845916100576285
+        },
+        {
+          "degree": 8,
+          "survival": 0.5242265220050868
+        },
+        {
+          "degree": 9,
+          "survival": 0.468239915005956
+        },
+        {
+          "degree": 10,
+          "survival": 0.4227809793631886
+        },
+        {
+          "degree": 11,
+          "survival": 0.38314928688709315
+        },
+        {
+          "degree": 12,
+          "survival": 0.3489906957277615
+        },
+        {
+          "degree": 13,
+          "survival": 0.319371559189981
+        },
+        {
+          "degree": 14,
+          "survival": 0.2934870094330511
+        },
+        {
+          "degree": 15,
+          "survival": 0.26937316892566243
+        },
+        {
+          "degree": 16,
+          "survival": 0.24793148964939957
+        },
+        {
+          "degree": 17,
+          "survival": 0.2306429284311516
+        },
+        {
+          "degree": 18,
+          "survival": 0.2144489874762564
+        },
+        {
+          "degree": 19,
+          "survival": 0.19963941920736614
+        },
+        {
+          "degree": 20,
+          "survival": 0.1865683654743891
+        },
+        {
+          "degree": 21,
+          "survival": 0.1746885161456489
+        },
+        {
+          "degree": 22,
+          "survival": 0.16435401307105374
+        },
+        {
+          "degree": 23,
+          "survival": 0.15472779369627507
+        },
+        {
+          "degree": 24,
+          "survival": 0.1458098580213129
+        },
+        {
+          "degree": 25,
+          "survival": 0.1384372686004958
+        },
+        {
+          "degree": 26,
+          "survival": 0.13064614790251441
+        },
+        {
+          "degree": 27,
+          "survival": 0.12440037345867809
+        },
+        {
+          "degree": 28,
+          "survival": 0.11641608447892857
+        },
+        {
+          "degree": 29,
+          "survival": 0.11049225717137245
+        },
+        {
+          "degree": 30,
+          "survival": 0.10485818228646857
+        },
+        {
+          "degree": 31,
+          "survival": 0.09944947039696082
+        },
+        {
+          "degree": 32,
+          "survival": 0.0946524580663855
+        },
+        {
+          "degree": 33,
+          "survival": 0.09004861401757831
+        },
+        {
+          "degree": 34,
+          "survival": 0.08660377965937993
+        },
+        {
+          "degree": 35,
+          "survival": 0.0828048034512733
+        },
+        {
+          "degree": 36,
+          "survival": 0.07926338495219085
+        },
+        {
+          "degree": 37,
+          "survival": 0.07604391358938863
+        },
+        {
+          "degree": 38,
+          "survival": 0.07282444222658639
+        },
+        {
+          "degree": 39,
+          "survival": 0.0696693602910402
+        },
+        {
+          "degree": 40,
+          "survival": 0.0666108624963781
+        },
+        {
+          "degree": 41,
+          "survival": 0.06419625897427643
+        },
+        {
+          "degree": 42,
+          "survival": 0.06162068188403464
+        },
+        {
+          "degree": 43,
+          "survival": 0.05994655677537748
+        },
+        {
+          "degree": 44,
+          "survival": 0.057596342680531855
+        },
+        {
+          "degree": 45,
+          "survival": 0.055503686294710405
+        },
+        {
+          "degree": 46,
+          "survival": 0.05373297704516918
+        },
+        {
+          "degree": 47,
+          "survival": 0.051865683654743894
+        },
+        {
+          "degree": 48,
+          "survival": 0.050191558546086736
+        },
+        {
+          "degree": 49,
+          "survival": 0.04880718586008177
+        },
+        {
+          "degree": 50,
+          "survival": 0.04722964489230868
+        },
+        {
+          "degree": 51,
+          "survival": 0.04590966163355977
+        },
+        {
+          "degree": 52,
+          "survival": 0.04462187308843888
+        },
+        {
+          "degree": 53,
+          "survival": 0.04339847397057403
+        },
+        {
+          "degree": 54,
+          "survival": 0.04227165899359325
+        },
+        {
+          "degree": 55,
+          "survival": 0.0410482598757284
+        },
+        {
+          "degree": 56,
+          "survival": 0.04008241846688774
+        },
+        {
+          "degree": 57,
+          "survival": 0.039052187630791026
+        },
+        {
+          "degree": 58,
+          "survival": 0.038086346221950354
+        },
+        {
+          "degree": 59,
+          "survival": 0.03747464666301793
+        },
+        {
+          "degree": 60,
+          "survival": 0.036669778822317374
+        },
+        {
+          "degree": 61,
+          "survival": 0.03557515855896462
+        },
+        {
+          "degree": 62,
+          "survival": 0.034705901291008014
+        },
+        {
+          "degree": 63,
+          "survival": 0.0336756704549113
+        },
+        {
+          "degree": 64,
+          "survival": 0.03293519204146679
+        },
+        {
+          "degree": 65,
+          "survival": 0.03232349248253437
+        },
+        {
+          "degree": 66,
+          "survival": 0.031550819355461834
+        },
+        {
+          "degree": 67,
+          "survival": 0.030874730369273365
+        },
+        {
+          "degree": 68,
+          "survival": 0.030037667814944786
+        },
+        {
+          "degree": 69,
+          "survival": 0.029683525965036543
+        },
+        {
+          "degree": 70,
+          "survival": 0.029071826406104118
+        },
+        {
+          "degree": 71,
+          "survival": 0.02855671098805576
+        },
+        {
+          "degree": 72,
+          "survival": 0.02810598499726345
+        },
+        {
+          "degree": 73,
+          "survival": 0.02755867486558707
+        },
+        {
+          "degree": 74,
+          "survival": 0.02714014358842278
+        },
+        {
+          "degree": 75,
+          "survival": 0.026786001738514535
+        },
+        {
+          "degree": 76,
+          "survival": 0.026528444029490356
+        },
+        {
+          "degree": 77,
+          "survival": 0.026013328611442
+        },
+        {
+          "degree": 78,
+          "survival": 0.025337239625253534
+        },
+        {
+          "degree": 79,
+          "survival": 0.024854318920833198
+        },
+        {
+          "degree": 80,
+          "survival": 0.024564566498181
+        },
+        {
+          "degree": 81,
+          "survival": 0.024210424648272753
+        },
+        {
+          "degree": 82,
+          "survival": 0.023920672225620554
+        },
+        {
+          "degree": 83,
+          "survival": 0.02359872508934033
+        },
+        {
+          "degree": 84,
+          "survival": 0.023341167380316153
+        },
+        {
+          "degree": 85,
+          "survival": 0.023115804384919995
+        },
+        {
+          "degree": 86,
+          "survival": 0.022761662535011752
+        },
+        {
+          "degree": 87,
+          "survival": 0.022246547116963396
+        },
+        {
+          "degree": 88,
+          "survival": 0.021924599980683173
+        },
+        {
+          "degree": 89,
+          "survival": 0.021570458130774926
+        },
+        {
+          "degree": 90,
+          "survival": 0.021216316280866683
+        },
+        {
+          "degree": 91,
+          "survival": 0.02092656385821448
+        },
+        {
+          "degree": 92,
+          "survival": 0.020733395576446347
+        },
+        {
+          "degree": 93,
+          "survival": 0.02034705901291008
+        },
+        {
+          "degree": 94,
+          "survival": 0.02005730659025788
+        },
+        {
+          "degree": 95,
+          "survival": 0.019831943594861724
+        },
+        {
+          "degree": 96,
+          "survival": 0.019445607031325456
+        },
+        {
+          "degree": 97,
+          "survival": 0.019252438749557323
+        },
+        {
+          "degree": 98,
+          "survival": 0.018994881040533144
+        },
+        {
+          "degree": 99,
+          "survival": 0.018672933904252922
+        },
+        {
+          "degree": 100,
+          "survival": 0.018286597340716654
+        },
+        {
+          "degree": 101,
+          "survival": 0.018061234345320497
+        },
+        {
+          "degree": 102,
+          "survival": 0.017868066063552363
+        },
+        {
+          "degree": 103,
+          "survival": 0.017739287209040274
+        },
+        {
+          "degree": 104,
+          "survival": 0.01751392421364412
+        },
+        {
+          "degree": 105,
+          "survival": 0.017320755931875986
+        },
+        {
+          "degree": 106,
+          "survival": 0.017159782363735873
+        },
+        {
+          "degree": 107,
+          "survival": 0.016870029941083674
+        },
+        {
+          "degree": 108,
+          "survival": 0.016773445800199606
+        },
+        {
+          "degree": 109,
+          "survival": 0.016612472232059496
+        },
+        {
+          "degree": 110,
+          "survival": 0.016451498663919383
+        },
+        {
+          "degree": 111,
+          "survival": 0.016161746241267184
+        },
+        {
+          "degree": 112,
+          "survival": 0.015871993818614982
+        },
+        {
+          "degree": 113,
+          "survival": 0.01567882553684685
+        },
+        {
+          "degree": 114,
+          "survival": 0.015550046682334761
+        },
+        {
+          "degree": 115,
+          "survival": 0.015356878400566628
+        },
+        {
+          "degree": 116,
+          "survival": 0.015228099546054539
+        },
+        {
+          "degree": 117,
+          "survival": 0.015002736550658383
+        },
+        {
+          "degree": 118,
+          "survival": 0.014648594700750138
+        },
+        {
+          "degree": 119,
+          "survival": 0.014455426418982004
+        },
+        {
+          "degree": 120,
+          "survival": 0.014326647564469915
+        },
+        {
+          "degree": 121,
+          "survival": 0.014262258137213869
+        },
+        {
+          "degree": 122,
+          "survival": 0.01413347928270178
+        },
+        {
+          "degree": 123,
+          "survival": 0.013875921573677601
+        },
+        {
+          "degree": 124,
+          "survival": 0.013650558578281445
+        },
+        {
+          "degree": 125,
+          "survival": 0.013360806155629245
+        },
+        {
+          "degree": 126,
+          "survival": 0.013264222014745178
+        },
+        {
+          "degree": 127,
+          "survival": 0.013135443160233089
+        },
+        {
+          "degree": 128,
+          "survival": 0.013103248446605067
+        },
+        {
+          "degree": 129,
+          "survival": 0.013006664305721
+        },
+        {
+          "degree": 130,
+          "survival": 0.012813496023952866
+        },
+        {
+          "degree": 131,
+          "survival": 0.012620327742184733
+        },
+        {
+          "degree": 132,
+          "survival": 0.01258813302855671
+        },
+        {
+          "degree": 133,
+          "survival": 0.012523743601300666
+        },
+        {
+          "degree": 134,
+          "survival": 0.012201796465020443
+        },
+        {
+          "degree": 135,
+          "survival": 0.01200862818325231
+        },
+        {
+          "degree": 136,
+          "survival": 0.01187984932874022
+        },
+        {
+          "degree": 137,
+          "survival": 0.011847654615112198
+        },
+        {
+          "degree": 138,
+          "survival": 0.011815459901484176
+        },
+        {
+          "degree": 139,
+          "survival": 0.011622291619716042
+        },
+        {
+          "degree": 140,
+          "survival": 0.011493512765203953
+        },
+        {
+          "degree": 141,
+          "survival": 0.011364733910691864
+        },
+        {
+          "degree": 142,
+          "survival": 0.011235955056179775
+        },
+        {
+          "degree": 143,
+          "survival": 0.011107176201667686
+        },
+        {
+          "degree": 144,
+          "survival": 0.011074981488039664
+        },
+        {
+          "degree": 145,
+          "survival": 0.010946202633527575
+        },
+        {
+          "degree": 146,
+          "survival": 0.01088181320627153
+        },
+        {
+          "degree": 147,
+          "survival": 0.010688644924503396
+        },
+        {
+          "degree": 148,
+          "survival": 0.010624255497247352
+        },
+        {
+          "degree": 150,
+          "survival": 0.010559866069991307
+        },
+        {
+          "degree": 151,
+          "survival": 0.010431087215479218
+        },
+        {
+          "degree": 152,
+          "survival": 0.010237918933711085
+        },
+        {
+          "degree": 153,
+          "survival": 0.010109140079198995
+        },
+        {
+          "degree": 154,
+          "survival": 0.00988377708380284
+        },
+        {
+          "degree": 155,
+          "survival": 0.00975499822929075
+        },
+        {
+          "degree": 156,
+          "survival": 0.009658414088406684
+        },
+        {
+          "degree": 157,
+          "survival": 0.009529635233894595
+        },
+        {
+          "degree": 158,
+          "survival": 0.009433051093010528
+        },
+        {
+          "degree": 159,
+          "survival": 0.009272077524870416
+        },
+        {
+          "degree": 160,
+          "survival": 0.009207688097614372
+        },
+        {
+          "degree": 161,
+          "survival": 0.009143298670358327
+        },
+        {
+          "degree": 162,
+          "survival": 0.00904671452947426
+        },
+        {
+          "degree": 163,
+          "survival": 0.009014519815846238
+        },
+        {
+          "degree": 164,
+          "survival": 0.008950130388590194
+        },
+        {
+          "degree": 165,
+          "survival": 0.008821351534078105
+        },
+        {
+          "degree": 166,
+          "survival": 0.008660377965937993
+        },
+        {
+          "degree": 167,
+          "survival": 0.00862818325230997
+        },
+        {
+          "degree": 168,
+          "survival": 0.008563793825053926
+        },
+        {
+          "degree": 169,
+          "survival": 0.008435014970541837
+        },
+        {
+          "degree": 170,
+          "survival": 0.008402820256913815
+        },
+        {
+          "degree": 171,
+          "survival": 0.008306236116029748
+        },
+        {
+          "degree": 172,
+          "survival": 0.008209651975145681
+        },
+        {
+          "degree": 174,
+          "survival": 0.008016483693377548
+        },
+        {
+          "degree": 176,
+          "survival": 0.007887704838865459
+        },
+        {
+          "degree": 177,
+          "survival": 0.007823315411609414
+        },
+        {
+          "degree": 178,
+          "survival": 0.0077589259843533695
+        },
+        {
+          "degree": 179,
+          "survival": 0.007662341843469303
+        },
+        {
+          "degree": 180,
+          "survival": 0.007469173561701169
+        },
+        {
+          "degree": 181,
+          "survival": 0.007436978848073147
+        },
+        {
+          "degree": 182,
+          "survival": 0.007179421139048969
+        },
+        {
+          "degree": 183,
+          "survival": 0.007115031711792923
+        },
+        {
+          "degree": 184,
+          "survival": 0.006986252857280834
+        },
+        {
+          "degree": 185,
+          "survival": 0.006760889861884678
+        },
+        {
+          "degree": 186,
+          "survival": 0.006599916293744567
+        },
+        {
+          "degree": 187,
+          "survival": 0.0065033321528605
+        },
+        {
+          "degree": 188,
+          "survival": 0.006406748011976433
+        },
+        {
+          "degree": 189,
+          "survival": 0.006310163871092366
+        },
+        {
+          "degree": 190,
+          "survival": 0.006277969157464344
+        },
+        {
+          "degree": 191,
+          "survival": 0.0062135797302082995
+        },
+        {
+          "degree": 192,
+          "survival": 0.006116995589324233
+        },
+        {
+          "degree": 193,
+          "survival": 0.005988216734812144
+        },
+        {
+          "degree": 194,
+          "survival": 0.005827243166672032
+        },
+        {
+          "degree": 195,
+          "survival": 0.005762853739415988
+        },
+        {
+          "degree": 196,
+          "survival": 0.005698464312159943
+        },
+        {
+          "degree": 197,
+          "survival": 0.005569685457647854
+        },
+        {
+          "degree": 198,
+          "survival": 0.005537490744019832
+        },
+        {
+          "degree": 199,
+          "survival": 0.005473101316763787
+        },
+        {
+          "degree": 200,
+          "survival": 0.005344322462251698
+        },
+        {
+          "degree": 201,
+          "survival": 0.005312127748623676
+        },
+        {
+          "degree": 202,
+          "survival": 0.005247738321367631
+        },
+        {
+          "degree": 203,
+          "survival": 0.005215543607739609
+        },
+        {
+          "degree": 204,
+          "survival": 0.005118959466855542
+        },
+        {
+          "degree": 205,
+          "survival": 0.00508676475322752
+        },
+        {
+          "degree": 206,
+          "survival": 0.005054570039599498
+        },
+        {
+          "degree": 207,
+          "survival": 0.0050223753259714754
+        },
+        {
+          "degree": 209,
+          "survival": 0.004990180612343453
+        },
+        {
+          "degree": 210,
+          "survival": 0.004957985898715431
+        },
+        {
+          "degree": 212,
+          "survival": 0.004925791185087409
+        },
+        {
+          "degree": 213,
+          "survival": 0.0047970123305753195
+        },
+        {
+          "degree": 214,
+          "survival": 0.004764817616947297
+        },
+        {
+          "degree": 216,
+          "survival": 0.004732622903319275
+        },
+        {
+          "degree": 217,
+          "survival": 0.004700428189691253
+        },
+        {
+          "degree": 218,
+          "survival": 0.004636038762435208
+        },
+        {
+          "degree": 219,
+          "survival": 0.004603844048807186
+        },
+        {
+          "degree": 220,
+          "survival": 0.004571649335179164
+        },
+        {
+          "degree": 223,
+          "survival": 0.004539454621551141
+        },
+        {
+          "degree": 224,
+          "survival": 0.004507259907923119
+        },
+        {
+          "degree": 225,
+          "survival": 0.004410675767039052
+        },
+        {
+          "degree": 226,
+          "survival": 0.00437848105341103
+        },
+        {
+          "degree": 229,
+          "survival": 0.004314091626154985
+        },
+        {
+          "degree": 235,
+          "survival": 0.004281896912526963
+        },
+        {
+          "degree": 237,
+          "survival": 0.004217507485270919
+        },
+        {
+          "degree": 238,
+          "survival": 0.004153118058014874
+        },
+        {
+          "degree": 240,
+          "survival": 0.0040887286307588295
+        },
+        {
+          "degree": 241,
+          "survival": 0.004056533917130807
+        },
+        {
+          "degree": 247,
+          "survival": 0.004024339203502785
+        },
+        {
+          "degree": 249,
+          "survival": 0.003992144489874763
+        },
+        {
+          "degree": 250,
+          "survival": 0.00395994977624674
+        },
+        {
+          "degree": 253,
+          "survival": 0.003927755062618718
+        },
+        {
+          "degree": 254,
+          "survival": 0.0038633656353626736
+        },
+        {
+          "degree": 257,
+          "survival": 0.0038311709217346513
+        },
+        {
+          "degree": 259,
+          "survival": 0.003798976208106629
+        },
+        {
+          "degree": 263,
+          "survival": 0.0037345867808505845
+        },
+        {
+          "degree": 264,
+          "survival": 0.0037023920672225622
+        },
+        {
+          "degree": 268,
+          "survival": 0.0036058079263384954
+        },
+        {
+          "degree": 269,
+          "survival": 0.003573613212710473
+        },
+        {
+          "degree": 276,
+          "survival": 0.0035414184990824505
+        },
+        {
+          "degree": 285,
+          "survival": 0.003509223785454428
+        },
+        {
+          "degree": 287,
+          "survival": 0.003477029071826406
+        },
+        {
+          "degree": 291,
+          "survival": 0.0034448343581983836
+        },
+        {
+          "degree": 292,
+          "survival": 0.0034126396445703614
+        },
+        {
+          "degree": 297,
+          "survival": 0.0033160555036862945
+        },
+        {
+          "degree": 304,
+          "survival": 0.0032838607900582723
+        },
+        {
+          "degree": 305,
+          "survival": 0.00325166607643025
+        },
+        {
+          "degree": 312,
+          "survival": 0.0032194713628022277
+        },
+        {
+          "degree": 314,
+          "survival": 0.003155081935546183
+        },
+        {
+          "degree": 318,
+          "survival": 0.003122887221918161
+        },
+        {
+          "degree": 322,
+          "survival": 0.0030906925082901386
+        },
+        {
+          "degree": 324,
+          "survival": 0.003026303081034094
+        },
+        {
+          "degree": 325,
+          "survival": 0.002994108367406072
+        },
+        {
+          "degree": 326,
+          "survival": 0.0029619136537780495
+        },
+        {
+          "degree": 333,
+          "survival": 0.0029297189401500273
+        },
+        {
+          "degree": 335,
+          "survival": 0.002897524226522005
+        },
+        {
+          "degree": 340,
+          "survival": 0.0028653295128939827
+        },
+        {
+          "degree": 342,
+          "survival": 0.0028331347992659604
+        },
+        {
+          "degree": 343,
+          "survival": 0.002800940085637938
+        },
+        {
+          "degree": 346,
+          "survival": 0.002768745372009916
+        },
+        {
+          "degree": 350,
+          "survival": 0.0027365506583818936
+        },
+        {
+          "degree": 359,
+          "survival": 0.0027043559447538714
+        },
+        {
+          "degree": 367,
+          "survival": 0.002672161231125849
+        },
+        {
+          "degree": 374,
+          "survival": 0.002639966517497827
+        },
+        {
+          "degree": 378,
+          "survival": 0.0026077718038698045
+        },
+        {
+          "degree": 401,
+          "survival": 0.0025755770902417823
+        },
+        {
+          "degree": 413,
+          "survival": 0.00254338237661376
+        },
+        {
+          "degree": 414,
+          "survival": 0.0025111876629857377
+        },
+        {
+          "degree": 416,
+          "survival": 0.0024789929493577154
+        },
+        {
+          "degree": 420,
+          "survival": 0.002446798235729693
+        },
+        {
+          "degree": 421,
+          "survival": 0.002414603522101671
+        },
+        {
+          "degree": 425,
+          "survival": 0.0023824088084736486
+        },
+        {
+          "degree": 441,
+          "survival": 0.0023502140948456264
+        },
+        {
+          "degree": 442,
+          "survival": 0.002318019381217604
+        },
+        {
+          "degree": 444,
+          "survival": 0.002285824667589582
+        },
+        {
+          "degree": 460,
+          "survival": 0.0022536299539615595
+        },
+        {
+          "degree": 465,
+          "survival": 0.0022214352403335373
+        },
+        {
+          "degree": 471,
+          "survival": 0.002189240526705515
+        },
+        {
+          "degree": 474,
+          "survival": 0.0021570458130774927
+        },
+        {
+          "degree": 475,
+          "survival": 0.0021248510994494704
+        },
+        {
+          "degree": 485,
+          "survival": 0.002092656385821448
+        },
+        {
+          "degree": 487,
+          "survival": 0.002060461672193426
+        },
+        {
+          "degree": 488,
+          "survival": 0.0020282669585654036
+        },
+        {
+          "degree": 499,
+          "survival": 0.0019960722449373814
+        },
+        {
+          "degree": 513,
+          "survival": 0.001963877531309359
+        },
+        {
+          "degree": 517,
+          "survival": 0.0018994881040533145
+        },
+        {
+          "degree": 520,
+          "survival": 0.0018672933904252923
+        },
+        {
+          "degree": 537,
+          "survival": 0.00183509867679727
+        },
+        {
+          "degree": 540,
+          "survival": 0.0018029039631692477
+        },
+        {
+          "degree": 557,
+          "survival": 0.0017707092495412252
+        },
+        {
+          "degree": 575,
+          "survival": 0.001738514535913203
+        },
+        {
+          "degree": 590,
+          "survival": 0.0017063198222851807
+        },
+        {
+          "degree": 593,
+          "survival": 0.0016741251086571584
+        },
+        {
+          "degree": 594,
+          "survival": 0.0016419303950291361
+        },
+        {
+          "degree": 602,
+          "survival": 0.0016097356814011139
+        },
+        {
+          "degree": 608,
+          "survival": 0.0015775409677730916
+        },
+        {
+          "degree": 643,
+          "survival": 0.0015453462541450693
+        },
+        {
+          "degree": 646,
+          "survival": 0.001513151540517047
+        },
+        {
+          "degree": 649,
+          "survival": 0.0014809568268890248
+        },
+        {
+          "degree": 674,
+          "survival": 0.0014487621132610025
+        },
+        {
+          "degree": 741,
+          "survival": 0.0014165673996329802
+        },
+        {
+          "degree": 746,
+          "survival": 0.001384372686004958
+        },
+        {
+          "degree": 769,
+          "survival": 0.0013521779723769357
+        },
+        {
+          "degree": 776,
+          "survival": 0.0013199832587489134
+        },
+        {
+          "degree": 802,
+          "survival": 0.0012877885451208911
+        },
+        {
+          "degree": 810,
+          "survival": 0.0012555938314928689
+        },
+        {
+          "degree": 814,
+          "survival": 0.0012233991178648466
+        },
+        {
+          "degree": 842,
+          "survival": 0.0011912044042368243
+        },
+        {
+          "degree": 845,
+          "survival": 0.001159009690608802
+        },
+        {
+          "degree": 849,
+          "survival": 0.0011268149769807798
+        },
+        {
+          "degree": 891,
+          "survival": 0.0010946202633527575
+        },
+        {
+          "degree": 956,
+          "survival": 0.0010624255497247352
+        },
+        {
+          "degree": 972,
+          "survival": 0.001030230836096713
+        },
+        {
+          "degree": 1060,
+          "survival": 0.0009980361224686907
+        },
+        {
+          "degree": 1061,
+          "survival": 0.0009658414088406684
+        },
+        {
+          "degree": 1219,
+          "survival": 0.0009336466952126461
+        },
+        {
+          "degree": 1237,
+          "survival": 0.0009014519815846239
+        },
+        {
+          "degree": 1264,
+          "survival": 0.0008692572679566015
+        },
+        {
+          "degree": 1279,
+          "survival": 0.0008370625543285792
+        },
+        {
+          "degree": 1338,
+          "survival": 0.0008048678407005569
+        },
+        {
+          "degree": 1393,
+          "survival": 0.0007726731270725347
+        },
+        {
+          "degree": 1501,
+          "survival": 0.0007404784134445124
+        },
+        {
+          "degree": 1542,
+          "survival": 0.0007082836998164901
+        },
+        {
+          "degree": 1605,
+          "survival": 0.0006760889861884678
+        },
+        {
+          "degree": 2034,
+          "survival": 0.0006438942725604456
+        },
+        {
+          "degree": 2122,
+          "survival": 0.0006116995589324233
+        },
+        {
+          "degree": 2339,
+          "survival": 0.000579504845304401
+        },
+        {
+          "degree": 2382,
+          "survival": 0.0005473101316763787
+        },
+        {
+          "degree": 2487,
+          "survival": 0.0005151154180483565
+        },
+        {
+          "degree": 2568,
+          "survival": 0.0004829207044203342
+        },
+        {
+          "degree": 2575,
+          "survival": 0.00045072599079231193
+        },
+        {
+          "degree": 2611,
+          "survival": 0.0004185312771642896
+        },
+        {
+          "degree": 2761,
+          "survival": 0.00038633656353626733
+        },
+        {
+          "degree": 2817,
+          "survival": 0.00035414184990824506
+        },
+        {
+          "degree": 2902,
+          "survival": 0.0003219471362802228
+        },
+        {
+          "degree": 3041,
+          "survival": 0.0002897524226522005
+        },
+        {
+          "degree": 4211,
+          "survival": 0.00025755770902417824
+        },
+        {
+          "degree": 4292,
+          "survival": 0.00022536299539615596
+        },
+        {
+          "degree": 4598,
+          "survival": 0.00019316828176813366
+        },
+        {
+          "degree": 5184,
+          "survival": 0.0001609735681401114
+        },
+        {
+          "degree": 5622,
+          "survival": 0.00012877885451208912
+        },
+        {
+          "degree": 6951,
+          "survival": 9.658414088406683e-05
+        },
+        {
+          "degree": 8750,
+          "survival": 6.438942725604456e-05
+        },
+        {
+          "degree": 18385,
+          "survival": 3.219471362802228e-05
+        }
+      ],
+      "power_law": {
+        "xmin": 24,
+        "alpha": 2.4592577098268276,
+        "ks": 0.013954457004062393,
+        "tail_nodes": 4529,
+        "tail_fraction_positive": 0.1458098580213129,
+        "tail_max": 18385,
+        "tail_decades": 2.8842523924932753,
+        "alpha_near_search_bound": false,
+        "searched_xmin_candidates": 64,
+        "available_xmin_candidates": 291,
+        "vs_discrete_exponential": {
+          "log_likelihood_ratio": 2762.896132220421,
+          "approx_two_sided_p": 4.012351223986435e-12,
+          "note": "Same fitted tail; approximate iid likelihood-ratio comparison, not a goodness-of-fit test."
+        },
+        "bootstrap": {
+          "requested": 1000,
+          "p_value": 0.017982017982017984,
+          "completed": 1000,
+          "monte_carlo_se": 0.004200121901483937
+        }
+      },
+      "status": "power-law tail rejected at 0.1 threshold",
+      "degree_histogram": {
+        "1": 1415,
+        "2": 2063,
+        "3": 2440,
+        "4": 2516,
+        "5": 2332,
+        "6": 2137,
+        "7": 1875,
+        "8": 1739,
+        "9": 1412,
+        "10": 1231,
+        "11": 1061,
+        "12": 920,
+        "13": 804,
+        "14": 749,
+        "15": 666,
+        "16": 537,
+        "17": 503,
+        "18": 460,
+        "19": 406,
+        "20": 369,
+        "21": 321,
+        "22": 299,
+        "23": 277,
+        "24": 229,
+        "25": 242,
+        "26": 194,
+        "27": 248,
+        "28": 184,
+        "29": 175,
+        "30": 168,
+        "31": 149,
+        "32": 143,
+        "33": 107,
+        "34": 118,
+        "35": 110,
+        "36": 100,
+        "37": 100,
+        "38": 98,
+        "39": 95,
+        "40": 75,
+        "41": 80,
+        "42": 52,
+        "43": 73,
+        "44": 65,
+        "45": 55,
+        "46": 58,
+        "47": 52,
+        "48": 43,
+        "49": 49,
+        "50": 41,
+        "51": 40,
+        "52": 38,
+        "53": 35,
+        "54": 38,
+        "55": 30,
+        "56": 32,
+        "57": 30,
+        "58": 19,
+        "59": 25,
+        "60": 34,
+        "61": 27,
+        "62": 32,
+        "63": 23,
+        "64": 19,
+        "65": 24,
+        "66": 21,
+        "67": 26,
+        "68": 11,
+        "69": 19,
+        "70": 16,
+        "71": 14,
+        "72": 17,
+        "73": 13,
+        "74": 11,
+        "75": 8,
+        "76": 16,
+        "77": 21,
+        "78": 15,
+        "79": 9,
+        "80": 11,
+        "81": 9,
+        "82": 10,
+        "83": 8,
+        "84": 7,
+        "85": 11,
+        "86": 16,
+        "87": 10,
+        "88": 11,
+        "89": 11,
+        "90": 9,
+        "91": 6,
+        "92": 12,
+        "93": 9,
+        "94": 7,
+        "95": 12,
+        "96": 6,
+        "97": 8,
+        "98": 10,
+        "99": 12,
+        "100": 7,
+        "101": 6,
+        "102": 4,
+        "103": 7,
+        "104": 6,
+        "105": 5,
+        "106": 9,
+        "107": 3,
+        "108": 5,
+        "109": 5,
+        "110": 9,
+        "111": 9,
+        "112": 6,
+        "113": 4,
+        "114": 6,
+        "115": 4,
+        "116": 7,
+        "117": 11,
+        "118": 6,
+        "119": 4,
+        "120": 2,
+        "121": 4,
+        "122": 8,
+        "123": 7,
+        "124": 9,
+        "125": 3,
+        "126": 4,
+        "127": 1,
+        "128": 3,
+        "129": 6,
+        "130": 6,
+        "131": 1,
+        "132": 2,
+        "133": 10,
+        "134": 6,
+        "135": 4,
+        "136": 1,
+        "137": 1,
+        "138": 6,
+        "139": 4,
+        "140": 4,
+        "141": 4,
+        "142": 4,
+        "143": 1,
+        "144": 4,
+        "145": 2,
+        "146": 6,
+        "147": 2,
+        "148": 2,
+        "150": 4,
+        "151": 6,
+        "152": 4,
+        "153": 7,
+        "154": 4,
+        "155": 3,
+        "156": 4,
+        "157": 3,
+        "158": 5,
+        "159": 2,
+        "160": 2,
+        "161": 3,
+        "162": 1,
+        "163": 2,
+        "164": 4,
+        "165": 5,
+        "166": 1,
+        "167": 2,
+        "168": 4,
+        "169": 1,
+        "170": 3,
+        "171": 3,
+        "172": 6,
+        "174": 4,
+        "176": 2,
+        "177": 2,
+        "178": 3,
+        "179": 6,
+        "180": 1,
+        "181": 8,
+        "182": 2,
+        "183": 4,
+        "184": 7,
+        "185": 5,
+        "186": 3,
+        "187": 3,
+        "188": 3,
+        "189": 1,
+        "190": 2,
+        "191": 3,
+        "192": 4,
+        "193": 5,
+        "194": 2,
+        "195": 2,
+        "196": 4,
+        "197": 1,
+        "198": 2,
+        "199": 4,
+        "200": 1,
+        "201": 2,
+        "202": 1,
+        "203": 3,
+        "204": 1,
+        "205": 1,
+        "206": 1,
+        "207": 1,
+        "209": 1,
+        "210": 1,
+        "212": 4,
+        "213": 1,
+        "214": 1,
+        "216": 1,
+        "217": 2,
+        "218": 1,
+        "219": 1,
+        "220": 1,
+        "223": 1,
+        "224": 3,
+        "225": 1,
+        "226": 2,
+        "229": 1,
+        "235": 2,
+        "237": 2,
+        "238": 2,
+        "240": 1,
+        "241": 1,
+        "247": 1,
+        "249": 1,
+        "250": 1,
+        "253": 2,
+        "254": 1,
+        "257": 1,
+        "259": 2,
+        "263": 1,
+        "264": 3,
+        "268": 1,
+        "269": 1,
+        "276": 1,
+        "285": 1,
+        "287": 1,
+        "291": 1,
+        "292": 3,
+        "297": 1,
+        "304": 1,
+        "305": 1,
+        "312": 2,
+        "314": 1,
+        "318": 1,
+        "322": 2,
+        "324": 1,
+        "325": 1,
+        "326": 1,
+        "333": 1,
+        "335": 1,
+        "340": 1,
+        "342": 1,
+        "343": 1,
+        "346": 1,
+        "350": 1,
+        "359": 1,
+        "367": 1,
+        "374": 1,
+        "378": 1,
+        "401": 1,
+        "413": 1,
+        "414": 1,
+        "416": 1,
+        "420": 1,
+        "421": 1,
+        "425": 1,
+        "441": 1,
+        "442": 1,
+        "444": 1,
+        "460": 1,
+        "465": 1,
+        "471": 1,
+        "474": 1,
+        "475": 1,
+        "485": 1,
+        "487": 1,
+        "488": 1,
+        "499": 1,
+        "513": 2,
+        "517": 1,
+        "520": 1,
+        "537": 1,
+        "540": 1,
+        "557": 1,
+        "575": 1,
+        "590": 1,
+        "593": 1,
+        "594": 1,
+        "602": 1,
+        "608": 1,
+        "643": 1,
+        "646": 1,
+        "649": 1,
+        "674": 1,
+        "741": 1,
+        "746": 1,
+        "769": 1,
+        "776": 1,
+        "802": 1,
+        "810": 1,
+        "814": 1,
+        "842": 1,
+        "845": 1,
+        "849": 1,
+        "891": 1,
+        "956": 1,
+        "972": 1,
+        "1060": 1,
+        "1061": 1,
+        "1219": 1,
+        "1237": 1,
+        "1264": 1,
+        "1279": 1,
+        "1338": 1,
+        "1393": 1,
+        "1501": 1,
+        "1542": 1,
+        "1605": 1,
+        "2034": 1,
+        "2122": 1,
+        "2339": 1,
+        "2382": 1,
+        "2487": 1,
+        "2568": 1,
+        "2575": 1,
+        "2611": 1,
+        "2761": 1,
+        "2817": 1,
+        "2902": 1,
+        "3041": 1,
+        "4211": 1,
+        "4292": 1,
+        "4598": 1,
+        "5184": 1,
+        "5622": 1,
+        "6951": 1,
+        "8750": 1,
+        "18385": 1
+      }
+    },
+    "in_degree": {
+      "nodes": 31061,
+      "zeros": 5300,
+      "mean": 9.45433179871865,
+      "max": 15010,
+      "gini": 0.7464583058032388,
+      "top_1_percent_degree_share": 0.3544358971739523,
+      "positive_degree_ccdf": [
+        {
+          "degree": 1,
+          "survival": 1.0
+        },
+        {
+          "degree": 2,
+          "survival": 0.8290439035751718
+        },
+        {
+          "degree": 3,
+          "survival": 0.6850277551337293
+        },
+        {
+          "degree": 4,
+          "survival": 0.5688831955281239
+        },
+        {
+          "degree": 5,
+          "survival": 0.47688366134855015
+        },
+        {
+          "degree": 6,
+          "survival": 0.4025853033655526
+        },
+        {
+          "degree": 7,
+          "survival": 0.34424129498078493
+        },
+        {
+          "degree": 8,
+          "survival": 0.29796979930903306
+        },
+        {
+          "degree": 9,
+          "survival": 0.2595396141454136
+        },
+        {
+          "degree": 10,
+          "survival": 0.23019292729319513
+        },
+        {
+          "degree": 11,
+          "survival": 0.2062031753425721
+        },
+        {
+          "degree": 12,
+          "survival": 0.18450370715422537
+        },
+        {
+          "degree": 13,
+          "survival": 0.16614261868716276
+        },
+        {
+          "degree": 14,
+          "survival": 0.14995535887582004
+        },
+        {
+          "degree": 15,
+          "survival": 0.13555374403167578
+        },
+        {
+          "degree": 16,
+          "survival": 0.12437405380225923
+        },
+        {
+          "degree": 17,
+          "survival": 0.11563992081052754
+        },
+        {
+          "degree": 18,
+          "survival": 0.10632351228601374
+        },
+        {
+          "degree": 19,
+          "survival": 0.09813283645821202
+        },
+        {
+          "degree": 20,
+          "survival": 0.09095143822056598
+        },
+        {
+          "degree": 21,
+          "survival": 0.08477931757307558
+        },
+        {
+          "degree": 22,
+          "survival": 0.0795776561468887
+        },
+        {
+          "degree": 23,
+          "survival": 0.0751911804665968
+        },
+        {
+          "degree": 24,
+          "survival": 0.0709211598928613
+        },
+        {
+          "degree": 25,
+          "survival": 0.06688404953223866
+        },
+        {
+          "degree": 26,
+          "survival": 0.06288575754046814
+        },
+        {
+          "degree": 27,
+          "survival": 0.0595085594503319
+        },
+        {
+          "degree": 28,
+          "survival": 0.0560925429913435
+        },
+        {
+          "degree": 29,
+          "survival": 0.052909436745467955
+        },
+        {
+          "degree": 30,
+          "survival": 0.04976514886844455
+        },
+        {
+          "degree": 31,
+          "survival": 0.04778541205698537
+        },
+        {
+          "degree": 32,
+          "survival": 0.04549512829470906
+        },
+        {
+          "degree": 33,
+          "survival": 0.04378712006521486
+        },
+        {
+          "degree": 34,
+          "survival": 0.04149683630293855
+        },
+        {
+          "degree": 35,
+          "survival": 0.040021738286557196
+        },
+        {
+          "degree": 36,
+          "survival": 0.03819727495050658
+        },
+        {
+          "degree": 37,
+          "survival": 0.03676099530297737
+        },
+        {
+          "degree": 38,
+          "survival": 0.03567408097511743
+        },
+        {
+          "degree": 39,
+          "survival": 0.0345095299095532
+        },
+        {
+          "degree": 40,
+          "survival": 0.03318970536858041
+        },
+        {
+          "degree": 41,
+          "survival": 0.031831062458755485
+        },
+        {
+          "degree": 42,
+          "survival": 0.031093513450564807
+        },
+        {
+          "degree": 43,
+          "survival": 0.030355964442374133
+        },
+        {
+          "degree": 44,
+          "survival": 0.029424323589922752
+        },
+        {
+          "degree": 45,
+          "survival": 0.02837622763091495
+        },
+        {
+          "degree": 46,
+          "survival": 0.02752222351616785
+        },
+        {
+          "degree": 47,
+          "survival": 0.02666821940142075
+        },
+        {
+          "degree": 48,
+          "survival": 0.025736578548969373
+        },
+        {
+          "degree": 49,
+          "survival": 0.02527075812274368
+        },
+        {
+          "degree": 50,
+          "survival": 0.02457202748340515
+        },
+        {
+          "degree": 51,
+          "survival": 0.023795660106362332
+        },
+        {
+          "degree": 52,
+          "survival": 0.023446294786693064
+        },
+        {
+          "degree": 53,
+          "survival": 0.02282520088505881
+        },
+        {
+          "degree": 54,
+          "survival": 0.0224370171965374
+        },
+        {
+          "degree": 55,
+          "survival": 0.022048833508015994
+        },
+        {
+          "degree": 56,
+          "survival": 0.02142773960638174
+        },
+        {
+          "degree": 57,
+          "survival": 0.02092310081130391
+        },
+        {
+          "degree": 58,
+          "survival": 0.020224370171965374
+        },
+        {
+          "degree": 59,
+          "survival": 0.01964209463918326
+        },
+        {
+          "degree": 60,
+          "survival": 0.019331547688366136
+        },
+        {
+          "degree": 61,
+          "survival": 0.018826908893288304
+        },
+        {
+          "degree": 62,
+          "survival": 0.01824463336050619
+        },
+        {
+          "degree": 63,
+          "survival": 0.017856449671984784
+        },
+        {
+          "degree": 64,
+          "survival": 0.017390629245759095
+        },
+        {
+          "degree": 65,
+          "survival": 0.016924808819533402
+        },
+        {
+          "degree": 66,
+          "survival": 0.016458988393307714
+        },
+        {
+          "degree": 67,
+          "survival": 0.016148441442490585
+        },
+        {
+          "degree": 68,
+          "survival": 0.01576025775396918
+        },
+        {
+          "degree": 69,
+          "survival": 0.015294437327743488
+        },
+        {
+          "degree": 70,
+          "survival": 0.014867435270369938
+        },
+        {
+          "degree": 71,
+          "survival": 0.014595706688404953
+        },
+        {
+          "degree": 72,
+          "survival": 0.014285159737587826
+        },
+        {
+          "degree": 73,
+          "survival": 0.013935794417918559
+        },
+        {
+          "degree": 74,
+          "survival": 0.013702884204805714
+        },
+        {
+          "degree": 75,
+          "survival": 0.01350879236054501
+        },
+        {
+          "degree": 76,
+          "survival": 0.01304297193431932
+        },
+        {
+          "degree": 77,
+          "survival": 0.012771243352354335
+        },
+        {
+          "degree": 78,
+          "survival": 0.012460696401537208
+        },
+        {
+          "degree": 79,
+          "survival": 0.012188967819572221
+        },
+        {
+          "degree": 80,
+          "survival": 0.011917239237607236
+        },
+        {
+          "degree": 81,
+          "survival": 0.011800784131050812
+        },
+        {
+          "degree": 82,
+          "survival": 0.011567873917937968
+        },
+        {
+          "degree": 83,
+          "survival": 0.011334963704825124
+        },
+        {
+          "degree": 84,
+          "survival": 0.01117969022941656
+        },
+        {
+          "degree": 85,
+          "survival": 0.010985598385155856
+        },
+        {
+          "degree": 86,
+          "survival": 0.010869143278599433
+        },
+        {
+          "degree": 87,
+          "survival": 0.010558596327782306
+        },
+        {
+          "degree": 88,
+          "survival": 0.010325686114669462
+        },
+        {
+          "degree": 89,
+          "survival": 0.010286867745817321
+        },
+        {
+          "degree": 90,
+          "survival": 0.010170412639260898
+        },
+        {
+          "degree": 91,
+          "survival": 0.010053957532704477
+        },
+        {
+          "degree": 92,
+          "survival": 0.009898684057295912
+        },
+        {
+          "degree": 93,
+          "survival": 0.009859865688443771
+        },
+        {
+          "degree": 94,
+          "survival": 0.009665773844183068
+        },
+        {
+          "degree": 95,
+          "survival": 0.009510500368774504
+        },
+        {
+          "degree": 96,
+          "survival": 0.0093164085245138
+        },
+        {
+          "degree": 97,
+          "survival": 0.009122316680253095
+        },
+        {
+          "degree": 98,
+          "survival": 0.009044679942548815
+        },
+        {
+          "degree": 99,
+          "survival": 0.008967043204844533
+        },
+        {
+          "degree": 100,
+          "survival": 0.00885058809828811
+        },
+        {
+          "degree": 101,
+          "survival": 0.008734132991731687
+        },
+        {
+          "degree": 102,
+          "survival": 0.008656496254027406
+        },
+        {
+          "degree": 103,
+          "survival": 0.008540041147470983
+        },
+        {
+          "degree": 104,
+          "survival": 0.008462404409766701
+        },
+        {
+          "degree": 105,
+          "survival": 0.008307130934358139
+        },
+        {
+          "degree": 106,
+          "survival": 0.008229494196653857
+        },
+        {
+          "degree": 108,
+          "survival": 0.008035402352393152
+        },
+        {
+          "degree": 109,
+          "survival": 0.007957765614688871
+        },
+        {
+          "degree": 111,
+          "survival": 0.00788012887698459
+        },
+        {
+          "degree": 112,
+          "survival": 0.007802492139280307
+        },
+        {
+          "degree": 113,
+          "survival": 0.007763673770428167
+        },
+        {
+          "degree": 114,
+          "survival": 0.007608400295019603
+        },
+        {
+          "degree": 115,
+          "survival": 0.007530763557315322
+        },
+        {
+          "degree": 116,
+          "survival": 0.0073754900819067585
+        },
+        {
+          "degree": 117,
+          "survival": 0.007181398237646054
+        },
+        {
+          "degree": 118,
+          "survival": 0.007103761499941772
+        },
+        {
+          "degree": 119,
+          "survival": 0.00698730639338535
+        },
+        {
+          "degree": 120,
+          "survival": 0.006832032917976787
+        },
+        {
+          "degree": 121,
+          "survival": 0.006754396180272505
+        },
+        {
+          "degree": 122,
+          "survival": 0.006599122704863941
+        },
+        {
+          "degree": 123,
+          "survival": 0.00652148596715966
+        },
+        {
+          "degree": 124,
+          "survival": 0.006405030860603237
+        },
+        {
+          "degree": 125,
+          "survival": 0.006288575754046815
+        },
+        {
+          "degree": 126,
+          "survival": 0.006210939016342534
+        },
+        {
+          "degree": 127,
+          "survival": 0.0061333022786382516
+        },
+        {
+          "degree": 128,
+          "survival": 0.00605566554093397
+        },
+        {
+          "degree": 129,
+          "survival": 0.005939210434377547
+        },
+        {
+          "degree": 130,
+          "survival": 0.005900392065525406
+        },
+        {
+          "degree": 131,
+          "survival": 0.005861573696673266
+        },
+        {
+          "degree": 133,
+          "survival": 0.005783936958968984
+        },
+        {
+          "degree": 134,
+          "survival": 0.005745118590116843
+        },
+        {
+          "degree": 135,
+          "survival": 0.005706300221264703
+        },
+        {
+          "degree": 137,
+          "survival": 0.00558984511470828
+        },
+        {
+          "degree": 138,
+          "survival": 0.0054733900081518575
+        },
+        {
+          "degree": 139,
+          "survival": 0.005356934901595435
+        },
+        {
+          "degree": 140,
+          "survival": 0.005240479795039012
+        },
+        {
+          "degree": 141,
+          "survival": 0.00512402468848259
+        },
+        {
+          "degree": 142,
+          "survival": 0.004968751213074027
+        },
+        {
+          "degree": 143,
+          "survival": 0.004929932844221886
+        },
+        {
+          "degree": 145,
+          "survival": 0.0047746593688133224
+        },
+        {
+          "degree": 146,
+          "survival": 0.00469702263110904
+        },
+        {
+          "degree": 148,
+          "survival": 0.0046582042622569
+        },
+        {
+          "degree": 149,
+          "survival": 0.004580567524552618
+        },
+        {
+          "degree": 150,
+          "survival": 0.004502930786848337
+        },
+        {
+          "degree": 151,
+          "survival": 0.004386475680291914
+        },
+        {
+          "degree": 153,
+          "survival": 0.004347657311439774
+        },
+        {
+          "degree": 158,
+          "survival": 0.004308838942587633
+        },
+        {
+          "degree": 159,
+          "survival": 0.004231202204883351
+        },
+        {
+          "degree": 160,
+          "survival": 0.004153565467179069
+        },
+        {
+          "degree": 161,
+          "survival": 0.004114747098326928
+        },
+        {
+          "degree": 162,
+          "survival": 0.004075928729474787
+        },
+        {
+          "degree": 163,
+          "survival": 0.004037110360622646
+        },
+        {
+          "degree": 166,
+          "survival": 0.003959473622918365
+        },
+        {
+          "degree": 169,
+          "survival": 0.003920655254066224
+        },
+        {
+          "degree": 174,
+          "survival": 0.0038042001475098015
+        },
+        {
+          "degree": 176,
+          "survival": 0.00372656340980552
+        },
+        {
+          "degree": 177,
+          "survival": 0.0036101083032490976
+        },
+        {
+          "degree": 178,
+          "survival": 0.003532471565544816
+        },
+        {
+          "degree": 179,
+          "survival": 0.0034160164589883933
+        },
+        {
+          "degree": 180,
+          "survival": 0.0032995613524319707
+        },
+        {
+          "degree": 181,
+          "survival": 0.003221924614727689
+        },
+        {
+          "degree": 183,
+          "survival": 0.0031442878770234074
+        },
+        {
+          "degree": 184,
+          "survival": 0.003105469508171267
+        },
+        {
+          "degree": 186,
+          "survival": 0.0030666511393191258
+        },
+        {
+          "degree": 187,
+          "survival": 0.003027832770466985
+        },
+        {
+          "degree": 188,
+          "survival": 0.002989014401614844
+        },
+        {
+          "degree": 190,
+          "survival": 0.0028725592950584215
+        },
+        {
+          "degree": 192,
+          "survival": 0.002833740926206281
+        },
+        {
+          "degree": 195,
+          "survival": 0.00279492255735414
+        },
+        {
+          "degree": 197,
+          "survival": 0.0027561041885019993
+        },
+        {
+          "degree": 201,
+          "survival": 0.0027172858196498582
+        },
+        {
+          "degree": 210,
+          "survival": 0.0026784674507977176
+        },
+        {
+          "degree": 215,
+          "survival": 0.0026396490819455766
+        },
+        {
+          "degree": 225,
+          "survival": 0.002600830713093436
+        },
+        {
+          "degree": 230,
+          "survival": 0.002562012344241295
+        },
+        {
+          "degree": 238,
+          "survival": 0.002523193975389154
+        },
+        {
+          "degree": 242,
+          "survival": 0.0024843756065370134
+        },
+        {
+          "degree": 245,
+          "survival": 0.0024455572376848723
+        },
+        {
+          "degree": 253,
+          "survival": 0.0024067388688327317
+        },
+        {
+          "degree": 257,
+          "survival": 0.0023679204999805907
+        },
+        {
+          "degree": 264,
+          "survival": 0.00232910213112845
+        },
+        {
+          "degree": 269,
+          "survival": 0.002290283762276309
+        },
+        {
+          "degree": 271,
+          "survival": 0.0022514653934241685
+        },
+        {
+          "degree": 274,
+          "survival": 0.0022126470245720275
+        },
+        {
+          "degree": 280,
+          "survival": 0.002173828655719887
+        },
+        {
+          "degree": 284,
+          "survival": 0.002135010286867746
+        },
+        {
+          "degree": 289,
+          "survival": 0.002096191918015605
+        },
+        {
+          "degree": 293,
+          "survival": 0.002057373549163464
+        },
+        {
+          "degree": 299,
+          "survival": 0.002018555180311323
+        },
+        {
+          "degree": 304,
+          "survival": 0.0019797368114591826
+        },
+        {
+          "degree": 311,
+          "survival": 0.0019409184426070418
+        },
+        {
+          "degree": 315,
+          "survival": 0.00186328170490276
+        },
+        {
+          "degree": 321,
+          "survival": 0.001824463336050619
+        },
+        {
+          "degree": 347,
+          "survival": 0.0017856449671984783
+        },
+        {
+          "degree": 356,
+          "survival": 0.0017468265983463375
+        },
+        {
+          "degree": 369,
+          "survival": 0.0017080082294941967
+        },
+        {
+          "degree": 383,
+          "survival": 0.0016691898606420558
+        },
+        {
+          "degree": 384,
+          "survival": 0.001630371491789915
+        },
+        {
+          "degree": 386,
+          "survival": 0.0015915531229377742
+        },
+        {
+          "degree": 395,
+          "survival": 0.0015527347540856334
+        },
+        {
+          "degree": 417,
+          "survival": 0.0015139163852334926
+        },
+        {
+          "degree": 428,
+          "survival": 0.0014750980163813516
+        },
+        {
+          "degree": 431,
+          "survival": 0.0014362796475292107
+        },
+        {
+          "degree": 444,
+          "survival": 0.00139746127867707
+        },
+        {
+          "degree": 457,
+          "survival": 0.0013586429098249291
+        },
+        {
+          "degree": 471,
+          "survival": 0.0013198245409727883
+        },
+        {
+          "degree": 481,
+          "survival": 0.0012810061721206475
+        },
+        {
+          "degree": 499,
+          "survival": 0.0012421878032685067
+        },
+        {
+          "degree": 532,
+          "survival": 0.0012033694344163659
+        },
+        {
+          "degree": 542,
+          "survival": 0.001164551065564225
+        },
+        {
+          "degree": 600,
+          "survival": 0.0011257326967120842
+        },
+        {
+          "degree": 639,
+          "survival": 0.0010869143278599434
+        },
+        {
+          "degree": 645,
+          "survival": 0.0010480959590078024
+        },
+        {
+          "degree": 648,
+          "survival": 0.0010092775901556616
+        },
+        {
+          "degree": 655,
+          "survival": 0.0009704592213035209
+        },
+        {
+          "degree": 664,
+          "survival": 0.00093164085245138
+        },
+        {
+          "degree": 683,
+          "survival": 0.0008928224835992391
+        },
+        {
+          "degree": 745,
+          "survival": 0.0008540041147470983
+        },
+        {
+          "degree": 834,
+          "survival": 0.0008151857458949575
+        },
+        {
+          "degree": 867,
+          "survival": 0.0007763673770428167
+        },
+        {
+          "degree": 869,
+          "survival": 0.0007375490081906758
+        },
+        {
+          "degree": 920,
+          "survival": 0.000698730639338535
+        },
+        {
+          "degree": 921,
+          "survival": 0.0006599122704863942
+        },
+        {
+          "degree": 922,
+          "survival": 0.0006210939016342533
+        },
+        {
+          "degree": 1029,
+          "survival": 0.0005822755327821125
+        },
+        {
+          "degree": 1127,
+          "survival": 0.0005434571639299717
+        },
+        {
+          "degree": 1211,
+          "survival": 0.0005046387950778308
+        },
+        {
+          "degree": 1246,
+          "survival": 0.00046582042622569
+        },
+        {
+          "degree": 1463,
+          "survival": 0.00042700205737354916
+        },
+        {
+          "degree": 1922,
+          "survival": 0.00038818368852140835
+        },
+        {
+          "degree": 2158,
+          "survival": 0.0003493653196692675
+        },
+        {
+          "degree": 2185,
+          "survival": 0.00031054695081712667
+        },
+        {
+          "degree": 2233,
+          "survival": 0.00027172858196498586
+        },
+        {
+          "degree": 2406,
+          "survival": 0.000232910213112845
+        },
+        {
+          "degree": 2587,
+          "survival": 0.00019409184426070418
+        },
+        {
+          "degree": 2982,
+          "survival": 0.00015527347540856334
+        },
+        {
+          "degree": 4576,
+          "survival": 0.0001164551065564225
+        },
+        {
+          "degree": 8594,
+          "survival": 7.763673770428167e-05
+        },
+        {
+          "degree": 15010,
+          "survival": 3.8818368852140834e-05
+        }
+      ],
+      "power_law": {
+        "xmin": 19,
+        "alpha": 2.411105013528508,
+        "ks": 0.010663170704283076,
+        "tail_nodes": 2528,
+        "tail_fraction_positive": 0.09813283645821202,
+        "tail_max": 15010,
+        "tail_decades": 2.8976270912904414,
+        "alpha_near_search_bound": false,
+        "searched_xmin_candidates": 64,
+        "available_xmin_candidates": 191,
+        "vs_discrete_exponential": {
+          "log_likelihood_ratio": 1672.1698531294744,
+          "approx_two_sided_p": 9.379797319682239e-07,
+          "note": "Same fitted tail; approximate iid likelihood-ratio comparison, not a goodness-of-fit test."
+        },
+        "bootstrap": {
+          "requested": 1000,
+          "p_value": 0.42957042957042957,
+          "completed": 1000,
+          "monte_carlo_se": 0.015645922175710123
+        }
+      },
+      "status": "power-law tail not rejected; not proof of a power law",
+      "degree_histogram": {
+        "0": 5300,
+        "1": 4404,
+        "2": 3710,
+        "3": 2992,
+        "4": 2370,
+        "5": 1914,
+        "6": 1503,
+        "7": 1192,
+        "8": 990,
+        "9": 756,
+        "10": 618,
+        "11": 559,
+        "12": 473,
+        "13": 417,
+        "14": 371,
+        "15": 288,
+        "16": 225,
+        "17": 240,
+        "18": 211,
+        "19": 185,
+        "20": 159,
+        "21": 134,
+        "22": 113,
+        "23": 110,
+        "24": 104,
+        "25": 103,
+        "26": 87,
+        "27": 88,
+        "28": 82,
+        "29": 81,
+        "30": 51,
+        "31": 59,
+        "32": 44,
+        "33": 59,
+        "34": 38,
+        "35": 47,
+        "36": 37,
+        "37": 28,
+        "38": 30,
+        "39": 34,
+        "40": 35,
+        "41": 19,
+        "42": 19,
+        "43": 24,
+        "44": 27,
+        "45": 22,
+        "46": 22,
+        "47": 24,
+        "48": 12,
+        "49": 18,
+        "50": 20,
+        "51": 9,
+        "52": 16,
+        "53": 10,
+        "54": 10,
+        "55": 16,
+        "56": 13,
+        "57": 18,
+        "58": 15,
+        "59": 8,
+        "60": 13,
+        "61": 15,
+        "62": 10,
+        "63": 12,
+        "64": 12,
+        "65": 12,
+        "66": 8,
+        "67": 10,
+        "68": 12,
+        "69": 11,
+        "70": 7,
+        "71": 8,
+        "72": 9,
+        "73": 6,
+        "74": 5,
+        "75": 12,
+        "76": 7,
+        "77": 8,
+        "78": 7,
+        "79": 7,
+        "80": 3,
+        "81": 6,
+        "82": 6,
+        "83": 4,
+        "84": 5,
+        "85": 3,
+        "86": 8,
+        "87": 6,
+        "88": 1,
+        "89": 3,
+        "90": 3,
+        "91": 4,
+        "92": 1,
+        "93": 5,
+        "94": 4,
+        "95": 5,
+        "96": 5,
+        "97": 2,
+        "98": 2,
+        "99": 3,
+        "100": 3,
+        "101": 2,
+        "102": 3,
+        "103": 2,
+        "104": 4,
+        "105": 2,
+        "106": 5,
+        "108": 2,
+        "109": 2,
+        "111": 2,
+        "112": 1,
+        "113": 4,
+        "114": 2,
+        "115": 4,
+        "116": 5,
+        "117": 2,
+        "118": 3,
+        "119": 4,
+        "120": 2,
+        "121": 4,
+        "122": 2,
+        "123": 3,
+        "124": 3,
+        "125": 2,
+        "126": 2,
+        "127": 2,
+        "128": 3,
+        "129": 1,
+        "130": 1,
+        "131": 2,
+        "133": 1,
+        "134": 1,
+        "135": 3,
+        "137": 3,
+        "138": 3,
+        "139": 3,
+        "140": 3,
+        "141": 4,
+        "142": 1,
+        "143": 4,
+        "145": 2,
+        "146": 1,
+        "148": 2,
+        "149": 2,
+        "150": 3,
+        "151": 1,
+        "153": 1,
+        "158": 2,
+        "159": 2,
+        "160": 1,
+        "161": 1,
+        "162": 1,
+        "163": 2,
+        "166": 1,
+        "169": 3,
+        "174": 2,
+        "176": 3,
+        "177": 2,
+        "178": 3,
+        "179": 3,
+        "180": 2,
+        "181": 2,
+        "183": 1,
+        "184": 1,
+        "186": 1,
+        "187": 1,
+        "188": 3,
+        "190": 1,
+        "192": 1,
+        "195": 1,
+        "197": 1,
+        "201": 1,
+        "210": 1,
+        "215": 1,
+        "225": 1,
+        "230": 1,
+        "238": 1,
+        "242": 1,
+        "245": 1,
+        "253": 1,
+        "257": 1,
+        "264": 1,
+        "269": 1,
+        "271": 1,
+        "274": 1,
+        "280": 1,
+        "284": 1,
+        "289": 1,
+        "293": 1,
+        "299": 1,
+        "304": 1,
+        "311": 2,
+        "315": 1,
+        "321": 1,
+        "347": 1,
+        "356": 1,
+        "369": 1,
+        "383": 1,
+        "384": 1,
+        "386": 1,
+        "395": 1,
+        "417": 1,
+        "428": 1,
+        "431": 1,
+        "444": 1,
+        "457": 1,
+        "471": 1,
+        "481": 1,
+        "499": 1,
+        "532": 1,
+        "542": 1,
+        "600": 1,
+        "639": 1,
+        "645": 1,
+        "648": 1,
+        "655": 1,
+        "664": 1,
+        "683": 1,
+        "745": 1,
+        "834": 1,
+        "867": 1,
+        "869": 1,
+        "920": 1,
+        "921": 1,
+        "922": 1,
+        "1029": 1,
+        "1127": 1,
+        "1211": 1,
+        "1246": 1,
+        "1463": 1,
+        "1922": 1,
+        "2158": 1,
+        "2185": 1,
+        "2233": 1,
+        "2406": 1,
+        "2587": 1,
+        "2982": 1,
+        "4576": 1,
+        "8594": 1,
+        "15010": 1
+      }
+    },
+    "out_degree": {
+      "nodes": 31061,
+      "zeros": 2249,
+      "mean": 9.45433179871865,
+      "max": 5353,
+      "gini": 0.679502333838053,
+      "top_1_percent_degree_share": 0.2981158546759699,
+      "positive_degree_ccdf": [
+        {
+          "degree": 1,
+          "survival": 1.0
+        },
+        {
+          "degree": 2,
+          "survival": 0.850374843815077
+        },
+        {
+          "degree": 3,
+          "survival": 0.7072053311120367
+        },
+        {
+          "degree": 4,
+          "survival": 0.5833680410939887
+        },
+        {
+          "degree": 5,
+          "survival": 0.4846244620297098
+        },
+        {
+          "degree": 6,
+          "survival": 0.4048660280438706
+        },
+        {
+          "degree": 7,
+          "survival": 0.3439886158545051
+        },
+        {
+          "degree": 8,
+          "survival": 0.2951200888518673
+        },
+        {
+          "degree": 9,
+          "survival": 0.2545814244064973
+        },
+        {
+          "degree": 10,
+          "survival": 0.22004720255449117
+        },
+        {
+          "degree": 11,
+          "survival": 0.19484936831875607
+        },
+        {
+          "degree": 12,
+          "survival": 0.17399000416493127
+        },
+        {
+          "degree": 13,
+          "survival": 0.15562959877828683
+        },
+        {
+          "degree": 14,
+          "survival": 0.14042759961127307
+        },
+        {
+          "degree": 15,
+          "survival": 0.12664861863112592
+        },
+        {
+          "degree": 16,
+          "survival": 0.11554213522143551
+        },
+        {
+          "degree": 17,
+          "survival": 0.10547688463140358
+        },
+        {
+          "degree": 18,
+          "survival": 0.09662640566430654
+        },
+        {
+          "degree": 19,
+          "survival": 0.08947660696931833
+        },
+        {
+          "degree": 20,
+          "survival": 0.08236151603498543
+        },
+        {
+          "degree": 21,
+          "survival": 0.07528113286130779
+        },
+        {
+          "degree": 22,
+          "survival": 0.07024850756629182
+        },
+        {
+          "degree": 23,
+          "survival": 0.06545883659586284
+        },
+        {
+          "degree": 24,
+          "survival": 0.06150215188116063
+        },
+        {
+          "degree": 25,
+          "survival": 0.057857837012355966
+        },
+        {
+          "degree": 26,
+          "survival": 0.0548035540746911
+        },
+        {
+          "degree": 27,
+          "survival": 0.051818686658336804
+        },
+        {
+          "degree": 28,
+          "survival": 0.04914618908788005
+        },
+        {
+          "degree": 29,
+          "survival": 0.04657781479938914
+        },
+        {
+          "degree": 30,
+          "survival": 0.044148271553519365
+        },
+        {
+          "degree": 31,
+          "survival": 0.04230876023878939
+        },
+        {
+          "degree": 32,
+          "survival": 0.040538664445369986
+        },
+        {
+          "degree": 33,
+          "survival": 0.03856032208801888
+        },
+        {
+          "degree": 34,
+          "survival": 0.03679022629459947
+        },
+        {
+          "degree": 35,
+          "survival": 0.035020130501180066
+        },
+        {
+          "degree": 36,
+          "survival": 0.03390948216021102
+        },
+        {
+          "degree": 37,
+          "survival": 0.03231292517006803
+        },
+        {
+          "degree": 38,
+          "survival": 0.031063445786477857
+        },
+        {
+          "degree": 39,
+          "survival": 0.02988338192419825
+        },
+        {
+          "degree": 40,
+          "survival": 0.02835624045536582
+        },
+        {
+          "degree": 41,
+          "survival": 0.027280299875052063
+        },
+        {
+          "degree": 42,
+          "survival": 0.026516729140635846
+        },
+        {
+          "degree": 43,
+          "survival": 0.02571845064556435
+        },
+        {
+          "degree": 44,
+          "survival": 0.024677217825905873
+        },
+        {
+          "degree": 45,
+          "survival": 0.023809523809523808
+        },
+        {
+          "degree": 46,
+          "survival": 0.023045953075107595
+        },
+        {
+          "degree": 47,
+          "survival": 0.022351797862001945
+        },
+        {
+          "degree": 48,
+          "survival": 0.02172705817020686
+        },
+        {
+          "degree": 49,
+          "survival": 0.021137026239067054
+        },
+        {
+          "degree": 50,
+          "survival": 0.02051228654727197
+        },
+        {
+          "degree": 51,
+          "survival": 0.019887546855476886
+        },
+        {
+          "degree": 52,
+          "survival": 0.019366930445647648
+        },
+        {
+          "degree": 53,
+          "survival": 0.018915729557128974
+        },
+        {
+          "degree": 54,
+          "survival": 0.018221574344023325
+        },
+        {
+          "degree": 55,
+          "survival": 0.017666250173538803
+        },
+        {
+          "degree": 56,
+          "survival": 0.017284464806330696
+        },
+        {
+          "degree": 57,
+          "survival": 0.01690267943912259
+        },
+        {
+          "degree": 58,
+          "survival": 0.016451478550603915
+        },
+        {
+          "degree": 59,
+          "survival": 0.01610440094405109
+        },
+        {
+          "degree": 60,
+          "survival": 0.015757323337498266
+        },
+        {
+          "degree": 61,
+          "survival": 0.015444953491600723
+        },
+        {
+          "degree": 62,
+          "survival": 0.014924337081771485
+        },
+        {
+          "degree": 63,
+          "survival": 0.014577259475218658
+        },
+        {
+          "degree": 64,
+          "survival": 0.014160766347355268
+        },
+        {
+          "degree": 65,
+          "survival": 0.013848396501457727
+        },
+        {
+          "degree": 66,
+          "survival": 0.013674857698181313
+        },
+        {
+          "degree": 67,
+          "survival": 0.013293072330973205
+        },
+        {
+          "degree": 68,
+          "survival": 0.013119533527696793
+        },
+        {
+          "degree": 69,
+          "survival": 0.012841871442454533
+        },
+        {
+          "degree": 70,
+          "survival": 0.012564209357212273
+        },
+        {
+          "degree": 71,
+          "survival": 0.01239067055393586
+        },
+        {
+          "degree": 72,
+          "survival": 0.0121130084686936
+        },
+        {
+          "degree": 73,
+          "survival": 0.01197417742607247
+        },
+        {
+          "degree": 74,
+          "survival": 0.011661807580174927
+        },
+        {
+          "degree": 75,
+          "survival": 0.011453561016243232
+        },
+        {
+          "degree": 76,
+          "survival": 0.01128002221296682
+        },
+        {
+          "degree": 77,
+          "survival": 0.011141191170345689
+        },
+        {
+          "degree": 78,
+          "survival": 0.011037067888379841
+        },
+        {
+          "degree": 79,
+          "survival": 0.010932944606413994
+        },
+        {
+          "degree": 80,
+          "survival": 0.010759405803137582
+        },
+        {
+          "degree": 81,
+          "survival": 0.010689990281827016
+        },
+        {
+          "degree": 82,
+          "survival": 0.010516451478550603
+        },
+        {
+          "degree": 83,
+          "survival": 0.010308204914618908
+        },
+        {
+          "degree": 84,
+          "survival": 0.01006525059003193
+        },
+        {
+          "degree": 85,
+          "survival": 0.009857004026100236
+        },
+        {
+          "degree": 86,
+          "survival": 0.009683465222823824
+        },
+        {
+          "degree": 87,
+          "survival": 0.009405803137581563
+        },
+        {
+          "degree": 88,
+          "survival": 0.009162848812994586
+        },
+        {
+          "degree": 89,
+          "survival": 0.00895460224906289
+        },
+        {
+          "degree": 90,
+          "survival": 0.008885186727752325
+        },
+        {
+          "degree": 91,
+          "survival": 0.008711647924475914
+        },
+        {
+          "degree": 92,
+          "survival": 0.008572816881854782
+        },
+        {
+          "degree": 93,
+          "survival": 0.008433985839233653
+        },
+        {
+          "degree": 94,
+          "survival": 0.008329862557267805
+        },
+        {
+          "degree": 95,
+          "survival": 0.00826044703595724
+        },
+        {
+          "degree": 97,
+          "survival": 0.008156323753991392
+        },
+        {
+          "degree": 98,
+          "survival": 0.008086908232680828
+        },
+        {
+          "degree": 99,
+          "survival": 0.007948077190059697
+        },
+        {
+          "degree": 100,
+          "survival": 0.007878661668749133
+        },
+        {
+          "degree": 101,
+          "survival": 0.007739830626128002
+        },
+        {
+          "degree": 102,
+          "survival": 0.0077051228654727195
+        },
+        {
+          "degree": 103,
+          "survival": 0.007600999583506872
+        },
+        {
+          "degree": 104,
+          "survival": 0.0074274607802304595
+        },
+        {
+          "degree": 105,
+          "survival": 0.007392753019575177
+        },
+        {
+          "degree": 106,
+          "survival": 0.007253921976954047
+        },
+        {
+          "degree": 108,
+          "survival": 0.007045675413022352
+        },
+        {
+          "degree": 109,
+          "survival": 0.006941552131056504
+        },
+        {
+          "degree": 110,
+          "survival": 0.0069068443704012215
+        },
+        {
+          "degree": 111,
+          "survival": 0.006768013327780092
+        },
+        {
+          "degree": 112,
+          "survival": 0.006698597806469526
+        },
+        {
+          "degree": 114,
+          "survival": 0.006559766763848397
+        },
+        {
+          "degree": 115,
+          "survival": 0.006420935721227266
+        },
+        {
+          "degree": 117,
+          "survival": 0.006247396917950854
+        },
+        {
+          "degree": 118,
+          "survival": 0.006143273635985006
+        },
+        {
+          "degree": 119,
+          "survival": 0.0060738581146744415
+        },
+        {
+          "degree": 120,
+          "survival": 0.006004442593363876
+        },
+        {
+          "degree": 121,
+          "survival": 0.005935027072053311
+        },
+        {
+          "degree": 122,
+          "survival": 0.005865611550742746
+        },
+        {
+          "degree": 123,
+          "survival": 0.005726780508121616
+        },
+        {
+          "degree": 124,
+          "survival": 0.005622657226155768
+        },
+        {
+          "degree": 125,
+          "survival": 0.0055532417048452035
+        },
+        {
+          "degree": 126,
+          "survival": 0.005518533944189921
+        },
+        {
+          "degree": 127,
+          "survival": 0.005483826183534639
+        },
+        {
+          "degree": 128,
+          "survival": 0.005344995140913508
+        },
+        {
+          "degree": 129,
+          "survival": 0.0052755796196029435
+        },
+        {
+          "degree": 130,
+          "survival": 0.005240871858947661
+        },
+        {
+          "degree": 131,
+          "survival": 0.00510204081632653
+        },
+        {
+          "degree": 134,
+          "survival": 0.005032625295015965
+        },
+        {
+          "degree": 135,
+          "survival": 0.004963209773705401
+        },
+        {
+          "degree": 136,
+          "survival": 0.004893794252394836
+        },
+        {
+          "degree": 137,
+          "survival": 0.004859086491739553
+        },
+        {
+          "degree": 138,
+          "survival": 0.004789670970428988
+        },
+        {
+          "degree": 139,
+          "survival": 0.004720255449118423
+        },
+        {
+          "degree": 140,
+          "survival": 0.004616132167152575
+        },
+        {
+          "degree": 141,
+          "survival": 0.004581424406497293
+        },
+        {
+          "degree": 143,
+          "survival": 0.004477301124531445
+        },
+        {
+          "degree": 144,
+          "survival": 0.00440788560322088
+        },
+        {
+          "degree": 145,
+          "survival": 0.004234346799944467
+        },
+        {
+          "degree": 147,
+          "survival": 0.004199639039289185
+        },
+        {
+          "degree": 149,
+          "survival": 0.004164931278633903
+        },
+        {
+          "degree": 150,
+          "survival": 0.00413022351797862
+        },
+        {
+          "degree": 154,
+          "survival": 0.004095515757323338
+        },
+        {
+          "degree": 155,
+          "survival": 0.00399139247535749
+        },
+        {
+          "degree": 157,
+          "survival": 0.0039219769540469246
+        },
+        {
+          "degree": 158,
+          "survival": 0.0038525614327363598
+        },
+        {
+          "degree": 160,
+          "survival": 0.0038178536720810774
+        },
+        {
+          "degree": 161,
+          "survival": 0.003783145911425795
+        },
+        {
+          "degree": 162,
+          "survival": 0.0037137303901152298
+        },
+        {
+          "degree": 163,
+          "survival": 0.0036790226294599474
+        },
+        {
+          "degree": 165,
+          "survival": 0.003609607108149382
+        },
+        {
+          "degree": 166,
+          "survival": 0.0035748993474940998
+        },
+        {
+          "degree": 167,
+          "survival": 0.0035054838261835346
+        },
+        {
+          "degree": 169,
+          "survival": 0.003470776065528252
+        },
+        {
+          "degree": 170,
+          "survival": 0.003401360544217687
+        },
+        {
+          "degree": 171,
+          "survival": 0.0033666527835624046
+        },
+        {
+          "degree": 172,
+          "survival": 0.003331945022907122
+        },
+        {
+          "degree": 173,
+          "survival": 0.0032972372622518393
+        },
+        {
+          "degree": 174,
+          "survival": 0.0032278217409412746
+        },
+        {
+          "degree": 175,
+          "survival": 0.0031931139802859917
+        },
+        {
+          "degree": 176,
+          "survival": 0.003123698458975427
+        },
+        {
+          "degree": 177,
+          "survival": 0.0030889906983201446
+        },
+        {
+          "degree": 182,
+          "survival": 0.0030542829376648617
+        },
+        {
+          "degree": 183,
+          "survival": 0.002984867416354297
+        },
+        {
+          "degree": 184,
+          "survival": 0.002950159655699014
+        },
+        {
+          "degree": 185,
+          "survival": 0.0029154518950437317
+        },
+        {
+          "degree": 186,
+          "survival": 0.0028807441343884493
+        },
+        {
+          "degree": 189,
+          "survival": 0.002846036373733167
+        },
+        {
+          "degree": 190,
+          "survival": 0.002811328613077884
+        },
+        {
+          "degree": 191,
+          "survival": 0.0027766208524226017
+        },
+        {
+          "degree": 192,
+          "survival": 0.0027419130917673193
+        },
+        {
+          "degree": 193,
+          "survival": 0.0027072053311120365
+        },
+        {
+          "degree": 197,
+          "survival": 0.002603082049146189
+        },
+        {
+          "degree": 200,
+          "survival": 0.002533666527835624
+        },
+        {
+          "degree": 202,
+          "survival": 0.0024989587671803417
+        },
+        {
+          "degree": 204,
+          "survival": 0.002464251006525059
+        },
+        {
+          "degree": 210,
+          "survival": 0.0024295432458697765
+        },
+        {
+          "degree": 212,
+          "survival": 0.002394835485214494
+        },
+        {
+          "degree": 218,
+          "survival": 0.0023601277245592113
+        },
+        {
+          "degree": 219,
+          "survival": 0.0022907122032486465
+        },
+        {
+          "degree": 225,
+          "survival": 0.0022560044425933637
+        },
+        {
+          "degree": 228,
+          "survival": 0.0022212966819380813
+        },
+        {
+          "degree": 232,
+          "survival": 0.002186588921282799
+        },
+        {
+          "degree": 235,
+          "survival": 0.0021518811606275165
+        },
+        {
+          "degree": 245,
+          "survival": 0.0021171733999722337
+        },
+        {
+          "degree": 247,
+          "survival": 0.0020824656393169513
+        },
+        {
+          "degree": 252,
+          "survival": 0.002047757878661669
+        },
+        {
+          "degree": 258,
+          "survival": 0.002013050118006386
+        },
+        {
+          "degree": 261,
+          "survival": 0.0019783423573511037
+        },
+        {
+          "degree": 271,
+          "survival": 0.0019089268360405387
+        },
+        {
+          "degree": 276,
+          "survival": 0.001874219075385256
+        },
+        {
+          "degree": 283,
+          "survival": 0.0018395113147299737
+        },
+        {
+          "degree": 287,
+          "survival": 0.0017700957934194085
+        },
+        {
+          "degree": 290,
+          "survival": 0.001735388032764126
+        },
+        {
+          "degree": 293,
+          "survival": 0.0017006802721088435
+        },
+        {
+          "degree": 297,
+          "survival": 0.001665972511453561
+        },
+        {
+          "degree": 305,
+          "survival": 0.0016312647507982785
+        },
+        {
+          "degree": 311,
+          "survival": 0.0015965569901429959
+        },
+        {
+          "degree": 322,
+          "survival": 0.0015618492294877135
+        },
+        {
+          "degree": 323,
+          "survival": 0.0015271414688324309
+        },
+        {
+          "degree": 339,
+          "survival": 0.0014924337081771485
+        },
+        {
+          "degree": 345,
+          "survival": 0.0014577259475218659
+        },
+        {
+          "degree": 346,
+          "survival": 0.0014230181868665835
+        },
+        {
+          "degree": 357,
+          "survival": 0.0013883104262113009
+        },
+        {
+          "degree": 375,
+          "survival": 0.0013536026655560183
+        },
+        {
+          "degree": 380,
+          "survival": 0.0013188949049007359
+        },
+        {
+          "degree": 397,
+          "survival": 0.0012841871442454533
+        },
+        {
+          "degree": 400,
+          "survival": 0.0012494793835901709
+        },
+        {
+          "degree": 434,
+          "survival": 0.0012147716229348883
+        },
+        {
+          "degree": 452,
+          "survival": 0.0011800638622796056
+        },
+        {
+          "degree": 486,
+          "survival": 0.0011453561016243233
+        },
+        {
+          "degree": 495,
+          "survival": 0.0011106483409690406
+        },
+        {
+          "degree": 512,
+          "survival": 0.0010759405803137583
+        },
+        {
+          "degree": 517,
+          "survival": 0.0010412328196584756
+        },
+        {
+          "degree": 528,
+          "survival": 0.001006525059003193
+        },
+        {
+          "degree": 531,
+          "survival": 0.0009718172983479105
+        },
+        {
+          "degree": 559,
+          "survival": 0.000937109537692628
+        },
+        {
+          "degree": 578,
+          "survival": 0.0009024017770373455
+        },
+        {
+          "degree": 579,
+          "survival": 0.000867694016382063
+        },
+        {
+          "degree": 589,
+          "survival": 0.0008329862557267805
+        },
+        {
+          "degree": 600,
+          "survival": 0.0007982784950714979
+        },
+        {
+          "degree": 620,
+          "survival": 0.0007635707344162154
+        },
+        {
+          "degree": 638,
+          "survival": 0.0007288629737609329
+        },
+        {
+          "degree": 674,
+          "survival": 0.0006941552131056504
+        },
+        {
+          "degree": 705,
+          "survival": 0.0006594474524503679
+        },
+        {
+          "degree": 795,
+          "survival": 0.0006247396917950854
+        },
+        {
+          "degree": 1034,
+          "survival": 0.0005900319311398028
+        },
+        {
+          "degree": 1241,
+          "survival": 0.0005553241704845203
+        },
+        {
+          "degree": 1367,
+          "survival": 0.0005206164098292378
+        },
+        {
+          "degree": 1467,
+          "survival": 0.00048590864917395527
+        },
+        {
+          "degree": 1577,
+          "survival": 0.00045120088851867277
+        },
+        {
+          "degree": 1647,
+          "survival": 0.00041649312786339027
+        },
+        {
+          "degree": 1775,
+          "survival": 0.0003817853672081077
+        },
+        {
+          "degree": 1914,
+          "survival": 0.0003470776065528252
+        },
+        {
+          "degree": 1928,
+          "survival": 0.0003123698458975427
+        },
+        {
+          "degree": 2037,
+          "survival": 0.00027766208524226016
+        },
+        {
+          "degree": 2134,
+          "survival": 0.00024295432458697764
+        },
+        {
+          "degree": 2172,
+          "survival": 0.00020824656393169514
+        },
+        {
+          "degree": 2578,
+          "survival": 0.0001735388032764126
+        },
+        {
+          "degree": 3305,
+          "survival": 0.00013883104262113008
+        },
+        {
+          "degree": 3371,
+          "survival": 0.00010412328196584757
+        },
+        {
+          "degree": 3395,
+          "survival": 6.941552131056504e-05
+        },
+        {
+          "degree": 5353,
+          "survival": 3.470776065528252e-05
+        }
+      ],
+      "power_law": {
+        "xmin": 13,
+        "alpha": 2.4476836637068495,
+        "ks": 0.009765259051799424,
+        "tail_nodes": 4484,
+        "tail_fraction_positive": 0.15562959877828683,
+        "tail_max": 5353,
+        "tail_decades": 2.614653891076595,
+        "alpha_near_search_bound": false,
+        "searched_xmin_candidates": 64,
+        "available_xmin_candidates": 193,
+        "vs_discrete_exponential": {
+          "log_likelihood_ratio": 2414.60561187045,
+          "approx_two_sided_p": 3.992484241764046e-15,
+          "note": "Same fitted tail; approximate iid likelihood-ratio comparison, not a goodness-of-fit test."
+        },
+        "bootstrap": {
+          "requested": 1000,
+          "p_value": 0.26673326673326675,
+          "completed": 1000,
+          "monte_carlo_se": 0.013978241660207322
+        }
+      },
+      "status": "power-law tail not rejected; not proof of a power law",
+      "degree_histogram": {
+        "0": 2249,
+        "1": 4311,
+        "2": 4125,
+        "3": 3568,
+        "4": 2845,
+        "5": 2298,
+        "6": 1754,
+        "7": 1408,
+        "8": 1168,
+        "9": 995,
+        "10": 726,
+        "11": 601,
+        "12": 529,
+        "13": 438,
+        "14": 397,
+        "15": 320,
+        "16": 290,
+        "17": 255,
+        "18": 206,
+        "19": 205,
+        "20": 204,
+        "21": 145,
+        "22": 138,
+        "23": 114,
+        "24": 105,
+        "25": 88,
+        "26": 86,
+        "27": 77,
+        "28": 74,
+        "29": 70,
+        "30": 53,
+        "31": 51,
+        "32": 57,
+        "33": 51,
+        "34": 51,
+        "35": 32,
+        "36": 46,
+        "37": 36,
+        "38": 34,
+        "39": 44,
+        "40": 31,
+        "41": 22,
+        "42": 23,
+        "43": 30,
+        "44": 25,
+        "45": 22,
+        "46": 20,
+        "47": 18,
+        "48": 17,
+        "49": 18,
+        "50": 18,
+        "51": 15,
+        "52": 13,
+        "53": 20,
+        "54": 16,
+        "55": 11,
+        "56": 11,
+        "57": 13,
+        "58": 10,
+        "59": 10,
+        "60": 9,
+        "61": 15,
+        "62": 10,
+        "63": 12,
+        "64": 9,
+        "65": 5,
+        "66": 11,
+        "67": 5,
+        "68": 8,
+        "69": 8,
+        "70": 5,
+        "71": 8,
+        "72": 4,
+        "73": 9,
+        "74": 6,
+        "75": 5,
+        "76": 4,
+        "77": 3,
+        "78": 3,
+        "79": 5,
+        "80": 2,
+        "81": 5,
+        "82": 6,
+        "83": 7,
+        "84": 6,
+        "85": 5,
+        "86": 8,
+        "87": 7,
+        "88": 6,
+        "89": 2,
+        "90": 5,
+        "91": 4,
+        "92": 4,
+        "93": 3,
+        "94": 2,
+        "95": 3,
+        "97": 2,
+        "98": 4,
+        "99": 2,
+        "100": 4,
+        "101": 1,
+        "102": 3,
+        "103": 5,
+        "104": 1,
+        "105": 4,
+        "106": 6,
+        "108": 3,
+        "109": 1,
+        "110": 4,
+        "111": 2,
+        "112": 4,
+        "114": 4,
+        "115": 5,
+        "117": 3,
+        "118": 2,
+        "119": 2,
+        "120": 2,
+        "121": 2,
+        "122": 4,
+        "123": 3,
+        "124": 2,
+        "125": 1,
+        "126": 1,
+        "127": 4,
+        "128": 2,
+        "129": 1,
+        "130": 4,
+        "131": 2,
+        "134": 2,
+        "135": 2,
+        "136": 1,
+        "137": 2,
+        "138": 2,
+        "139": 3,
+        "140": 1,
+        "141": 3,
+        "143": 2,
+        "144": 5,
+        "145": 1,
+        "147": 1,
+        "149": 1,
+        "150": 1,
+        "154": 3,
+        "155": 2,
+        "157": 2,
+        "158": 1,
+        "160": 1,
+        "161": 2,
+        "162": 1,
+        "163": 2,
+        "165": 1,
+        "166": 2,
+        "167": 1,
+        "169": 2,
+        "170": 1,
+        "171": 1,
+        "172": 1,
+        "173": 2,
+        "174": 1,
+        "175": 2,
+        "176": 1,
+        "177": 1,
+        "182": 2,
+        "183": 1,
+        "184": 1,
+        "185": 1,
+        "186": 1,
+        "189": 1,
+        "190": 1,
+        "191": 1,
+        "192": 1,
+        "193": 3,
+        "197": 2,
+        "200": 1,
+        "202": 1,
+        "204": 1,
+        "210": 1,
+        "212": 1,
+        "218": 2,
+        "219": 1,
+        "225": 1,
+        "228": 1,
+        "232": 1,
+        "235": 1,
+        "245": 1,
+        "247": 1,
+        "252": 1,
+        "258": 1,
+        "261": 2,
+        "271": 1,
+        "276": 1,
+        "283": 2,
+        "287": 1,
+        "290": 1,
+        "293": 1,
+        "297": 1,
+        "305": 1,
+        "311": 1,
+        "322": 1,
+        "323": 1,
+        "339": 1,
+        "345": 1,
+        "346": 1,
+        "357": 1,
+        "375": 1,
+        "380": 1,
+        "397": 1,
+        "400": 1,
+        "434": 1,
+        "452": 1,
+        "486": 1,
+        "495": 1,
+        "512": 1,
+        "517": 1,
+        "528": 1,
+        "531": 1,
+        "559": 1,
+        "578": 1,
+        "579": 1,
+        "589": 1,
+        "600": 1,
+        "620": 1,
+        "638": 1,
+        "674": 1,
+        "705": 1,
+        "795": 1,
+        "1034": 1,
+        "1241": 1,
+        "1367": 1,
+        "1467": 1,
+        "1577": 1,
+        "1647": 1,
+        "1775": 1,
+        "1914": 1,
+        "1928": 1,
+        "2037": 1,
+        "2134": 1,
+        "2172": 1,
+        "2578": 1,
+        "3305": 1,
+        "3371": 1,
+        "3395": 1,
+        "5353": 1
+      }
+    }
+  },
+  "references": {
+    "power_law": "https://arxiv.org/abs/0706.1062",
+    "clustering_hierarchy": "https://arxiv.org/abs/cond-mat/0206130"
+  }
+}
