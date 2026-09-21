@@ -32,6 +32,7 @@ def create_cascade_collate_fn(max_len):
                 observed_tensor = observed_tensor[:max_len]
             observed_padded[i, :len(observed_tensor)] = observed_tensor
 
+
             neg_tensor = torch.tensor(item['negative_samples'], dtype=torch.long) if item['negative_samples'] else torch.tensor([0], dtype=torch.long)
             actual_neg_len = min(len(neg_tensor), max_neg_len)
             negative_samples_padded[i, :actual_neg_len] = neg_tensor[:actual_neg_len]

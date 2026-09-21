@@ -2718,6 +2718,48 @@
   },
   "references": {
     "power_law": "https://arxiv.org/abs/0706.1062",
-    "clustering_hierarchy": "https://arxiv.org/abs/cond-mat/0206130"
+    "clustering_hierarchy": "https://arxiv.org/abs/cond-mat/0206130",
+    "hyperbolicity": "https://doc.sagemath.org/html/en/reference/graphs/sage/graphs/hyperbolicity.html"
+  },
+  "hyperbolicity": {
+    "method": "uniform_quadruple_mean",
+    "mode": "sampled",
+    "definition": "delta_avg=mean((largest_pair_sum-second_largest_pair_sum)/2)",
+    "normalization": "delta_G=2*delta_avg/d_avg; not clipped to [0,1]",
+    "metric": "unweighted undirected vertex shortest-path metric",
+    "seed": 21,
+    "quadruples_requested": 100000,
+    "pairs_requested": 100000,
+    "scope": "largest",
+    "total_nodes": 12232,
+    "components": 501,
+    "analysed_nodes": 11729,
+    "excluded_nodes": 503,
+    "node_coverage": 0.9588783518639634,
+    "delta_avg": 0.18947,
+    "d_avg": 3.00096,
+    "delta_G": 0.12627292599701428,
+    "quadruples_evaluated": 100000,
+    "pairs_evaluated": 100000,
+    "status": "sampled_mean",
+    "delta_avg_mc_se": 0.0007939568594545592,
+    "d_avg_mc_se": 0.0020878779601173443,
+    "delta_G_approx_mc_se": 0.0005363787939182268,
+    "sampled_delta_histogram": {
+      "0.0": 62945,
+      "0.5": 36217,
+      "1.0": 837,
+      "1.5": 1
+    },
+    "pair_distance_histogram": {
+      "1": 298,
+      "2": 19770,
+      "3": 60536,
+      "4": 18348,
+      "5": 1030,
+      "6": 18
+    },
+    "note": "Mean statistic, not maximum Gromov delta. Small values alone do not establish a tree or hierarchy.",
+    "method_reference": "方法参照：[1]谢文锦.社交与学术网络上的信息传播预测研究[D].西南大学,2025.DOI:10.27684/d.cnki.gxndx.2025.003879."
   }
 }

@@ -18,6 +18,8 @@ auto 模式将完全双向对称的边集合视为无向图，这只是存储约
 
 输出 analysis.json（全部指标）、summary.md（中文说明）和 diagnostics.png（可选）。
 另输出 degree_distribution_linear.png / degree_distribution_loglog.png，分别用普通/双对数坐标绘制度分布。
+默认随机四点法计算平均 δ_avg 和归一化 δ_G=2δ_avg/d_avg；--hyperbolicity off 可跳过。
+非连通图默认分析最大连通分量并报告覆盖率；平均值不是最大 Gromov δ。
 层级指标不是因果传播层次；BFS 层数不是原图为树的证据。
 幂律使用离散极大似然和 KS 选择尾部阈值，不用双对数直线回归证明幂律。
 默认运行 1000 次 bootstrap；可用 --bootstrap 0 跳过，跳过时不判断是否服从幂律。
@@ -37,9 +39,11 @@ import uuid
 
 
 ROOT = Path(__file__).resolve().parent
+HYPERBOLICITY_METHOD_REFERENCE = "方法参照：[1]谢文锦.社交与学术网络上的信息传播预测研究[D].西南大学,2025.DOI:10.27684/d.cnki.gxndx.2025.003879."
 REFERENCES = {
     "power_law": "https://arxiv.org/abs/0706.1062",
     "clustering_hierarchy": "https://arxiv.org/abs/cond-mat/0206130",
+    "hyperbolicity": "https://doc.sagemath.org/html/en/reference/graphs/sage/graphs/hyperbolicity.html",
 }
 PLOT_FILES = ("diagnostics.png", "degree_distribution_linear.png", "degree_distribution_loglog.png")
 
@@ -58,6 +62,14 @@ def parse_args(argv=None):
     parser.add_argument("--max-xmin-candidates", type=int, default=64, help="搜索阈值数量上限，0 表示全部")
     parser.add_argument("--bootstrap", type=int, default=1000, help="半参数模拟次数，默认 1000，每次重新拟合；0 表示跳过")
     parser.add_argument("--seed", type=int, default=21)
+    parser.add_argument("--hyperbolicity", choices=("sampled", "off"), default="sampled",
+                        help="随机四点平均双曲度；off 跳过")
+    parser.add_argument("--hyperbolicity-samples", type=int, default=100000,
+                        help="全分量均匀抽样的互异四元组数量，默认 100000")
+    parser.add_argument("--hyperbolicity-pairs", type=int, default=100000,
+                        help="用于估计 d_avg 的独立互异节点对数量，默认 100000")
+    parser.add_argument("--hyperbolicity-scope", choices=("largest", "require-connected"), default="largest",
+                        help="默认分析最大连通分量；require-connected 在非连通图上报错")
     parser.add_argument("--no-plots", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args(argv)
@@ -71,6 +83,8 @@ def parse_args(argv=None):
     if min(args.clustering_samples, args.bootstrap, args.max_xmin_candidates) < 0 or args.min_tail < 2:
         parser.error("采样/模拟次数不能为负，min-tail 至少为 2")
     args.output_dir = (args.output_dir or ROOT / "analysis" / args.dataset).resolve()
+    if args.hyperbolicity_samples < 1 or args.hyperbolicity_pairs < 1:
+        parser.error("双曲度 samples/pairs 必须为正整数")
     if args.output_dir.exists() and (not args.output_dir.is_dir() or not args.overwrite):
         parser.error("输出目录已存在，请指定新目录或使用 --overwrite")
     return args
@@ -277,6 +291,109 @@ def structure_metrics(graph, sample_size, seed):
                 len(c) > 1 and nx.is_arborescence(graph.subgraph(c)) for c in components),
             "note": "SCC condensation is always a DAG; its levels alone do not prove the original graph is hierarchical."}
     return tree, hierarchy
+
+
+def random_distinct_rows(rng, n, count, width):
+    """均匀抽取互异节点；不同样本可以重复，不限制候选节点池。"""
+    import numpy as np
+    rows = rng.integers(0, n, size=(count, width))
+    while True:
+        invalid = (np.diff(np.sort(rows, axis=1), axis=1) == 0).any(axis=1)
+        if not invalid.any():
+            return rows
+        rows[invalid] = rng.integers(0, n, size=(int(invalid.sum()), width))
+
+
+def queried_distances(graph, ids, pairs):
+    """对需要的节点对求精确最短路，分批 BFS，避免存储全源 n*n 距离矩阵。"""
+    import numpy as np
+    import networkx as nx
+    from scipy.sparse.csgraph import shortest_path
+    adjacency = nx.to_scipy_sparse_array(graph, nodelist=ids, dtype=np.float64, format="csr")
+    adjacency.indices = adjacency.indices.astype(np.int32)
+    adjacency.indptr = adjacency.indptr.astype(np.int32)
+    # 无向距离对称，统一端点次序减少重复 BFS；结果恢复原查询顺序。
+    pairs = np.sort(pairs, axis=1)
+    order = np.argsort(pairs[:, 0], kind="stable")
+    sorted_pairs = pairs[order]
+    sources, starts = np.unique(sorted_pairs[:, 0], return_index=True)
+    ends = np.r_[starts[1:], len(pairs)]
+    output = np.empty(len(pairs), dtype=np.float64)
+    for begin in range(0, len(sources), 16):
+        selected = sources[begin:begin+16]
+        block = shortest_path(adjacency, directed=False, unweighted=True, indices=selected)
+        for row in range(len(selected)):
+            i = begin + row
+            positions = slice(starts[i], ends[i])
+            output[order[positions]] = block[row, sorted_pairs[positions, 1]]
+        if begin % 2048 == 0 or begin + 16 >= len(sources):
+            print(f"  Shortest paths: {min(begin+16, len(sources))}/{len(sources)} sources", flush=True)
+    if not np.isfinite(output).all():
+        raise ValueError("平均双曲度分析范围内存在不可达节点对")
+    return output
+
+
+def hyperbolicity_metrics(graph, args):
+    """按用户给定公式计算平均四点偏差及 2*delta_avg/d_avg，不计算全局最大值。
+
+    方法参照：[1]谢文锦.社交与学术网络上的信息传播预测研究[D].西南大学,2025.DOI:10.27684/d.cnki.gxndx.2025.003879.
+
+    四元组在完整分析分量上均匀抽样，组内四节点互异；d_avg 使用独立抽样
+    的互异节点对。非连通图默认采用最大连通分量，并显式报告覆盖范围。
+    归一化比值不截断：该公式并不能保证结果落在 [0,1]（四节点环约为 1.5）。
+    """
+    import networkx as nx
+    import numpy as np
+    result = {"method": "uniform_quadruple_mean", "mode": args.hyperbolicity,
+              "method_reference": HYPERBOLICITY_METHOD_REFERENCE,
+              "definition": "delta_avg=mean((largest_pair_sum-second_largest_pair_sum)/2)",
+              "normalization": "delta_G=2*delta_avg/d_avg; not clipped to [0,1]",
+              "metric": "unweighted undirected vertex shortest-path metric", "seed": args.seed,
+              "quadruples_requested": args.hyperbolicity_samples,
+              "pairs_requested": args.hyperbolicity_pairs, "scope": args.hyperbolicity_scope}
+    if args.hyperbolicity == "off":
+        return {**result, "status": "skipped"}
+    undirected = graph.to_undirected()
+    components = sorted(nx.connected_components(undirected), key=lambda c: (-len(c), min(c)))
+    if args.hyperbolicity_scope == "require-connected" and len(components) != 1:
+        raise ValueError("平均双曲度要求连通图；可使用 --hyperbolicity-scope largest 分析最大连通分量")
+    ids = sorted(components[0]) if components else []
+    n = len(ids)
+    result.update({"total_nodes": len(undirected), "components": len(components),
+                   "analysed_nodes": n, "excluded_nodes": len(undirected)-n,
+                   "node_coverage": n/len(undirected) if len(undirected) else 0.0,
+                   "delta_avg": None, "d_avg": None, "delta_G": None,
+                   "quadruples_evaluated": 0, "pairs_evaluated": 0})
+    # 少于四个节点无法按指定的互异四元组定义估计，不伪造零值。
+    if n < 4:
+        return {**result, "status": "insufficient_nodes"}
+    rng_quad, rng_pair = [np.random.default_rng(s) for s in np.random.SeedSequence(args.seed).spawn(2)]
+    quads = random_distinct_rows(rng_quad, n, args.hyperbolicity_samples, 4)
+    pairs = random_distinct_rows(rng_pair, n, args.hyperbolicity_pairs, 2)
+    # 距离顺序为 ab, cd, ac, bd, ad, bc；随后为独立节点对距离。
+    quad_pairs = quads[:, [0,1,2,3,0,2,1,3,0,3,1,2]].reshape(-1, 2)
+    queries = np.concatenate((quad_pairs, pairs))
+    print(f"Mean hyperbolicity: {n} nodes, {len(quads)} quadruples, {len(pairs)} pairs", flush=True)
+    distances = queried_distances(undirected.subgraph(ids), ids, queries)
+    sums = distances[:6*len(quads)].reshape(-1, 3, 2).sum(axis=2)
+    sums.sort(axis=1)
+    delta = (sums[:, 2]-sums[:, 1])/2
+    pair_distances = distances[6*len(quads):]
+    delta_avg, d_avg = float(delta.mean()), float(pair_distances.mean())
+    # 标准误仅反映固定图上随机抽样的误差，不是全局最大 δ 的置信区间。
+    def mean_se(values):
+        return float(values.std(ddof=1)/np.sqrt(len(values))) if len(values) > 1 else None
+    delta_se, distance_se = mean_se(delta), mean_se(pair_distances)
+    ratio_se = (math.sqrt((2*delta_se/d_avg)**2 + (2*delta_avg*distance_se/d_avg**2)**2)
+                if delta_se is not None and distance_se is not None else None)
+    result.update({"status": "sampled_mean", "quadruples_evaluated": len(quads), "pairs_evaluated": len(pairs),
+                   "delta_avg": delta_avg, "d_avg": d_avg, "delta_G": 2*delta_avg/d_avg,
+                   "delta_avg_mc_se": delta_se, "d_avg_mc_se": distance_se,
+                   "delta_G_approx_mc_se": ratio_se,
+                   "sampled_delta_histogram": {str(float(v)): int(c) for v,c in zip(*np.unique(delta, return_counts=True))},
+                   "pair_distance_histogram": {str(int(v)): int(c) for v,c in zip(*np.unique(pair_distances, return_counts=True))},
+                   "note": "Mean statistic, not maximum Gromov delta. Small values alone do not establish a tree or hierarchy."})
+    return result
 
 
 def fit_discrete_powerlaw(values, min_tail=50, max_candidates=64):
@@ -496,7 +613,26 @@ def summary_text(report):
         d=hierarchy["directed"]
         lines.extend([f"- 最大强连通分量覆盖 {d['largest_scc_fraction']:.2%} 的节点；压缩图最长路径为 {d['condensation_longest_path_edges']} 条边。",
                       "强连通分量内部存在可互达结构；压缩图必为 DAG，不能据此宣称原图具有严格层级。"])
-    lines.extend(["BFS 层次依赖根节点；这些结构指标不证明传播方向或因果关系。", "", "## 幂律特征", ""])
+    lines.append("BFS 层次依赖根节点；这些结构指标不证明传播方向或因果关系。")
+    if "hyperbolicity" in report:
+        h = report["hyperbolicity"]
+        lines.extend(["", "## 平均 δ-双曲度（随机四点法）", "",
+                      h.get("method_reference", HYPERBOLICITY_METHOD_REFERENCE), ""])
+        if h["status"] == "skipped":
+            lines.append("本次跳过平均双曲度分析。")
+        elif h["status"] == "insufficient_nodes":
+            lines.append("分析分量不足四个节点，无法抽取四个互异节点；结果记为 null。")
+        else:
+            lines.extend(["按给定公式计算四点偏差的均值，不是所有四点偏差的最大值。",
+                          f"- 范围：无向投影的最大连通分量，覆盖 {h['analysed_nodes']}/{h['total_nodes']} 个节点（{h['node_coverage']:.2%}），排除 {h['excluded_nodes']} 个节点。",
+                          f"- 随机互异四元组：{h['quadruples_evaluated']} 次；独立随机互异节点对：{h['pairs_evaluated']} 次。",
+                          f"- 平均四点偏差 δ_avg = {h['delta_avg']:.6f}。",
+                          f"- 平均最短路距离 d_avg = {h['d_avg']:.6f}。",
+                          f"- 归一化平均双曲度 δ_G = 2δ_avg/d_avg = {h['delta_G']:.6f}。",
+                          f"- δ_G 的近似蒙特卡洛标准误：{h['delta_G_approx_mc_se']}。",
+                          "节点从整个分析分量直接均匀抽样；最短路在完整分量上精确计算，不使用候选节点池。",
+                          "该归一化公式不保证结果在 [0,1]，未做截断。四节点环可得到 δ_G≈1.5；完全图的四点偏差为 0，因此小值不能单独证明树状结构或层级性。"])
+    lines.extend(["", "## 幂律特征", ""])
     for name,stats in report["degree_distributions"].items():
         fit=stats["power_law"]
         if not fit:
@@ -543,6 +679,7 @@ def run(args):
         raise ValueError("请将分析输出放在输入数据目录之外")
     print(f"Loaded {args.dataset}: {graph.number_of_nodes()} nodes, {graph.number_of_edges()} edges",flush=True)
     tree,hierarchy=structure_metrics(graph,args.clustering_samples,args.seed)
+    hyperbolicity = hyperbolicity_metrics(graph, args)
     undirected=graph.to_undirected()
     degree_sets={"undirected":list(dict(undirected.degree()).values())}
     if graph.is_directed():
@@ -557,6 +694,7 @@ def run(args):
                           "bootstrap":args.bootstrap,"clustering_samples":args.clustering_samples},
             "versions":{"numpy":np.__version__,"networkx":nx.__version__},
             "tree_structure":tree,"hierarchy":hierarchy,"degree_distributions":distributions,
+            "hyperbolicity": hyperbolicity,
             "references":REFERENCES}
     args.output_dir.parent.mkdir(parents=True,exist_ok=True)
     with tempfile.TemporaryDirectory(dir=args.output_dir.parent,prefix=".analyse-") as temp:

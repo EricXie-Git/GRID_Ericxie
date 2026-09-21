@@ -224,6 +224,53 @@ assumptions. See [Clauset et al.](https://arxiv.org/abs/0706.1062) and
 and clustering-scaling background. Existing reports require `--overwrite`;
 other files in the output directory are preserved.
 
+## Mean delta-hyperbolicity analysis
+
+The calculation follows the user-provided average four-point method:
+
+1. Uniformly sample four distinct vertices from the analysis component.
+2. Calculate exact shortest-path distances and the three pair-distance sums.
+3. For each sample, delta = (largest sum - second-largest sum) / 2.
+4. Average over samples to obtain `delta_avg`.
+5. Independently sample distinct vertex pairs to estimate mean distance `d_avg`.
+6. Report `delta_G = 2 * delta_avg / d_avg`.
+
+This **mean statistic is not the maximum Gromov hyperbolicity constant**.
+The default is 100000 quadruples and 100000 independent pairs, sampled directly
+from all vertices of the analysis component. There is no landmark pool.
+Samples may repeat across draws, but vertices within each draw are distinct.
+Shortest paths are computed on the full component using batched BFS, storing
+only requested distances rather than an all-pairs distance matrix. Runtime can
+be substantial because many distinct source vertices need BFS.
+
+Directed graphs use their unweighted undirected projection. Disconnected graphs
+use the largest connected component by default, with node coverage and excluded
+node counts explicitly reported. This is **not an average for disconnected
+vertices of the entire graph**. Use `--hyperbolicity-scope require-connected` to
+reject disconnected input. Components with fewer than four vertices have null
+results because distinct quadruples cannot be formed.
+
+```bash
+python data_analyse.py --dataset douban --overwrite
+python data_analyse.py --dataset twitter --hyperbolicity-samples 200000 --hyperbolicity-pairs 200000 --overwrite
+python data_analyse.py --dataset weibo --hyperbolicity off --overwrite
+```
+
+JSON `hyperbolicity` and the Chinese summary report `delta_avg`, `d_avg`,
+`delta_G`, sampling scope, sample counts, histograms and Monte Carlo standard
+errors. The ratio standard error uses first-order error propagation with the
+independently sampled means; it is not a confidence interval for maximum delta.
+The old maximum bounds and exact/landmark options have been removed.
+`--no-plots` does not disable this calculation; `--seed` controls sampling.
+
+**The normalization does not guarantee a [0,1] range**, so results are not
+clipped: a four-cycle has delta_avg=1 and mean pair distance=4/3, giving
+normalized delta_G=1.5. Trees and complete graphs both have zero four-point
+mean, so small values alone cannot establish a tree structure or hierarchy.
+The [SageMath reference](https://doc.sagemath.org/html/en/reference/graphs/sage/graphs/hyperbolicity.html)
+describes the four-point definition; the averaging and normalization here
+follow the supplied method rather than SageMath's maximum definition.
+
 ## Training and Testing
 
 Run training with:
