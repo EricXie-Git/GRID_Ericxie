@@ -200,12 +200,12 @@ The output directory defaults to `analysis/<dataset>` and contains:
 Hierarchy diagnostics include k-core decomposition, sampled clustering versus
 degree, and, for directed graphs, strongly connected components and condensation
 DAG levels. Tree diagnostics use the undirected projection: leaves, bridges,
-tree components and cycle rank `m - n + components`. BFS layers depend on the
+tree components and cycle rank $m-n+c$ (where $c$ is the component count). BFS layers depend on the
 selected root; condensation is always a DAG. Neither proves causal hierarchy.
 `--direction auto` treats a completely reciprocal edge set as undirected; use
 `--direction directed` or `undirected` to override that convention.
 
-Degree tails are fitted with discrete maximum likelihood, choosing `xmin` by
+Degree tails are fitted with discrete maximum likelihood, choosing $x_{\min}$ by
 minimum discrete KS distance over at most 64 candidate thresholds. The report
 also compares the fitted tail to a discrete exponential distribution. This
 comparison alone does not establish a power law. By default goodness-of-fit
@@ -230,10 +230,10 @@ The calculation follows the user-provided average four-point method:
 
 1. Uniformly sample four distinct vertices from the analysis component.
 2. Calculate exact shortest-path distances and the three pair-distance sums.
-3. For each sample, delta = (largest sum - second-largest sum) / 2.
-4. Average over samples to obtain `delta_avg`.
-5. Independently sample distinct vertex pairs to estimate mean distance `d_avg`.
-6. Report `delta_G = 2 * delta_avg / d_avg`.
+3. For each sample, $\delta = \frac{S_{\max}-S_{\mathrm{mid}}}{2}$, using the largest and second-largest pair-distance sums.
+4. Average over samples to obtain $\delta_{\mathrm{avg}}$.
+5. Independently sample distinct vertex pairs to estimate mean distance $d_{\mathrm{avg}}$.
+6. Report $\delta_G = \frac{2\delta_{\mathrm{avg}}}{d_{\mathrm{avg}}}$.
 
 This **mean statistic is not the maximum Gromov hyperbolicity constant**.
 The default is 100000 quadruples and 100000 independent pairs, sampled directly
@@ -263,9 +263,9 @@ independently sampled means; it is not a confidence interval for maximum delta.
 The old maximum bounds and exact/landmark options have been removed.
 `--no-plots` does not disable this calculation; `--seed` controls sampling.
 
-**The normalization does not guarantee a [0,1] range**, so results are not
-clipped: a four-cycle has delta_avg=1 and mean pair distance=4/3, giving
-normalized delta_G=1.5. Trees and complete graphs both have zero four-point
+**The normalization does not guarantee a $[0,1]$ range**, so results are not
+clipped: a four-cycle has $\delta_{\mathrm{avg}}=1$ and mean pair distance $d_{\mathrm{avg}}=4/3$, giving
+normalized $\delta_G=1.5$. Trees and complete graphs both have zero four-point
 mean, so small values alone cannot establish a tree structure or hierarchy.
 The [SageMath reference](https://doc.sagemath.org/html/en/reference/graphs/sage/graphs/hyperbolicity.html)
 describes the four-point definition; the averaging and normalization here

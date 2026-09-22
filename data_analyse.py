@@ -603,12 +603,12 @@ def summary_text(report):
            "## 树状结构（无向投影）", "",
            f"- 节点 {tree['nodes']}，边 {tree['edges']}，连通分量 {tree['components']}，孤立节点 {tree['isolates']}。",
            f"- 是否为树：{tree['is_tree']}；是否为森林：{tree['is_forest']}。",
-           f"- 独立环数量 m−n+c：{tree['independent_cycles']}；变为森林至少需移除 {tree['min_edge_removal_fraction_to_forest']:.2%} 的边。",
+           f"- 独立环数量 $m-n+c$：{tree['independent_cycles']}；变为森林至少需移除 {tree['min_edge_removal_fraction_to_forest']:.2%} 的边。",
            f"- 桥 {tree['bridges']} 条；叶节点 {tree['leaves']} 个；非孤立树组件 {tree['tree_components_excluding_singletons']} 个。",
            "环冗余越低、桥占比越高，通常越接近森林，但没有统一的“树状”分类阈值。", "",
            "## 层级特征", "", f"- 最大核数：{hierarchy['max_core']}（核心/外围结构指标）。",
            f"- 最大连通分量中，从最高度节点出发的最远距离：{hierarchy['bfs_largest_component']['max_distance']}。",
-           f"- 聚类系数使用 {hierarchy['clustering']['sampled_nodes']} 个节点；C(k) 趋势仅作描述。"]
+           f"- 聚类系数使用 {hierarchy['clustering']['sampled_nodes']} 个节点；$C(k)$ 趋势仅作描述。"]
     if "directed" in hierarchy:
         d=hierarchy["directed"]
         lines.extend([f"- 最大强连通分量覆盖 {d['largest_scc_fraction']:.2%} 的节点；压缩图最长路径为 {d['condensation_longest_path_edges']} 条边。",
@@ -616,7 +616,7 @@ def summary_text(report):
     lines.append("BFS 层次依赖根节点；这些结构指标不证明传播方向或因果关系。")
     if "hyperbolicity" in report:
         h = report["hyperbolicity"]
-        lines.extend(["", "## 平均 δ-双曲度（随机四点法）", "",
+        lines.extend(["", r"## 平均 $\delta$-双曲度（随机四点法）", "",
                       h.get("method_reference", HYPERBOLICITY_METHOD_REFERENCE), ""])
         if h["status"] == "skipped":
             lines.append("本次跳过平均双曲度分析。")
@@ -626,12 +626,12 @@ def summary_text(report):
             lines.extend(["按给定公式计算四点偏差的均值，不是所有四点偏差的最大值。",
                           f"- 范围：无向投影的最大连通分量，覆盖 {h['analysed_nodes']}/{h['total_nodes']} 个节点（{h['node_coverage']:.2%}），排除 {h['excluded_nodes']} 个节点。",
                           f"- 随机互异四元组：{h['quadruples_evaluated']} 次；独立随机互异节点对：{h['pairs_evaluated']} 次。",
-                          f"- 平均四点偏差 δ_avg = {h['delta_avg']:.6f}。",
-                          f"- 平均最短路距离 d_avg = {h['d_avg']:.6f}。",
-                          f"- 归一化平均双曲度 δ_G = 2δ_avg/d_avg = {h['delta_G']:.6f}。",
-                          f"- δ_G 的近似蒙特卡洛标准误：{h['delta_G_approx_mc_se']}。",
+                          rf"- 平均四点偏差 $\delta_{{\mathrm{{avg}}}} = {h['delta_avg']:.6f}$。",
+                          rf"- 平均最短路距离 $d_{{\mathrm{{avg}}}} = {h['d_avg']:.6f}$。",
+                          rf"- 归一化平均双曲度 $\delta_G = \frac{{2\delta_{{\mathrm{{avg}}}}}}{{d_{{\mathrm{{avg}}}}}} = {h['delta_G']:.6f}$。",
+                          rf"- $\delta_G$ 的近似蒙特卡洛标准误：{h['delta_G_approx_mc_se']}。",
                           "节点从整个分析分量直接均匀抽样；最短路在完整分量上精确计算，不使用候选节点池。",
-                          "该归一化公式不保证结果在 [0,1]，未做截断。四节点环可得到 δ_G≈1.5；完全图的四点偏差为 0，因此小值不能单独证明树状结构或层级性。"])
+                          r"该归一化公式不保证结果在 $[0,1]$，未做截断。四节点环可得到 $\delta_G\approx1.5$；完全图的四点偏差为 0，因此小值不能单独证明树状结构或层级性。"])
     lines.extend(["", "## 幂律特征", ""])
     for name,stats in report["degree_distributions"].items():
         fit=stats["power_law"]
@@ -639,8 +639,9 @@ def summary_text(report):
             lines.append(f"- {name}：非恒定尾部样本不足，未拟合。")
             continue
         p=fit["bootstrap"]["p_value"]
+        p_text = str(p) if p is not None else r"\mathrm{N/A}"
         verdict="未完成拟合优度检验，不能判断是否服从幂律" if p is None else "在 0.1 阈值拒绝幂律尾部" if p<.1 else "未拒绝幂律尾部，但不等于证明幂律"
-        lines.append(f"- {name}：alpha={fit['alpha']:.3f}，xmin={fit['xmin']}，尾部 n={fit['tail_nodes']}，KS={fit['ks']:.4f}，bootstrap p={p}；{verdict}。")
+        lines.append(rf"- {name}：$\alpha={fit['alpha']:.3f}$，$x_{{\min}}={fit['xmin']}$，尾部 $n={fit['tail_nodes']}$，$\mathrm{{KS}}={fit['ks']:.4f}$，bootstrap $p={p_text}$；{verdict}。")
     lines.extend(["", "零度节点不参与幂律尾部拟合，其数量另行报告。阈值采用候选搜索中的最小 KS，候选数量见 JSON。",
                   "指数分布比较仅是一个替代模型，未排除对数正态等解释。网络节点度数相关，bootstrap 和似然比的 iid 假设是限制。",
                   f"本次 bootstrap 请求 {report['parameters']['bootstrap']} 次；默认 1000 次，可用 --bootstrap 0 跳过。接近 0.1 阈值时应增加重复次数并检查蒙特卡洛误差。",
