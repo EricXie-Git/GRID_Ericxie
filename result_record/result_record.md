@@ -28,7 +28,22 @@ result:
  ndcg@100: 0.02400175
 
 
-### (3) hyperbolic (use hyperbolic distance)
+### (3) euclidean (use euclidean distance but weight 0)
+
+```bash
+python main.py --dataset twitter --decoder_type euclidean --decoder_dim 32 --decoder_weight 0
+```
+
+result:
+-------Final Results-------
+ recall@50: 0.24967876
+ recall@100: 0.29867974
+ ndcg@50: 0.19173884
+ ndcg@100: 0.20740767
+
+
+
+### (4) hyperbolic (use hyperbolic distance)
 
 ```bash
 python main.py --dataset twitter --decoder_type hyperbolic --decoder_dim 32 --decoder_weight 0.1
