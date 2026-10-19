@@ -1,0 +1,196 @@
+2026-10-19 11:57:56 - INFO - Training/Testing parameters: Namespace(batch_size=32, best_score=0.0, bpr_margin=0.5, cascade_path_test='dataset/twitter/cascade_test.json', cascade_path_train='dataset/twitter/cascade_train_neg.json', cascade_path_valid='dataset/twitter/cascade_val.json', ckpt_file='checkpoint/model_.bin', clustering=True, dataset='twitter', decoder_dim=32, decoder_temperature=1.0, decoder_type='euclidean', decoder_weight=0.1, device='cuda', dim=128, dropout=0.3, epsilon=0.3, gnn_layers=2, gnn_type='lightgcn', graph_path='dataset/twitter/graph.pt', group_num=20, learning_rate=0.001, max_epochs=30, max_len=200, metric_k=[50, 100], n_gpu=1, n_heads=6, n_warmup_steps=500, neg_num=100, print_steps=10, saved_model_path='checkpoint/', seed=21, user_num=12628, weight_decay=0.0001)
+
+[ Training Epoch 0 ]
+2026-10-19 11:57:57 - INFO - Epoch 0 step 10 eta 00:02:33: loss 8.052
+2026-10-19 11:57:57 - INFO - Epoch 0 step 20 eta 00:01:40: loss 8.052
+2026-10-19 11:57:58 - INFO - Epoch 0 step 30 eta 00:01:22: loss 8.048
+2026-10-19 11:57:58 - INFO - Epoch 0 step 40 eta 00:01:13: loss 8.046
+2026-10-19 11:57:58 - INFO - Epoch 0 step 50 eta 00:01:07: loss 8.043
+2026-10-19 11:57:58 - INFO - Epoch 0 step 60 eta 00:01:04: loss 8.039
+
+[同一模型，推理权重=0.1] {'recall@50': 0.003237037919461727, 'recall@100': 0.008886504918336868, 'ndcg@50': 0.001563175581395626, 'ndcg@100': 0.0029951974283903837}
+[同一模型，推理权重=0] {'recall@50': 0.003237037919461727, 'recall@100': 0.0084015391767025, 'ndcg@50': 0.0014946786686778069, 'ndcg@100': 0.0028278930112719536}
+
+ # ----------Test Result---------
+ recall@50: 0.00323704
+ recall@100: 0.00888650
+ ndcg@50: 0.00156318
+ ndcg@100: 0.00299520
+ --> Save Model <-- 
+
+[ Training Epoch 1 ]
+2026-10-19 11:57:59 - INFO - Epoch 1 step 70 eta 00:01:20: loss 7.969
+2026-10-19 11:58:00 - INFO - Epoch 1 step 80 eta 00:01:15: loss 7.951
+2026-10-19 11:58:00 - INFO - Epoch 1 step 90 eta 00:01:12: loss 7.924
+2026-10-19 11:58:00 - INFO - Epoch 1 step 100 eta 00:01:09: loss 7.892
+2026-10-19 11:58:00 - INFO - Epoch 1 step 110 eta 00:01:06: loss 7.845
+2026-10-19 11:58:01 - INFO - Epoch 1 step 120 eta 00:01:04: loss 7.787
+2026-10-19 11:58:01 - INFO - Epoch 1 step 130 eta 00:01:03: loss 7.714
+
+[同一模型，推理权重=0.1] {'recall@50': 0.019717484712600708, 'recall@100': 0.03846810758113861, 'ndcg@50': 0.008420833386480808, 'ndcg@100': 0.012918226420879364}
+[同一模型，推理权重=0] {'recall@50': 0.006887388415634632, 'recall@100': 0.013548852875828743, 'ndcg@50': 0.0035820179618895054, 'ndcg@100': 0.005786277819424868}
+
+ # ----------Test Result---------
+ recall@50: 0.01971748
+ recall@100: 0.03846811
+ ndcg@50: 0.00842083
+ ndcg@100: 0.01291823
+ --> Save Model <-- 
+
+[ Training Epoch 2 ]
+2026-10-19 11:58:02 - INFO - Epoch 2 step 140 eta 00:01:10: loss 6.993
+2026-10-19 11:58:02 - INFO - Epoch 2 step 150 eta 00:01:08: loss 6.880
+2026-10-19 11:58:02 - INFO - Epoch 2 step 160 eta 00:01:06: loss 6.811
+2026-10-19 11:58:03 - INFO - Epoch 2 step 170 eta 00:01:04: loss 6.746
+2026-10-19 11:58:03 - INFO - Epoch 2 step 180 eta 00:01:03: loss 6.689
+2026-10-19 11:58:03 - INFO - Epoch 2 step 190 eta 00:01:02: loss 6.632
+
+[同一模型，推理权重=0.1] {'recall@50': 0.036572642624378204, 'recall@100': 0.05263480171561241, 'ndcg@50': 0.01646321266889572, 'ndcg@100': 0.02089819312095642}
+[同一模型，推理权重=0] {'recall@50': 0.017187561839818954, 'recall@100': 0.03274422883987427, 'ndcg@50': 0.008188477717339993, 'ndcg@100': 0.012412060052156448}
+
+ # ----------Test Result---------
+ recall@50: 0.03657264
+ recall@100: 0.05263480
+ ndcg@50: 0.01646321
+ ndcg@100: 0.02089819
+ --> Save Model <-- 
+
+[ Training Epoch 3 ]
+2026-10-19 11:58:04 - INFO - Epoch 3 step 200 eta 00:01:06: loss 6.096
+2026-10-19 11:58:04 - INFO - Epoch 3 step 210 eta 00:01:05: loss 6.109
+2026-10-19 11:58:05 - INFO - Epoch 3 step 220 eta 00:01:04: loss 6.035
+2026-10-19 11:58:05 - INFO - Epoch 3 step 230 eta 00:01:02: loss 6.010
+2026-10-19 11:58:05 - INFO - Epoch 3 step 240 eta 00:01:01: loss 5.997
+2026-10-19 11:58:05 - INFO - Epoch 3 step 250 eta 00:01:00: loss 5.958
+2026-10-19 11:58:06 - INFO - Epoch 3 step 260 eta 00:00:59: loss 5.942
+
+[同一模型，推理权重=0.1] {'recall@50': 0.03471088781952858, 'recall@100': 0.060961510986089706, 'ndcg@50': 0.019499223679304123, 'ndcg@100': 0.026146244257688522}
+[同一模型，推理权重=0] {'recall@50': 0.030916841700673103, 'recall@100': 0.043217096477746964, 'ndcg@50': 0.012224292382597923, 'ndcg@100': 0.015751108527183533}
+
+ # ----------Test Result---------
+ recall@50: 0.03471089
+ recall@100: 0.06096151
+ ndcg@50: 0.01949922
+ ndcg@100: 0.02614624
+ --> Save Model <-- 
+
+[ Training Epoch 4 ]
+2026-10-19 11:58:07 - INFO - Epoch 4 step 270 eta 00:01:03: loss 5.693
+2026-10-19 11:58:07 - INFO - Epoch 4 step 280 eta 00:01:02: loss 5.640
+2026-10-19 11:58:07 - INFO - Epoch 4 step 290 eta 00:01:01: loss 5.585
+2026-10-19 11:58:07 - INFO - Epoch 4 step 300 eta 00:01:00: loss 5.554
+2026-10-19 11:58:08 - INFO - Epoch 4 step 310 eta 00:00:59: loss 5.532
+2026-10-19 11:58:08 - INFO - Epoch 4 step 320 eta 00:00:58: loss 5.519
+
+[同一模型，推理权重=0.1] {'recall@50': 0.045688796788454056, 'recall@100': 0.06927742809057236, 'ndcg@50': 0.017515623942017555, 'ndcg@100': 0.023953836411237717}
+[同一模型，推理权重=0] {'recall@50': 0.024058746173977852, 'recall@100': 0.037314631044864655, 'ndcg@50': 0.010352379642426968, 'ndcg@100': 0.013812145218253136}
+
+ # ----------Test Result---------
+ recall@50: 0.04568880
+ recall@100: 0.06927743
+ ndcg@50: 0.01751562
+ ndcg@100: 0.02395384
+ --> Save Model <-- 
+
+[ Training Epoch 5 ]
+2026-10-19 11:58:09 - INFO - Epoch 5 step 330 eta 00:01:00: loss 5.279
+2026-10-19 11:58:09 - INFO - Epoch 5 step 340 eta 00:00:59: loss 5.262
+2026-10-19 11:58:09 - INFO - Epoch 5 step 350 eta 00:00:58: loss 5.203
+2026-10-19 11:58:10 - INFO - Epoch 5 step 360 eta 00:00:58: loss 5.196
+2026-10-19 11:58:10 - INFO - Epoch 5 step 370 eta 00:00:57: loss 5.198
+2026-10-19 11:58:10 - INFO - Epoch 5 step 380 eta 00:00:56: loss 5.208
+2026-10-19 11:58:10 - INFO - Epoch 5 step 390 eta 00:00:55: loss 5.203
+
+[同一模型，推理权重=0.1] {'recall@50': 0.038794271647930145, 'recall@100': 0.06350604444742203, 'ndcg@50': 0.015343810431659222, 'ndcg@100': 0.021213876083493233}
+[同一模型，推理权重=0] {'recall@50': 0.023126693442463875, 'recall@100': 0.0340188592672348, 'ndcg@50': 0.010524936951696873, 'ndcg@100': 0.013144990429282188}
+
+ # ----------Test Result---------
+ recall@50: 0.03879427
+ recall@100: 0.06350604
+ ndcg@50: 0.01534381
+ ndcg@100: 0.02121388
+ --> No improvement for 1 epochs <-- 
+
+[ Training Epoch 6 ]
+2026-10-19 11:58:11 - INFO - Epoch 6 step 400 eta 00:00:57: loss 5.036
+2026-10-19 11:58:12 - INFO - Epoch 6 step 410 eta 00:00:56: loss 4.997
+2026-10-19 11:58:12 - INFO - Epoch 6 step 420 eta 00:00:55: loss 4.996
+2026-10-19 11:58:12 - INFO - Epoch 6 step 430 eta 00:00:55: loss 5.008
+2026-10-19 11:58:12 - INFO - Epoch 6 step 440 eta 00:00:54: loss 5.028
+2026-10-19 11:58:13 - INFO - Epoch 6 step 450 eta 00:00:53: loss 5.039
+
+[同一模型，推理权重=0.1] {'recall@50': 0.03626098111271858, 'recall@100': 0.05690748617053032, 'ndcg@50': 0.014326152391731739, 'ndcg@100': 0.01944716088473797}
+[同一模型，推理权重=0] {'recall@50': 0.0212418083101511, 'recall@100': 0.03386648744344711, 'ndcg@50': 0.011954911053180695, 'ndcg@100': 0.01485198363661766}
+
+ # ----------Test Result---------
+ recall@50: 0.03626098
+ recall@100: 0.05690749
+ ndcg@50: 0.01432615
+ ndcg@100: 0.01944716
+ --> No improvement for 2 epochs <-- 
+
+[ Training Epoch 7 ]
+2026-10-19 11:58:14 - INFO - Epoch 7 step 460 eta 00:00:55: loss 4.752
+2026-10-19 11:58:14 - INFO - Epoch 7 step 470 eta 00:00:54: loss 4.833
+2026-10-19 11:58:14 - INFO - Epoch 7 step 480 eta 00:00:53: loss 4.878
+2026-10-19 11:58:14 - INFO - Epoch 7 step 490 eta 00:00:53: loss 4.912
+2026-10-19 11:58:15 - INFO - Epoch 7 step 500 eta 00:00:52: loss 4.918
+2026-10-19 11:58:15 - INFO - Epoch 7 step 510 eta 00:00:51: loss 4.949
+2026-10-19 11:58:15 - INFO - Epoch 7 step 520 eta 00:00:51: loss 4.966
+
+[同一模型，推理权重=0.1] {'recall@50': 0.03332154452800751, 'recall@100': 0.05861009284853935, 'ndcg@50': 0.013336032629013062, 'ndcg@100': 0.0193089097738266}
+[同一模型，推理权重=0] {'recall@50': 0.019856959581375122, 'recall@100': 0.03208351135253906, 'ndcg@50': 0.010842354968190193, 'ndcg@100': 0.013578642159700394}
+
+ # ----------Test Result---------
+ recall@50: 0.03332154
+ recall@100: 0.05861009
+ ndcg@50: 0.01333603
+ ndcg@100: 0.01930891
+ --> No improvement for 3 epochs <-- 
+
+[ Training Epoch 8 ]
+2026-10-19 11:58:16 - INFO - Epoch 8 step 530 eta 00:00:52: loss 4.815
+2026-10-19 11:58:16 - INFO - Epoch 8 step 540 eta 00:00:51: loss 4.839
+2026-10-19 11:58:16 - INFO - Epoch 8 step 550 eta 00:00:51: loss 4.849
+2026-10-19 11:58:17 - INFO - Epoch 8 step 560 eta 00:00:50: loss 4.863
+2026-10-19 11:58:17 - INFO - Epoch 8 step 570 eta 00:00:49: loss 4.903
+2026-10-19 11:58:17 - INFO - Epoch 8 step 580 eta 00:00:49: loss 4.912
+
+[同一模型，推理权重=0.1] {'recall@50': 0.03542979806661606, 'recall@100': 0.061307188123464584, 'ndcg@50': 0.014351192861795425, 'ndcg@100': 0.01994178257882595}
+[同一模型，推理权重=0] {'recall@50': 0.018428057432174683, 'recall@100': 0.029920361936092377, 'ndcg@50': 0.009982905350625515, 'ndcg@100': 0.012510358355939388}
+
+ # ----------Test Result---------
+ recall@50: 0.03542980
+ recall@100: 0.06130719
+ ndcg@50: 0.01435119
+ ndcg@100: 0.01994178
+ --> No improvement for 4 epochs <-- 
+
+[ Training Epoch 9 ]
+2026-10-19 11:58:18 - INFO - Epoch 9 step 590 eta 00:00:50: loss 4.737
+2026-10-19 11:58:18 - INFO - Epoch 9 step 600 eta 00:00:49: loss 4.775
+2026-10-19 11:58:19 - INFO - Epoch 9 step 610 eta 00:00:49: loss 4.806
+2026-10-19 11:58:19 - INFO - Epoch 9 step 620 eta 00:00:48: loss 4.819
+2026-10-19 11:58:19 - INFO - Epoch 9 step 630 eta 00:00:47: loss 4.837
+2026-10-19 11:58:20 - INFO - Epoch 9 step 640 eta 00:00:47: loss 4.859
+2026-10-19 11:58:20 - INFO - Epoch 9 step 650 eta 00:00:46: loss 4.900
+
+[同一模型，推理权重=0.1] {'recall@50': 0.0383005253970623, 'recall@100': 0.05261770263314247, 'ndcg@50': 0.015207701362669468, 'ndcg@100': 0.01907491497695446}
+[同一模型，推理权重=0] {'recall@50': 0.02103070542216301, 'recall@100': 0.031275562942028046, 'ndcg@50': 0.008801729418337345, 'ndcg@100': 0.011092465370893478}
+
+ # ----------Test Result---------
+ recall@50: 0.03830053
+ recall@100: 0.05261770
+ ndcg@50: 0.01520770
+ ndcg@100: 0.01907491
+ --> No improvement for 5 epochs <-- 
+
+ --> Early stopping triggered after 5 epochs without improvement <-- 
+ --> Best score achieved: 0.15643569 <-- 
+ --> Loaded best model state <-- 
+
+ #-------Final Results-------
+ recall@50: 0.04568880
+ recall@100: 0.06927743
+ ndcg@50: 0.01751562
+ ndcg@100: 0.02395384
