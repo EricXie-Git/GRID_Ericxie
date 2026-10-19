@@ -292,6 +292,49 @@ Common arguments:
 | `--neg_num` | `100` | Maximum negatives sampled per cascade |
 | `--metric_k` | `[50, 100]` | Evaluation cutoffs for Recall@K and NDCG@K |
 
+### Optional distance decoder
+
+The original GRID scores can be combined with an auxiliary distance score:
+$s(v\mid C)=s_{\mathrm{GRID}}(v\mid C)-\lambda d(q_C,z_v)^2/\tau$.
+The branch projects the pooled cascade representation and GNN user embeddings
+separately. `euclidean` uses squared Euclidean distance; `hyperbolic` maps both
+projections to the Lorentz model with curvature -1 and uses squared geodesic
+distance. Both branches have the same trainable projection sizes and a shared
+projected-vector norm cap of 3. This is a decoder experiment, not a hyperbolic
+GNN or a change to grouping. The original `Combined_Loss` trains the fused
+scores; no extra loss or new data is needed.
+
+| Argument | Default | Description |
+|---|---|---|
+| `--decoder_type` | `none` | `none`, `euclidean`, or `hyperbolic` |
+| `--decoder_dim` | `32` | Projection dimension; Lorentz coordinates add one time component |
+| `--decoder_weight` | `0.1` | Nonnegative fusion weight; zero bypasses the branch |
+| `--decoder_temperature` | `1.0` | Positive distance-score temperature |
+
+```bash
+python main.py --dataset twitter --decoder_type none
+python main.py --dataset twitter --decoder_type euclidean --decoder_dim 32 --decoder_weight 0.1
+python main.py --dataset twitter --decoder_type hyperbolic --decoder_dim 32 --decoder_weight 0.1
+```
+
+Keep temperature at 1 initially: only the ratio of weight to temperature
+affects score fusion. Distance operations use float32 even under autocast,
+with candidate chunks of 4096 and a near-zero expansion for squared `acosh`.
+Existing PAD/previous-user masking is applied after fusion.
+
+The disabled branch adds no checkpoint parameters and accepts older argument
+objects without decoder options. Enabled checkpoints contain `Decoder.*`
+parameters and must be loaded with matching decoder options. When deliberately
+initializing an enabled model from an old checkpoint, load with `strict=False`
+and verify that only `Decoder.*` keys are missing. Record decoder options
+alongside checkpoints; they are not all stored in `state_dict`.
+
+Small synthetic-graph forward/backward and compatibility checks (no experiment):
+
+```bash
+python -m unittest discover -s tests -p test_distance_decoder.py -v
+```
+
 
 
 ## Additional Scripts

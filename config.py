@@ -1,9 +1,10 @@
 import argparse
+import math
 from typing import List
 from dataclasses import dataclass
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv=None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Official implementation of GRID.")
 
     parser.add_argument("--seed", type=int, default=21, help="Random seed")
@@ -28,6 +29,12 @@ def parse_args() -> argparse.Namespace:
     model_group.add_argument('--n_heads', type=int, default=6, help="Number of attention heads in the grouped transformer")
     model_group.add_argument('--group_num', type=int, default=20, help="Number of grouped tokens produced by clustering, including the padding group")
 
+    decoder_group = parser.add_argument_group('Auxiliary Decoder')
+    decoder_group.add_argument('--decoder_type', choices=['none', 'euclidean', 'hyperbolic'], default='none', help="Optional distance scoring branch")
+    decoder_group.add_argument('--decoder_dim', type=int, default=32, help="Spatial dimension of the auxiliary decoder")
+    decoder_group.add_argument('--decoder_weight', type=float, default=0.1, help="Nonnegative weight added to the original GRID scores")
+    decoder_group.add_argument('--decoder_temperature', type=float, default=1.0, help="Positive temperature for negative squared distance scores")
+
     checkpoint_group = parser.add_argument_group('Checkpoint Configs')
     checkpoint_group.add_argument('--saved_model_path', type=str, default='checkpoint/', help="Directory created before training for checkpoint-related outputs")
     checkpoint_group.add_argument('--ckpt_file', type=str, default='checkpoint/model_.bin', help="Reserved checkpoint file path; the current training loop keeps the best model state in memory")
@@ -35,7 +42,14 @@ def parse_args() -> argparse.Namespace:
     checkpoint_group.add_argument('--metric_k', type=List[int], default=[50, 100], help="Cutoff values used to report Recall@K and NDCG@K")
     checkpoint_group.add_argument('--epsilon', type=float, default=0.3, help="Reserved argument; not used by the current training or evaluation pipeline")
 
-    return parser.parse_args()
+    args = parser.parse_args(argv)
+    if args.decoder_dim < 1:
+        parser.error('decoder_dim must be positive')
+    if not math.isfinite(args.decoder_weight) or args.decoder_weight < 0:
+        parser.error('decoder_weight must be finite and nonnegative')
+    if not math.isfinite(args.decoder_temperature) or args.decoder_temperature <= 0:
+        parser.error('decoder_temperature must be finite and positive')
+    return args
 
 
 def setup_info(args: argparse.Namespace) -> None:

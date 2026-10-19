@@ -2,7 +2,65 @@ import torch
 import torch.nn as nn
 import torch.nn.init as init
 import torch.nn.functional as F
+import math
 from torch_geometric.nn import GATConv, SAGEConv, GCNConv
+
+
+class DistanceDecoder(nn.Module):
+    """辅助距离评分：[B, D] 和 [U, D] -> [B, U]，由原有损失统一训练。"""
+
+    def __init__(self, args):
+        super(DistanceDecoder, self).__init__()
+        self.decoder_type = getattr(args, 'decoder_type', 'none')
+        self.dim = getattr(args, 'decoder_dim', 32)
+        self.temperature = getattr(args, 'decoder_temperature', 1.0)
+        if self.decoder_type not in ('euclidean', 'hyperbolic'):
+            raise ValueError('DistanceDecoder requires euclidean or hyperbolic mode')
+        if self.dim < 1 or not math.isfinite(self.temperature) or self.temperature <= 0:
+            raise ValueError('Decoder dimension and temperature must be positive and finite')
+        self.W_c = nn.Linear(args.dim, self.dim, bias=False)
+        self.W_u = nn.Linear(args.dim, self.dim, bias=False)
+        # 两种几何使用相同投影和范数上限；限制双曲指数映射的数值范围。
+        self.max_norm = 3.0
+        self.chunk_size = 4096
+
+    def project(self, x, layer):
+        x = F.linear(x.float(), layer.weight.float())
+        norm = torch.linalg.vector_norm(x, dim=-1, keepdim=True)
+        return x * (self.max_norm / norm.clamp_min(self.max_norm))
+
+    def exp_map(self, x):
+        """曲率固定为 -1；空间坐标 D 维，Lorentz 坐标 D+1 维。"""
+        norm = torch.linalg.vector_norm(x, dim=-1, keepdim=True)
+        safe_norm = norm.clamp_min(1e-7)
+        spatial = (torch.sinh(safe_norm) / safe_norm) * x
+        return torch.cat((torch.cosh(norm), spatial), dim=-1)
+
+    def squared_distance(self, query, users):
+        if self.decoder_type == 'euclidean':
+            distance = query.square().sum(-1, keepdim=True) + users.square().sum(-1).unsqueeze(0)
+            return (distance - 2 * query @ users.t()).clamp_min(0.0)
+
+        # d_H^2 = acosh(-<q,z>_L)^2，不使用 Lorentz 弦距离替代测地距离。
+        inner = query[:, :1] @ users[:, :1].t() - query[:, 1:] @ users[:, 1:].t()
+        offset = (inner - 1.0).clamp_min(0.0)
+        # acosh 在 1 处导数发散，但其平方导数有限；近零使用泰勒展开。
+        near = offset.clamp_max(1e-4)
+        approximation = 2 * near - near.square() / 3 + 4 * near.pow(3) / 45
+        regular = torch.acosh(1.0 + offset.clamp_min(1e-4)).square()
+        return torch.where(offset < 1e-4, approximation, regular)
+
+    def forward(self, cascade_h, user_embeddings):
+        # 距离运算保持 float32，避免 autocast 的低精度放大双曲数值误差。
+        with torch.autocast(device_type=cascade_h.device.type, enabled=False):
+            query = self.project(cascade_h, self.W_c)
+            users = self.project(user_embeddings, self.W_u)
+            if self.decoder_type == 'hyperbolic':
+                query = self.exp_map(query)
+                users = self.exp_map(users)
+            scores = [-self.squared_distance(query, block) / self.temperature
+                      for block in users.split(self.chunk_size, dim=0)]
+            return torch.cat(scores, dim=-1)
 
 
 class GroupAttn(nn.Module):
@@ -297,7 +355,7 @@ class PositionEmbedding(nn.Module):
         self.Drop = nn.Dropout(args.dropout)
 
     def forward(self, seq_h):
-        position_ids = torch.arange(0, seq_h.size(1), dtype=torch.long).cuda()
+        position_ids = torch.arange(0, seq_h.size(1), dtype=torch.long, device=seq_h.device)
         position_ids = position_ids.unsqueeze(0).view(-1, seq_h.size(1))
         pe = self.pos_embed(position_ids).repeat(seq_h.size(0), 1, 1)
         return self.Drop(pe)
@@ -314,11 +372,11 @@ class SelfAttn(nn.Module):
         if is_layer_norm:
             self.layer_norm = nn.LayerNorm(normalized_shape=input_size)
 
-        self.W_q = nn.Parameter(torch.Tensor(input_size, n_heads * d_k))
-        self.W_k = nn.Parameter(torch.Tensor(input_size, n_heads * d_k))
-        self.W_v = nn.Parameter(torch.Tensor(input_size, n_heads * d_v))
+        self.W_q = nn.Parameter(torch.Tensor(input_size, n_heads * self.d_k))
+        self.W_k = nn.Parameter(torch.Tensor(input_size, n_heads * self.d_k))
+        self.W_v = nn.Parameter(torch.Tensor(input_size, n_heads * self.d_v))
 
-        self.W_o = nn.Parameter(torch.Tensor(d_v * n_heads, input_size))
+        self.W_o = nn.Parameter(torch.Tensor(self.d_v * n_heads, input_size))
         self.linear1 = nn.Linear(input_size, input_size)
         self.linear2 = nn.Linear(input_size, input_size)
 
@@ -344,7 +402,7 @@ class SelfAttn(nn.Module):
         Q_K = torch.einsum("bqd,bkd->bqk", Q, K) / (temperature + epsilon)
 
         pad_mask = attn_mask.unsqueeze(dim=-1).expand(-1, -1, K.size(1))
-        attn_mask = torch.triu(torch.ones(pad_mask.size()), diagonal=1).bool().cuda()
+        attn_mask = torch.triu(torch.ones(pad_mask.size(), device=Q.device), diagonal=1).bool()
         mask_ = attn_mask + pad_mask
         Q_K = Q_K.masked_fill(mask_, -2 ** 32 + 1)
 
@@ -391,7 +449,7 @@ class SelfAttn(nn.Module):
 class GNNConv(nn.Module):
     def __init__(self):
         super(GNNConv, self).__init__()
-    
+
     def forward(self, x, edge_index):
         """
         LightGCN convolution: simple message passing without learnable parameters
