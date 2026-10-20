@@ -192,6 +192,7 @@ class KMeansLayer(nn.Module):
         self.max_iter = 10
         self.temperature = 1.0
         self.eps = 1e-6
+        self.deterministic_eval = getattr(args, 'deterministic_eval', False)
 
         self.max_clusters = self.cluster_num - 1
         self.cluster_centers = nn.Parameter(torch.randn(self.max_clusters, self.dim) * 0.1)
@@ -238,8 +239,9 @@ class KMeansLayer(nn.Module):
         with torch.no_grad():
             centers = self.cluster_centers.unsqueeze(0).expand(bs, -1, -1).clone()
 
-            noise_scale = min(x.std().item() * 0.01, 0.01)
-            centers.add_(noise_scale * torch.randn_like(centers))
+            if self.training or not self.deterministic_eval:
+                noise_scale = min(x.std().item() * 0.01, 0.01)
+                centers.add_(noise_scale * torch.randn_like(centers))
 
             for iteration in range(self.max_iter):
                 distances = self.compute_distances(x, centers)
@@ -294,7 +296,20 @@ class KMeansLayer(nn.Module):
         return clustered_x, cluster_mask, cluster_counts
 
 
-def Combined_Loss(args, pred_users, labels_padded, label_mask, negative_samples, neg_mask, first_label):
+def BPR_Loss(args, scores, labels_padded, label_mask, negative_samples, neg_mask):
+    """原有 BPR 公式，可独立监督未融合的 Decoder 分数。"""
+    pos_scores = torch.gather(scores, 1, labels_padded)
+    neg_scores = torch.gather(scores, 1, negative_samples)
+    valid_pairs = label_mask.unsqueeze(2) & (neg_mask & (negative_samples != 0)).unsqueeze(1)
+    if valid_pairs.any():
+        difference = pos_scores.unsqueeze(2) - neg_scores.unsqueeze(1)
+        return F.softplus(-(difference[valid_pairs] - getattr(args, 'bpr_margin', 1.0))).mean()
+    # 无有效正负对时返回可反传的零值。
+    return scores.sum() * 0.0
+
+
+def Combined_Loss(args, pred_users, labels_padded, label_mask, negative_samples, neg_mask, first_label,
+                  return_components=False):
     """
     Hybrid loss: BCE (multi-label) + BPR (ranking) + CE (next-user anchor).
     """
@@ -304,7 +319,6 @@ def Combined_Loss(args, pred_users, labels_padded, label_mask, negative_samples,
     alpha  = getattr(args, 'alpha',      2.0)
     beta   = getattr(args, 'beta',       2.0)
     gamma  = getattr(args, 'gamma',      0.5)
-    margin = getattr(args, 'bpr_margin', 1.0)
 
     target = torch.zeros_like(pred_users)
     valid_batch_idx = torch.arange(batch_size, device=device).unsqueeze(1).expand_as(labels_padded)[label_mask]
@@ -315,21 +329,16 @@ def Combined_Loss(args, pred_users, labels_padded, label_mask, negative_samples,
         pred_users[:, 1:], target[:, 1:], reduction='sum'
     ) / (batch_size * (num_classes - 1))
 
-    pos_scores = torch.gather(pred_users, 1, labels_padded)
-    neg_scores = torch.gather(pred_users, 1, negative_samples)
-
-    combined_neg_mask = neg_mask & (negative_samples != 0)
-    valid_pair_mask = label_mask.unsqueeze(2) & combined_neg_mask.unsqueeze(1)
-
-    if valid_pair_mask.any():
-        score_diff = pos_scores.unsqueeze(2) - neg_scores.unsqueeze(1)
-        bpr_loss = F.softplus(-(score_diff[valid_pair_mask] - margin)).mean()
-    else:
-        bpr_loss = torch.tensor(0.0, device=device)
+    bpr_loss = BPR_Loss(args, pred_users, labels_padded, label_mask, negative_samples, neg_mask)
 
     ce_loss = F.cross_entropy(pred_users, first_label, ignore_index=0)
 
-    return alpha * bce_loss + beta * bpr_loss + gamma * ce_loss
+    loss = alpha * bce_loss + beta * bpr_loss + gamma * ce_loss
+    if return_components:
+        return loss, {'bce': bce_loss, 'bpr': bpr_loss, 'ce': ce_loss,
+                      'weighted_bce': alpha * bce_loss, 'weighted_bpr': beta * bpr_loss,
+                      'weighted_ce': gamma * ce_loss}
+    return loss
 
 
 class WeightedPooling(nn.Module):

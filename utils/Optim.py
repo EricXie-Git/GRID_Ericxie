@@ -16,7 +16,10 @@ def schedule_with_warmup(optimizer, num_warmup_steps, num_training_steps, num_cy
 
 def build_optimizer(args, model, num_training_steps):
     """ Prepare optimizer and schedule """
-    optimizer = torch.optim.AdamW(model.parameters(), betas=(0.9, 0.99), eps=1e-8, weight_decay=1e-2)
+    parameters = [p for p in model.parameters() if p.requires_grad]
+    if not parameters:
+        raise ValueError('No trainable parameters')
+    optimizer = torch.optim.AdamW(parameters, betas=(0.9, 0.99), eps=1e-8, weight_decay=1e-2)
     scheduler = schedule_with_warmup(optimizer, args.n_warmup_steps, num_training_steps)
 
     return optimizer, scheduler

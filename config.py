@@ -34,10 +34,20 @@ def parse_args(argv=None) -> argparse.Namespace:
     decoder_group.add_argument('--decoder_dim', type=int, default=32, help="Spatial dimension of the auxiliary decoder")
     decoder_group.add_argument('--decoder_weight', type=float, default=0.1, help="Nonnegative weight added to the original GRID scores")
     decoder_group.add_argument('--decoder_temperature', type=float, default=1.0, help="Positive temperature for negative squared distance scores")
+    decoder_group.add_argument('--decoder_diagnostics', action='store_true', help="Log loss components, sampled distances and candidate score scales")
+    decoder_group.add_argument('--compare_decoder', action='store_true', help="Evaluate fused and original scores in the same forward pass")
+    decoder_group.add_argument('--freeze_backbone', action='store_true', help="Load a checkpoint and train only Decoder in a deterministic frozen backbone")
+    decoder_group.add_argument('--decoder_objective', choices=['fused', 'bpr'], default='fused', help="Original fused loss, or decoder-only BPR with a frozen backbone")
+    decoder_group.add_argument('--deterministic_eval', action='store_true', help="Disable KMeans initialization noise during evaluation")
+    learning_group.add_argument('--patience', type=int, default=5, help="Early stopping patience in epochs")
+    learning_group.add_argument('--early_stop_after_warmup', action='store_true', help="Start counting early stopping patience after warmup")
+    learning_group.add_argument('--selection_split', choices=['test', 'val'], default='test', help="Selection split; use val for new controlled experiments (test preserves legacy behaviour)")
 
     checkpoint_group = parser.add_argument_group('Checkpoint Configs')
     checkpoint_group.add_argument('--saved_model_path', type=str, default='checkpoint/', help="Directory created before training for checkpoint-related outputs")
-    checkpoint_group.add_argument('--ckpt_file', type=str, default='checkpoint/model_.bin', help="Reserved checkpoint file path; the current training loop keeps the best model state in memory")
+    checkpoint_group.add_argument('--ckpt_file', type=str, default='checkpoint/model_.bin', help="Output path used with --save_checkpoint")
+    checkpoint_group.add_argument('--save_checkpoint', action='store_true', help="Save best model weights and configuration; not optimizer resume state")
+    checkpoint_group.add_argument('--load_checkpoint', type=str, default=None, help="Initialize from a trusted GRID checkpoint")
     checkpoint_group.add_argument('--best_score', type=float, default=0.0, help="Initial best-score threshold used for model selection")
     checkpoint_group.add_argument('--metric_k', type=List[int], default=[50, 100], help="Cutoff values used to report Recall@K and NDCG@K")
     checkpoint_group.add_argument('--epsilon', type=float, default=0.3, help="Reserved argument; not used by the current training or evaluation pipeline")
@@ -49,6 +59,16 @@ def parse_args(argv=None) -> argparse.Namespace:
         parser.error('decoder_weight must be finite and nonnegative')
     if not math.isfinite(args.decoder_temperature) or args.decoder_temperature <= 0:
         parser.error('decoder_temperature must be finite and positive')
+    if args.patience < 1:
+        parser.error('patience must be positive')
+    if args.freeze_backbone and (not args.load_checkpoint or args.decoder_type == 'none'):
+        parser.error('freeze_backbone requires load_checkpoint and an enabled decoder')
+    if args.decoder_objective == 'bpr' and not args.freeze_backbone:
+        parser.error('decoder-only BPR requires freeze_backbone')
+    if args.freeze_backbone and args.decoder_objective == 'fused' and args.decoder_weight == 0:
+        parser.error('frozen fused training requires decoder_weight > 0')
+    if args.freeze_backbone:
+        args.deterministic_eval = True
     return args
 
 

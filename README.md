@@ -74,281 +74,112 @@ Each cascade file is a JSON list of records with the following structure:
 
 This repository currently includes the `twitter` dataset layout. `config.py` also contains dataset-specific presets for `douban`, `quora`, and `weibo`; those datasets should follow the same directory structure if added locally.
 
-## Preprocessing Full Cascades
+## 数据预处理
 
-`data_preprocess.py` converts `cascade_train.json`, `cascade_valid.json`,
-`cascade_test.json` (each record has `cascade` and `timestamp`) and a sparse
-`graph.npz` into the four GRID input files. Install its dependencies in your
-training environment:
+将原始级联和社交图转换成 GRID 输入，支持 Douban、Weibo 等数据集：
 
 ```bash
-pip install numpy scipy torch torch-geometric
-python data_preprocess.py --dataset douban --dry-run
+pip install scipy
+python data_preprocess.py --dataset douban --dry-run  # 检查输入
 python data_preprocess.py --dataset douban
-```
-
-The default source is `dataset/origin_data/douban`, and the destination is
-`dataset/douban`. Existing output directories require explicit `--overwrite`,
-or use `--output-dir` to create a separate version:
-
-```bash
-python data_preprocess.py --dataset douban --overwrite
-```
-
-Overwrite mode replaces only the three cascade JSON files, `graph.pt`,
-`preprocess_report.json`, and `sample_provenance.json`, preserving other files.
-Results are generated and verified in a temporary directory before publication;
-existing files are then replaced individually, not as a single transaction.
-A dry run writes nothing, even when combined with `--overwrite`.
-
-The default `--protocol paper` retains each user's first adoption, filters
-cascades with fewer than 10 distinct participants, and uses the first 90% of
-participants as history. These rules follow Appendix A of the
-[paper](https://www.comp.hkbu.edu.hk/~xinhuang/publications/pdfs/WWW2026-Diffusion.pdf).
-The configurable `--split-ratios 0.6 0.1 0.3` default is inferred from the
-repository's Twitter files, not confirmed as a paper requirement. All source
-splits are merged, cleaned, stably sorted by cascade start time, and repartitioned.
-Boundaries are rounded down. To use 80% history and retain short cascades as
-in the shipped Twitter data, select `--protocol repository` (minimum length 2).
-Both presets remove repeated users within a cascade and retain duplicate full
-records, which are reported.
-
-The graph converter selects `(value & 1) != 0`, removes self-loops, preserves
-edge direction, and writes unit edge attributes. This rule exactly recovers the
-shipped Twitter edge set; confirm the relation encoding before applying it to
-other source graphs. `--graph-relation-bit` and `--max-user-id` allow explicit
-overrides. User IDs are preserved, 0 is PAD, and the trailing source special
-node is excluded. Known user ranges come from `config.py`; for other datasets,
-the fallback assumes a square graph of size `real_users + 2`.
-
-For the supplied Weibo layout, use:
-
-```bash
-python data_preprocess.py --dataset weibo --dry-run
 python data_preprocess.py --dataset weibo
 ```
 
-This reads only `dataset/origin_data/Weibo/cascade_train.json` and `graph.txt`,
-then writes `dataset/weibo`. The single JSON file is treated as a cascade pool:
-it is cleaned, sorted by cascade start time, and split using `--split-ratios`.
-The TXT graph must contain two integer user IDs per nonempty line. Its direction
-is preserved, duplicate edges and self-loops are removed, and no relation-bit
-filter is applied. Non-default `--graph-relation-bit` values are rejected for
-Weibo. Its real user range is `1..31061` from `config.py` (overridable with
-`--max-user-id`); `graph.pt` includes 31062 node slots including PAD.
-Profiles, prompts, `gt.json`, bias attention, and co-occurrence edges are not
-used. Dataset arguments `weibo`, `Weibo`, and `WEIBO` select the same preset.
+输出到 `dataset/<dataset>/`，覆盖需加 `--overwrite`。自定义路径使用 `--input-dir`、`--output-dir`，完整选项见 `--help`。
 
-Training records receive up to `--neg-num 100` distinct negatives sampled with
-`--seed 21`, excluding the entire cleaned cascade and special IDs. Complete
-histories, targets, and timestamps are saved. `preprocess_report.json` records
-parameters, input/output hashes, cleaning and length statistics, graph statistics,
-and compatibility notes. `sample_provenance.json` maps output records to their
-source file and zero-based index.
+默认 `--protocol paper`：用户去重，保留至少 10 人的级联，前 90% 为历史；按起始时间排序，以 6:1:3 划分训练、验证、测试集。划分比例来自仓库数据，非论文明确要求。`--protocol repository` 改为至少 2 人、前 80% 为历史。
 
-**Training compatibility:** the current loader still truncates histories to
-`--max_len` (default 200) and targets to 20. For full-target experiments, change
-the loader to dynamically pad labels and choose a history limit large enough
-(500 covers the supplied Twitter/Douban/Android/Christian data; the supplied
-Weibo data needs up to 7369 observed users and 819 target users under the paper
-preset). Preprocessing does not change the loader
-or fix the existing test-set-based early stopping. Android and Christian also
-need entries in `config.py`; the report provides the required `user_num`.
+- Douban：读取三个级联 JSON 和 `graph.npz`，默认保留关系位 1。
+- Weibo：读取 `cascade_train.json` 和 `graph.txt`，其他辅助文件不参与处理。
+- 负例排除整个级联的用户；用户 ID 保持不变，0 为 PAD。
+- 输出另含处理报告和样本来源。训练加载器仍默认截断历史到 200 人、目标到 20 人。
 
-## Graph Structure Analysis
+## 图结构分析
 
-`data_analyse.py` analyses the **social graph**, not a cascade transmission tree.
-User sequences alone do not specify who infected whom. Install the analysis
-dependencies in your Python environment:
+分析社交图的层级性、树状特征、度分布及平均 δ-双曲性：
 
 ```bash
-pip install numpy scipy networkx matplotlib
+pip install scipy networkx matplotlib
+python data_analyse.py --dataset douban
 python data_analyse.py --dataset weibo
-python data_analyse.py --dataset douban --no-plots
 python data_analyse.py --dataset twitter
 ```
 
-Twitter is supported by the same analysis pipeline: by default it reads
-`dataset/origin_data/twitter/graph.npz`, selects relation bit 1, and uses real
-user IDs 1 through 12627 from `config.py`. No preprocessing is required.
-Results are saved to `analysis/twitter/`. To analyse the training graph instead,
-use `python data_analyse.py --dataset twitter --graph-path dataset/twitter/graph.pt`.
+自动从 `dataset/origin_data`、`dataset/origin`、`dataset` 查找输入。指定训练图可加 `--graph-path dataset/twitter/graph.pt`。
 
-Inputs are automatically located under `dataset/origin_data`, `dataset/origin`,
-then `dataset`, preferring raw TXT/NPZ files to PT. Use `--graph-path` to select
-a specific file. PT requires `torch` and `torch-geometric` and must come from a
-trusted source. NPZ selects relation bit 1 by default; TXT/PT do not use bit
-filtering. PAD/special nodes, self-loops and duplicate edges are removed.
-Known user ranges come from `config.py`; specify `--max-user-id` for other
-numbering conventions. All metrics use unweighted simple graphs.
+结果位于 `analysis/<dataset>/`：
 
-The output directory defaults to `analysis/<dataset>` and contains:
+| 文件 | 内容 |
+|---|---|
+| `summary.md` / `analysis.json` | 结果解释 / 完整数值 |
+| `diagnostics.png` | 度 CCDF、度与聚类系数、核数、BFS 层级 |
+| `degree_distribution_linear.png` | 普通坐标度分布 |
+| `degree_distribution_loglog.png` | 双对数坐标度分布 |
 
-- `summary.md`: Chinese explanation of results and limitations.
-- `analysis.json`: all metrics, distributions, parameters and source hash.
-- `diagnostics.png`: degree CCDF, clustering by degree, core numbers and BFS levels
-  (unless `--no-plots` is used).
-- `degree_distribution_linear.png`: empirical degree probabilities on linear axes,
-  including zero-degree nodes.
-- `degree_distribution_loglog.png`: the same probabilities on log-log axes;
-  zero-degree nodes are omitted and their fraction is annotated. Both plots use
-  all nodes as the denominator, without binning or fitting. Directed graphs have
-  separate panels for undirected projection degree, in-degree and out-degree.
-  `--no-plots` skips all three PNG files. Exact counts are stored in each
-  distribution's `degree_histogram` in `analysis.json`.
+常用选项：`--overwrite` 覆盖结果，`--no-plots` 跳过绘图，`--bootstrap 0` 跳过默认 1000 次幂律检验，`--hyperbolicity off` 跳过双曲性计算。
 
-Hierarchy diagnostics include k-core decomposition, sampled clustering versus
-degree, and, for directed graphs, strongly connected components and condensation
-DAG levels. Tree diagnostics use the undirected projection: leaves, bridges,
-tree components and cycle rank $m-n+c$ (where $c$ is the component count). BFS layers depend on the
-selected root; condensation is always a DAG. Neither proves causal hierarchy.
-`--direction auto` treats a completely reciprocal edge set as undirected; use
-`--direction directed` or `undirected` to override that convention.
+幂律检验针对拟合选出的**尾部**，不能据此认定整个分布符合幂律。层级和树状指标描述社交图，不代表真实传播树。
 
-Degree tails are fitted with discrete maximum likelihood, choosing $x_{\min}$ by
-minimum discrete KS distance over at most 64 candidate thresholds. The report
-also compares the fitted tail to a discrete exponential distribution. This
-comparison alone does not establish a power law. By default goodness-of-fit
-bootstrap runs **1000 simulations** (each simulated sample is refitted).
-Use `--bootstrap 0` to skip it for a quick structural analysis. For example:
+双曲性默认在无向投影的最大连通分量上，随机采样 10 万个四元组和 10 万对节点，计算精确最短路：
+$\delta=(S_{\max}-S_{\mathrm{mid}})/2$，$\delta_G=2\delta_{\mathrm{avg}}/d_{\mathrm{avg}}$。
+可用 `--hyperbolicity-samples`、`--hyperbolicity-pairs` 调整采样数。这是平均统计量，非最大 Gromov 常数；归一化值不保证在 $[0,1]$，值小也不能单独证明树状结构。
 
-```bash
-python data_analyse.py --dataset weibo --bootstrap 1000 --overwrite
-```
+方法参照：[1]谢文锦.社交与学术网络上的信息传播预测研究[D].西南大学,2025.DOI:10.27684/d.cnki.gxndx.2025.003879.
 
-`--min-tail`, `--max-xmin-candidates` (0 searches all), `--clustering-samples`
-(0 uses all nodes), and `--seed` control the analysis. A non-rejected power-law
-tail is not proof of a power law, and network degrees violate strict iid
-assumptions. See [Clauset et al.](https://arxiv.org/abs/0706.1062) and
-[Ravasz and Barabasi](https://arxiv.org/abs/cond-mat/0206130) for the statistical
-and clustering-scaling background. Existing reports require `--overwrite`;
-other files in the output directory are preserved.
-
-## Mean delta-hyperbolicity analysis
-
-The calculation follows the user-provided average four-point method:
-
-1. Uniformly sample four distinct vertices from the analysis component.
-2. Calculate exact shortest-path distances and the three pair-distance sums.
-3. For each sample, $\delta = \frac{S_{\max}-S_{\mathrm{mid}}}{2}$, using the largest and second-largest pair-distance sums.
-4. Average over samples to obtain $\delta_{\mathrm{avg}}$.
-5. Independently sample distinct vertex pairs to estimate mean distance $d_{\mathrm{avg}}$.
-6. Report $\delta_G = \frac{2\delta_{\mathrm{avg}}}{d_{\mathrm{avg}}}$.
-
-This **mean statistic is not the maximum Gromov hyperbolicity constant**.
-The default is 100000 quadruples and 100000 independent pairs, sampled directly
-from all vertices of the analysis component. There is no landmark pool.
-Samples may repeat across draws, but vertices within each draw are distinct.
-Shortest paths are computed on the full component using batched BFS, storing
-only requested distances rather than an all-pairs distance matrix. Runtime can
-be substantial because many distinct source vertices need BFS.
-
-Directed graphs use their unweighted undirected projection. Disconnected graphs
-use the largest connected component by default, with node coverage and excluded
-node counts explicitly reported. This is **not an average for disconnected
-vertices of the entire graph**. Use `--hyperbolicity-scope require-connected` to
-reject disconnected input. Components with fewer than four vertices have null
-results because distinct quadruples cannot be formed.
-
-```bash
-python data_analyse.py --dataset douban --overwrite
-python data_analyse.py --dataset twitter --hyperbolicity-samples 200000 --hyperbolicity-pairs 200000 --overwrite
-python data_analyse.py --dataset weibo --hyperbolicity off --overwrite
-```
-
-JSON `hyperbolicity` and the Chinese summary report `delta_avg`, `d_avg`,
-`delta_G`, sampling scope, sample counts, histograms and Monte Carlo standard
-errors. The ratio standard error uses first-order error propagation with the
-independently sampled means; it is not a confidence interval for maximum delta.
-The old maximum bounds and exact/landmark options have been removed.
-`--no-plots` does not disable this calculation; `--seed` controls sampling.
-
-**The normalization does not guarantee a $[0,1]$ range**, so results are not
-clipped: a four-cycle has $\delta_{\mathrm{avg}}=1$ and mean pair distance $d_{\mathrm{avg}}=4/3$, giving
-normalized $\delta_G=1.5$. Trees and complete graphs both have zero four-point
-mean, so small values alone cannot establish a tree structure or hierarchy.
-The [SageMath reference](https://doc.sagemath.org/html/en/reference/graphs/sage/graphs/hyperbolicity.html)
-describes the four-point definition; the averaging and normalization here
-follow the supplied method rather than SageMath's maximum definition.
-
-## Training and Testing
-
-Run training with:
+## 训练与评分分支
 
 ```bash
 python main.py --dataset twitter
+# 增加双曲评分分支；欧氏对照改为 euclidean
+python main.py --dataset twitter --decoder_type hyperbolic --decoder_weight 0.1
 ```
 
-Common arguments:
+默认关闭分支。启用后，评分为 $s=s_{\mathrm{GRID}}-\lambda d^2/\tau$，将级联和用户表示投影后计算欧氏或双曲距离，并使用融合评分训练。
 
-| Argument | Default | Description |
+| 参数 | 默认值 | 作用 |
 |---|---|---|
-| `--dataset` | `twitter` | Dataset preset and data directory to use |
-| `--batch_size` | `32` | Mini-batch size |
-| `--max_len` | `200` | Maximum observed cascade length after truncation/padding |
-| `--max_epochs` | `30` | Number of training epochs |
-| `--group_num` | `20` | Number of grouped tokens produced by clustering |
-| `--gnn_type` | `lightgcn` | Social graph encoder backbone |
-| `--neg_num` | `100` | Maximum negatives sampled per cascade |
-| `--metric_k` | `[50, 100]` | Evaluation cutoffs for Recall@K and NDCG@K |
+| `--decoder_type` | `none` | `none` / `euclidean` / `hyperbolic` |
+| `--decoder_dim` | `32` | 分支投影维度 |
+| `--decoder_weight` | `0.1` | 融合权重，0 不参与融合 |
+| `--decoder_temperature` | `1.0` | 距离评分温度 |
+| `--selection_split` | `test` | 模型选择集；新实验建议设为 `val` |
+| `--patience` | `5` | 早停耐心轮数 |
 
-### Optional distance decoder
+其他参数见 `python main.py --help`。为兼容旧流程，默认仍按测试集选择模型；指定 `--selection_split val` 后，用验证集选择模型，最后评估测试集。
 
-The original GRID scores can be combined with an auxiliary distance score:
-$s(v\mid C)=s_{\mathrm{GRID}}(v\mid C)-\lambda d(q_C,z_v)^2/\tau$.
-The branch projects the pooled cascade representation and GNN user embeddings
-separately. `euclidean` uses squared Euclidean distance; `hyperbolic` maps both
-projections to the Lorentz model with curvature -1 and uses squared geodesic
-distance. Both branches have the same trainable projection sizes and a shared
-projected-vector norm cap of 3. This is a decoder experiment, not a hyperbolic
-GNN or a change to grouping. The original `Combined_Loss` trains the fused
-scores; no extra loss or new data is needed.
+### 冻结主干的诊断实验
 
-| Argument | Default | Description |
-|---|---|---|
-| `--decoder_type` | `none` | `none`, `euclidean`, or `hyperbolic` |
-| `--decoder_dim` | `32` | Projection dimension; Lorentz coordinates add one time component |
-| `--decoder_weight` | `0.1` | Nonnegative fusion weight; zero bypasses the branch |
-| `--decoder_temperature` | `1.0` | Positive distance-score temperature |
+先保存基线，再只训练评分分支，比较两种损失。以下命令在 Linux 项目根目录执行：
 
 ```bash
-python main.py --dataset twitter --decoder_type none
-python main.py --dataset twitter --decoder_type euclidean --decoder_dim 32 --decoder_weight 0.1
-python main.py --dataset twitter --decoder_type hyperbolic --decoder_dim 32 --decoder_weight 0.1
+# 1. 训练并保存基线
+python main.py --dataset twitter --selection_split val \
+  --deterministic_eval --early_stop_after_warmup \
+  --save_checkpoint --ckpt_file checkpoint/twitter_base.pt
+
+# 2. 冻结主干，使用原融合损失
+python main.py --dataset twitter --decoder_type hyperbolic \
+  --load_checkpoint checkpoint/twitter_base.pt --freeze_backbone \
+  --decoder_objective fused --selection_split val --early_stop_after_warmup \
+  --decoder_diagnostics --compare_decoder
+
+# 3. 重复第 2 条命令，将 fused 改为 bpr，仅优化评分分支的 BPR
 ```
 
-Keep temperature at 1 initially: only the ratio of weight to temperature
-affects score fusion. Distance operations use float32 even under autocast,
-with candidate chunks of 4096 and a near-zero expansion for squared `acosh`.
-Existing PAD/previous-user masking is applied after fusion.
+- `--decoder_diagnostics`：记录分项损失、正负例距离和评分尺度。`distance_gap` 为负例距离减正例距离；`objective` 为实际优化的损失。
+- `--compare_decoder`：同一次前向计算分支开启/关闭的指标（ON/OFF）。
+- `--freeze_backbone`：仅更新 Decoder，固定主干及评估随机性；OFF 指标应保持不变。
+- `--decoder_objective bpr`：仅冻结模式可用。日志里的 BCE/BPR/CE 仍描述融合评分，但只有 Decoder 自身的 BPR 参与优化。
+- `--save_checkpoint --ckpt_file 路径`：保存最佳模型；加载只恢复权重，不恢复优化器。输出路径应与基线不同。
 
-The disabled branch adds no checkpoint parameters and accepts older argument
-objects without decoder options. Enabled checkpoints contain `Decoder.*`
-parameters and must be loaded with matching decoder options. When deliberately
-initializing an enabled model from an old checkpoint, load with `strict=False`
-and verify that only `Decoder.*` keys are missing. Record decoder options
-alongside checkpoints; they are not all stored in `state_dict`.
+欧氏对照将 `hyperbolic` 改为 `euclidean`。诊断联合训练时，只添加 `--decoder_diagnostics --compare_decoder`，不冻结主干。对比实验应保持数据划分、随机性及早停设置一致。
 
-Small synthetic-graph forward/backward and compatibility checks (no experiment):
+## 辅助检查
 
 ```bash
-python -m unittest discover -s tests -p test_distance_decoder.py -v
-```
-
-
-
-## Additional Scripts
-
-Check GroupSoftMax consistency:
-
-```bash
-python scripts/Group_test.py
-```
-
-Profile parameters, FLOPs, memory, and inference time:
-
-```bash
-python scripts/Efficiency_test.py --dataset twitter
+python -m unittest discover -s tests -v       # 小图兼容性与训练流程测试
+python scripts/Group_test.py                 # GroupSoftMax 检查
+python scripts/Efficiency_test.py --dataset twitter  # 效率测试
 ```
 
 ## Citation
