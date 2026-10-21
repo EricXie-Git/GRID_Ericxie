@@ -118,6 +118,13 @@ python main.py --dataset twitter --decoder_type hyperbolic \
     ndcg@50: 0.19601823
     ndcg@100: 0.20996214
 
+#### 4. 冻结主干，使用原融合损失，仅优化评分分支的 BPR，但使用的是欧式
+    -------Final Results-------
+    recall@50: 0.25858086
+    recall@100: 0.30193621
+    ndcg@50: 0.19551910
+    ndcg@100: 0.20967774
+
 
 - `--decoder_diagnostics`：记录分项损失、正负例距离和评分尺度。`distance_gap` 为负例距离减正例距离；`objective` 为实际优化的损失。
 - `--compare_decoder`：同一次前向计算分支开启/关闭的指标（ON/OFF）。
