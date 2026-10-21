@@ -1,1 +1,7 @@
 /__pycache__/
+# 忽略所有层级的 Python 字节码缓存目录
+__pycache__/
+
+# 忽略 Python 编译生成的字节码文件
+*.pyc
+*.pyo

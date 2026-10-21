@@ -74,3 +74,55 @@ result:
 
 后续应记录 BCE、BPR、CE 分项损失及正负例距离，并尝试从已训练的 GRID 出发，冻结主干、单独训练距离分支，以区分评分能力与联合优化问题。目前只能说明当前融合训练方案无效，不能据此否定双曲评分的可行性。
 
+
+
+# 20261021
+## 沿着上面思路做验证实验
+### 冻结主干的诊断实验（同README中描述）
+
+先保存基线，再只训练评分分支，比较两种损失。以下命令在 Linux 项目根目录执行：
+
+```bash
+# 1. 训练并保存基线
+python main.py --dataset twitter --selection_split val \
+  --deterministic_eval --early_stop_after_warmup \
+  --save_checkpoint --ckpt_file checkpoint/twitter_base.pt
+
+# 2. 冻结主干，使用原融合损失
+python main.py --dataset twitter --decoder_type hyperbolic \
+  --load_checkpoint checkpoint/twitter_base.pt --freeze_backbone \
+  --decoder_objective fused --selection_split val --early_stop_after_warmup \
+  --decoder_diagnostics --compare_decoder
+
+# 3. 重复第 2 条命令，将 fused 改为 bpr，仅优化评分分支的 BPR
+```
+
+#### 1. 训练并保存基线结果：
+    -------Final Results-------
+    recall@50: 0.25636348
+    recall@100: 0.29950184
+    ndcg@50: 0.19440149
+    ndcg@100: 0.20842667
+
+#### 2. 冻结主干，使用原融合损失
+    -------Final Results-------
+    recall@50: 0.25937551
+    recall@100: 0.30010951
+    ndcg@50: 0.19537196
+    ndcg@100: 0.20907128
+
+#### 3. 冻结主干，使用原融合损失，将 fused 改为 bpr，仅优化评分分支的 BPR
+    -------Final Results-------
+    recall@50: 0.25967318
+    recall@100: 0.30165228
+    ndcg@50: 0.19601823
+    ndcg@100: 0.20996214
+
+
+- `--decoder_diagnostics`：记录分项损失、正负例距离和评分尺度。`distance_gap` 为负例距离减正例距离；`objective` 为实际优化的损失。
+- `--compare_decoder`：同一次前向计算分支开启/关闭的指标（ON/OFF）。
+- `--freeze_backbone`：仅更新 Decoder，固定主干及评估随机性；OFF 指标应保持不变。
+- `--decoder_objective bpr`：仅冻结模式可用。日志里的 BCE/BPR/CE 仍描述融合评分，但只有 Decoder 自身的 BPR 参与优化。
+- `--save_checkpoint --ckpt_file 路径`：保存最佳模型；加载只恢复权重，不恢复优化器。输出路径应与基线不同。
+
+欧氏对照将 `hyperbolic` 改为 `euclidean`。诊断联合训练时，只添加 `--decoder_diagnostics --compare_decoder`，不冻结主干。对比实验应保持数据划分、随机性及早停设置一致。
