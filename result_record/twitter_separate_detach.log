@@ -1,0 +1,504 @@
+2026-10-27 11:19:33 - INFO - Training/Testing parameters: Namespace(batch_size=32, best_score=0.0, bpr_margin=0.5, cascade_path_test='dataset/twitter/cascade_test.json', cascade_path_train='dataset/twitter/cascade_train_neg.json', cascade_path_valid='dataset/twitter/cascade_val.json', ckpt_file='checkpoint/model_.bin', clustering=True, compare_decoder=True, dataset='twitter', decoder_detach_backbone=True, decoder_diagnostics=True, decoder_dim=32, decoder_loss_weight=0.1, decoder_objective='separate', decoder_temperature=1.0, decoder_type='euclidean', decoder_weight=0.1, deterministic_eval=True, device='cuda', dim=128, dropout=0.3, early_stop_after_warmup=True, epsilon=0.3, freeze_backbone=False, gnn_layers=2, gnn_type='lightgcn', graph_path='dataset/twitter/graph.pt', group_num=20, learning_rate=0.001, load_checkpoint=None, max_epochs=30, max_len=200, metric_k=[50, 100], n_gpu=1, n_heads=6, n_warmup_steps=500, neg_num=100, patience=5, print_steps=10, save_checkpoint=False, saved_model_path='checkpoint/', seed=21, selection_split='val', user_num=12628, weight_decay=0.0001)
+
+[ Training Epoch 0 ]
+2026-10-27 11:19:35 - INFO - Epoch 0 step 10 eta 00:02:43: loss 8.155
+2026-10-27 11:19:35 - INFO - Epoch 0 step 20 eta 00:01:52: loss 8.156
+2026-10-27 11:19:35 - INFO - Epoch 0 step 30 eta 00:01:34: loss 8.152
+2026-10-27 11:19:35 - INFO - Epoch 0 step 40 eta 00:01:25: loss 8.151
+2026-10-27 11:19:36 - INFO - Epoch 0 step 50 eta 00:01:20: loss 8.149
+2026-10-27 11:19:36 - INFO - Epoch 0 step 60 eta 00:01:17: loss 8.147
+2026-10-27 11:19:36 - INFO - Epoch 0 diagnostics (separate): {"base_bce": 0.6894717787955931, "base_bpr": 0.9739840456665516, "base_candidate_mean": -0.005394496483328829, "base_candidate_std": 0.06317415052264827, "base_ce": 9.441862062364455, "base_loss": 8.047842580100276, "base_weighted_bce": 1.3789435575911861, "base_weighted_bpr": 1.9479680913331032, "base_weighted_ce": 4.720931031182228, "decoder_bpr": 0.9742727597496684, "distance_gap": -0.0006480378078260463, "negative_distance": 0.23964919354492117, "objective": 8.145269877004832, "positive_distance": 0.24029723135274722, "weighted_decoder_bpr": 0.0974272771411761, "weighted_decoder_candidate_mean": -0.005757384526162385, "weighted_decoder_candidate_std": 0.00031785322759087637}
+2026-10-27 11:19:36 - INFO - Epoch 0 val ON={'recall@50': 0.003457623766735196, 'recall@100': 0.007643886376172304, 'ndcg@50': 0.0012122549815103412, 'ndcg@100': 0.0022898393217474222} OFF={'recall@50': 0.003457623766735196, 'recall@100': 0.007826101966202259, 'ndcg@50': 0.0012151155387982726, 'ndcg@100': 0.002360026352107525}
+ # ----------Val Result---------
+ recall@50: 0.00345762
+ recall@100: 0.00764389
+ ndcg@50: 0.00121225
+ ndcg@100: 0.00228984
+ --> Save Model <-- 
+
+[ Training Epoch 1 ]
+2026-10-27 11:19:37 - INFO - Epoch 1 step 70 eta 00:01:18: loss 8.108
+2026-10-27 11:19:37 - INFO - Epoch 1 step 80 eta 00:01:16: loss 8.103
+2026-10-27 11:19:37 - INFO - Epoch 1 step 90 eta 00:01:13: loss 8.094
+2026-10-27 11:19:38 - INFO - Epoch 1 step 100 eta 00:01:11: loss 8.086
+2026-10-27 11:19:38 - INFO - Epoch 1 step 110 eta 00:01:10: loss 8.072
+2026-10-27 11:19:38 - INFO - Epoch 1 step 120 eta 00:01:09: loss 8.058
+2026-10-27 11:19:39 - INFO - Epoch 1 step 130 eta 00:01:07: loss 8.043
+2026-10-27 11:19:39 - INFO - Epoch 1 diagnostics (separate): {"base_bce": 0.6709418588908537, "base_bpr": 0.9522533990525899, "base_candidate_mean": -0.043727978312061114, "base_candidate_std": 0.0793202787688321, "base_ce": 9.400565488890269, "base_loss": 7.946673302555594, "base_weighted_bce": 1.3418837177817073, "base_weighted_bpr": 1.9045067981051798, "base_weighted_ce": 4.7002827444451345, "decoder_bpr": 0.9733497655142979, "distance_gap": 0.0011255697366673312, "negative_distance": 0.4015575206286638, "objective": 8.044008285544672, "positive_distance": 0.40043195089199646, "weighted_decoder_bpr": 0.09733497806902015, "weighted_decoder_candidate_mean": -0.017680383756872465, "weighted_decoder_candidate_std": 0.0005941678215515714}
+2026-10-27 11:19:39 - INFO - Epoch 1 val ON={'recall@50': 0.006883146241307259, 'recall@100': 0.013667992316186428, 'ndcg@50': 0.00335867190733552, 'ndcg@100': 0.005599928088486195} OFF={'recall@50': 0.006599273532629013, 'recall@100': 0.013182084076106548, 'ndcg@50': 0.0033090452197939157, 'ndcg@100': 0.005375117063522339}
+ # ----------Val Result---------
+ recall@50: 0.00688315
+ recall@100: 0.01366799
+ ndcg@50: 0.00335867
+ ndcg@100: 0.00559993
+ --> Save Model <-- 
+
+[ Training Epoch 2 ]
+2026-10-27 11:19:39 - INFO - Epoch 2 step 140 eta 00:01:08: loss 7.884
+2026-10-27 11:19:39 - INFO - Epoch 2 step 150 eta 00:01:07: loss 7.848
+2026-10-27 11:19:40 - INFO - Epoch 2 step 160 eta 00:01:06: loss 7.814
+2026-10-27 11:19:40 - INFO - Epoch 2 step 170 eta 00:01:05: loss 7.778
+2026-10-27 11:19:40 - INFO - Epoch 2 step 180 eta 00:01:04: loss 7.740
+2026-10-27 11:19:41 - INFO - Epoch 2 step 190 eta 00:01:03: loss 7.699
+2026-10-27 11:19:41 - INFO - Epoch 2 diagnostics (separate): {"base_bce": 0.6064291572408848, "base_bpr": 0.8740232084515834, "base_candidate_mean": -0.18916444272916333, "base_candidate_std": 0.17621076657955997, "base_ce": 9.248100686108007, "base_loss": 7.5849551025494275, "base_weighted_bce": 1.2128583144817695, "base_weighted_bpr": 1.7480464169031669, "base_weighted_ce": 4.624050343054003, "decoder_bpr": 0.9627315248753595, "distance_gap": 0.006427833641106773, "negative_distance": 1.637174332008314, "objective": 7.681228240678057, "positive_distance": 1.6307464983672073, "weighted_decoder_bpr": 0.0962731539913892, "weighted_decoder_candidate_mean": -0.31532338156587636, "weighted_decoder_candidate_std": 0.004763662083897322}
+2026-10-27 11:19:41 - INFO - Epoch 2 val ON={'recall@50': 0.02059735544025898, 'recall@100': 0.03220406547188759, 'ndcg@50': 0.00944566447287798, 'ndcg@100': 0.013226865790784359} OFF={'recall@50': 0.019762208685278893, 'recall@100': 0.03238421678543091, 'ndcg@50': 0.009021761827170849, 'ndcg@100': 0.013128222897648811}
+ # ----------Val Result---------
+ recall@50: 0.02059736
+ recall@100: 0.03220407
+ ndcg@50: 0.00944566
+ ndcg@100: 0.01322687
+ --> Save Model <-- 
+
+[ Training Epoch 3 ]
+2026-10-27 11:19:41 - INFO - Epoch 3 step 200 eta 00:01:04: loss 7.266
+2026-10-27 11:19:41 - INFO - Epoch 3 step 210 eta 00:01:03: loss 7.224
+2026-10-27 11:19:42 - INFO - Epoch 3 step 220 eta 00:01:02: loss 7.153
+2026-10-27 11:19:42 - INFO - Epoch 3 step 230 eta 00:01:02: loss 7.092
+2026-10-27 11:19:42 - INFO - Epoch 3 step 240 eta 00:01:01: loss 7.031
+2026-10-27 11:19:43 - INFO - Epoch 3 step 250 eta 00:01:00: loss 6.968
+2026-10-27 11:19:43 - INFO - Epoch 3 step 260 eta 00:01:00: loss 6.917
+2026-10-27 11:19:43 - INFO - Epoch 3 diagnostics (separate): {"base_bce": 0.47663976909291794, "base_bpr": 0.7095111071166919, "base_candidate_mean": -0.5683429410219308, "base_candidate_std": 0.46649640612033083, "base_ce": 8.910317530625079, "base_loss": 6.8274605145794505, "base_weighted_bce": 0.9532795381858359, "base_weighted_bpr": 1.4190222142333837, "base_weighted_ce": 4.4551587653125395, "decoder_bpr": 0.9293411194786524, "distance_gap": 0.014053853329254018, "negative_distance": 2.98627852515249, "objective": 6.920394621446027, "positive_distance": 2.972224671823236, "weighted_decoder_bpr": 0.09293411365560626, "weighted_decoder_candidate_mean": -0.8918694908441935, "weighted_decoder_candidate_std": 0.016946240729520848}
+2026-10-27 11:19:43 - INFO - Epoch 3 val ON={'recall@50': 0.02313574217259884, 'recall@100': 0.032048359513282776, 'ndcg@50': 0.012182737700641155, 'ndcg@100': 0.015304996632039547} OFF={'recall@50': 0.02382703125476837, 'recall@100': 0.031315166503190994, 'ndcg@50': 0.012653911486268044, 'ndcg@100': 0.015442471951246262}
+ # ----------Val Result---------
+ recall@50: 0.02313574
+ recall@100: 0.03204836
+ ndcg@50: 0.01218274
+ ndcg@100: 0.01530500
+ --> Save Model <-- 
+
+[ Training Epoch 4 ]
+2026-10-27 11:19:43 - INFO - Epoch 4 step 270 eta 00:01:00: loss 6.372
+2026-10-27 11:19:44 - INFO - Epoch 4 step 280 eta 00:01:00: loss 6.303
+2026-10-27 11:19:44 - INFO - Epoch 4 step 290 eta 00:00:59: loss 6.242
+2026-10-27 11:19:44 - INFO - Epoch 4 step 300 eta 00:00:59: loss 6.193
+2026-10-27 11:19:45 - INFO - Epoch 4 step 310 eta 00:00:58: loss 6.156
+2026-10-27 11:19:45 - INFO - Epoch 4 step 320 eta 00:00:58: loss 6.120
+2026-10-27 11:19:45 - INFO - Epoch 4 diagnostics (separate): {"base_bce": 0.34216203720230665, "base_bpr": 0.5441480498907347, "base_candidate_mean": -1.2257562909005975, "base_candidate_std": 0.9470035764327737, "base_ce": 8.491643553969352, "base_loss": 6.018441927658592, "base_weighted_bce": 0.6843240744046133, "base_weighted_bpr": 1.0882960997814695, "base_weighted_ce": 4.245821776984676, "decoder_bpr": 0.8905838328562333, "distance_gap": 0.029566021000468456, "negative_distance": 2.974806557751555, "objective": 6.107500279661176, "positive_distance": 2.9452405367510863, "weighted_decoder_bpr": 0.08905838481261277, "weighted_decoder_candidate_mean": -0.8852291047023605, "weighted_decoder_candidate_std": 0.030915035864845286}
+2026-10-27 11:19:45 - INFO - Epoch 4 val ON={'recall@50': 0.023828977718949318, 'recall@100': 0.0339287705719471, 'ndcg@50': 0.012009287253022194, 'ndcg@100': 0.015558158978819847} OFF={'recall@50': 0.021634716540575027, 'recall@100': 0.032902758568525314, 'ndcg@50': 0.011853234842419624, 'ndcg@100': 0.015549452044069767}
+ # ----------Val Result---------
+ recall@50: 0.02382898
+ recall@100: 0.03392877
+ ndcg@50: 0.01200929
+ ndcg@100: 0.01555816
+ --> Save Model <-- 
+
+[ Training Epoch 5 ]
+2026-10-27 11:19:46 - INFO - Epoch 5 step 330 eta 00:00:58: loss 5.736
+2026-10-27 11:19:46 - INFO - Epoch 5 step 340 eta 00:00:57: loss 5.710
+2026-10-27 11:19:46 - INFO - Epoch 5 step 350 eta 00:00:57: loss 5.653
+2026-10-27 11:19:47 - INFO - Epoch 5 step 360 eta 00:00:56: loss 5.641
+2026-10-27 11:19:47 - INFO - Epoch 5 step 370 eta 00:00:56: loss 5.631
+2026-10-27 11:19:47 - INFO - Epoch 5 step 380 eta 00:00:55: loss 5.631
+2026-10-27 11:19:48 - INFO - Epoch 5 step 390 eta 00:00:55: loss 5.621
+2026-10-27 11:19:48 - INFO - Epoch 5 diagnostics (separate): {"base_bce": 0.2564082015188269, "base_bpr": 0.47207856578829216, "base_candidate_mean": -2.010899240735779, "base_candidate_std": 1.4463395830614367, "base_ce": 8.166066210921212, "base_loss": 5.540006634334174, "base_weighted_bce": 0.5128164030376537, "base_weighted_bpr": 0.9441571315765843, "base_weighted_ce": 4.083033105460606, "decoder_bpr": 0.8522749710349075, "distance_gap": 0.05315772953130171, "negative_distance": 2.987929065361464, "objective": 5.6252341282014875, "positive_distance": 2.9347713358301624, "weighted_decoder_bpr": 0.08522749819089231, "weighted_decoder_candidate_mean": -0.893546998385143, "weighted_decoder_candidate_std": 0.0522393275220408}
+2026-10-27 11:19:48 - INFO - Epoch 5 val ON={'recall@50': 0.022070297971367836, 'recall@100': 0.0356074720621109, 'ndcg@50': 0.010173224844038486, 'ndcg@100': 0.014138688333332539} OFF={'recall@50': 0.021241692826151848, 'recall@100': 0.031456004828214645, 'ndcg@50': 0.00967993400990963, 'ndcg@100': 0.012919483706355095}
+ # ----------Val Result---------
+ recall@50: 0.02207030
+ recall@100: 0.03560747
+ ndcg@50: 0.01017322
+ ndcg@100: 0.01413869
+ --> No improvement for 0 epochs <-- 
+
+[ Training Epoch 6 ]
+2026-10-27 11:19:48 - INFO - Epoch 6 step 400 eta 00:00:55: loss 5.415
+2026-10-27 11:19:48 - INFO - Epoch 6 step 410 eta 00:00:55: loss 5.381
+2026-10-27 11:19:49 - INFO - Epoch 6 step 420 eta 00:00:54: loss 5.365
+2026-10-27 11:19:49 - INFO - Epoch 6 step 430 eta 00:00:54: loss 5.368
+2026-10-27 11:19:49 - INFO - Epoch 6 step 440 eta 00:00:53: loss 5.378
+2026-10-27 11:19:50 - INFO - Epoch 6 step 450 eta 00:00:53: loss 5.382
+2026-10-27 11:19:50 - INFO - Epoch 6 diagnostics (separate): {"base_bce": 0.20258913215562477, "base_bpr": 0.45618107693684673, "base_candidate_mean": -2.7699327753447376, "base_candidate_std": 1.861772164854247, "base_ce": 7.964635927893478, "base_loss": 5.299858376680214, "base_weighted_bce": 0.40517826431124954, "base_weighted_bpr": 0.9123621538736935, "base_weighted_ce": 3.982317963946739, "decoder_bpr": 0.8174968193538671, "distance_gap": 0.08658243005209831, "negative_distance": 3.065630717318411, "objective": 5.381608058618493, "positive_distance": 2.9790482872663127, "weighted_decoder_bpr": 0.08174968302278829, "weighted_decoder_candidate_mean": -0.9417482143984669, "weighted_decoder_candidate_std": 0.08427861175639487}
+2026-10-27 11:19:50 - INFO - Epoch 6 val ON={'recall@50': 0.015009135007858276, 'recall@100': 0.03454674035310745, 'ndcg@50': 0.007900809869170189, 'ndcg@100': 0.01322234608232975} OFF={'recall@50': 0.014259803108870983, 'recall@100': 0.033500682562589645, 'ndcg@50': 0.007395443506538868, 'ndcg@100': 0.012702669948339462}
+ # ----------Val Result---------
+ recall@50: 0.01500914
+ recall@100: 0.03454674
+ ndcg@50: 0.00790081
+ ndcg@100: 0.01322235
+ --> No improvement for 0 epochs <-- 
+
+[ Training Epoch 7 ]
+2026-10-27 11:19:50 - INFO - Epoch 7 step 460 eta 00:00:53: loss 5.060
+2026-10-27 11:19:50 - INFO - Epoch 7 step 470 eta 00:00:52: loss 5.138
+2026-10-27 11:19:51 - INFO - Epoch 7 step 480 eta 00:00:52: loss 5.172
+2026-10-27 11:19:51 - INFO - Epoch 7 step 490 eta 00:00:51: loss 5.194
+2026-10-27 11:19:51 - INFO - Epoch 7 step 500 eta 00:00:51: loss 5.196
+2026-10-27 11:19:52 - INFO - Epoch 7 step 510 eta 00:00:51: loss 5.217
+2026-10-27 11:19:52 - INFO - Epoch 7 step 520 eta 00:00:50: loss 5.228
+2026-10-27 11:19:52 - INFO - Epoch 7 diagnostics (separate): {"base_bce": 0.1651243741277466, "base_bpr": 0.44423901331997334, "base_candidate_mean": -3.4259212306261873, "base_candidate_std": 2.178856496785463, "base_ce": 7.851263748217068, "base_loss": 5.144358650218625, "base_weighted_bce": 0.3302487482554932, "base_weighted_bpr": 0.8884780266399467, "base_weighted_ce": 3.925631874108534, "decoder_bpr": 0.8105826653478679, "distance_gap": 0.09230831017829733, "negative_distance": 3.1040198265633614, "objective": 5.225416935166938, "positive_distance": 3.011711516385064, "weighted_decoder_bpr": 0.0810582675925451, "weighted_decoder_candidate_mean": -0.9655364084047117, "weighted_decoder_candidate_std": 0.08879331058846522}
+2026-10-27 11:19:52 - INFO - Epoch 7 val ON={'recall@50': 0.01588231697678566, 'recall@100': 0.030595313757658005, 'ndcg@50': 0.008065075613558292, 'ndcg@100': 0.012154540978372097} OFF={'recall@50': 0.015783706679940224, 'recall@100': 0.02903897501528263, 'ndcg@50': 0.008001024834811687, 'ndcg@100': 0.011570477858185768}
+ # ----------Val Result---------
+ recall@50: 0.01588232
+ recall@100: 0.03059531
+ ndcg@50: 0.00806508
+ ndcg@100: 0.01215454
+ --> No improvement for 1 epochs <-- 
+
+[ Training Epoch 8 ]
+2026-10-27 11:19:53 - INFO - Epoch 8 step 530 eta 00:00:50: loss 5.020
+2026-10-27 11:19:53 - INFO - Epoch 8 step 540 eta 00:00:50: loss 5.037
+2026-10-27 11:19:53 - INFO - Epoch 8 step 550 eta 00:00:49: loss 5.029
+2026-10-27 11:19:54 - INFO - Epoch 8 step 560 eta 00:00:49: loss 5.029
+2026-10-27 11:19:54 - INFO - Epoch 8 step 570 eta 00:00:49: loss 5.051
+2026-10-27 11:19:54 - INFO - Epoch 8 step 580 eta 00:00:48: loss 5.046
+2026-10-27 11:19:54 - INFO - Epoch 8 diagnostics (separate): {"base_bce": 0.13857213302557472, "base_bpr": 0.41704077095386183, "base_candidate_mean": -3.953864187248004, "base_candidate_std": 2.409116105279085, "base_ce": 7.733813097036214, "base_loss": 4.9781323423205155, "base_weighted_bce": 0.27714426605114945, "base_weighted_bpr": 0.8340815419077237, "base_weighted_ce": 3.866906548518107, "decoder_bpr": 0.7077429917239264, "distance_gap": 0.13420460395362266, "negative_distance": 3.0476336569481743, "objective": 5.048906631923196, "positive_distance": 2.9134290529945517, "weighted_decoder_bpr": 0.07077430074782351, "weighted_decoder_candidate_mean": -0.9342201410176857, "weighted_decoder_candidate_std": 0.0840485231909758}
+2026-10-27 11:19:55 - INFO - Epoch 8 val ON={'recall@50': 0.01909618265926838, 'recall@100': 0.043232984840869904, 'ndcg@50': 0.010259945876896381, 'ndcg@100': 0.01609378680586815} OFF={'recall@50': 0.017815066501498222, 'recall@100': 0.038201991468667984, 'ndcg@50': 0.009473034180700779, 'ndcg@100': 0.014580003917217255}
+ # ----------Val Result---------
+ recall@50: 0.01909618
+ recall@100: 0.04323298
+ ndcg@50: 0.01025995
+ ndcg@100: 0.01609379
+ --> Save Model <-- 
+
+[ Training Epoch 9 ]
+2026-10-27 11:19:55 - INFO - Epoch 9 step 590 eta 00:00:48: loss 4.764
+2026-10-27 11:19:55 - INFO - Epoch 9 step 600 eta 00:00:48: loss 4.785
+2026-10-27 11:19:55 - INFO - Epoch 9 step 610 eta 00:00:47: loss 4.803
+2026-10-27 11:19:56 - INFO - Epoch 9 step 620 eta 00:00:47: loss 4.799
+2026-10-27 11:19:56 - INFO - Epoch 9 step 630 eta 00:00:47: loss 4.794
+2026-10-27 11:19:56 - INFO - Epoch 9 step 640 eta 00:00:46: loss 4.796
+2026-10-27 11:19:57 - INFO - Epoch 9 step 650 eta 00:00:46: loss 4.816
+2026-10-27 11:19:57 - INFO - Epoch 9 diagnostics (separate): {"base_bce": 0.11952760686925289, "base_bpr": 0.3694358457933636, "base_candidate_mean": -4.394230260714809, "base_candidate_std": 2.5935984811176667, "base_ce": 7.556638935825768, "base_loss": 4.756246382145555, "base_weighted_bce": 0.23905521373850577, "base_weighted_bpr": 0.7388716915867272, "base_weighted_ce": 3.778319467912884, "decoder_bpr": 0.5855140632821888, "distance_gap": 0.10368447499296796, "negative_distance": 2.9119456735055462, "objective": 4.81479778155605, "positive_distance": 2.8082611985125783, "weighted_decoder_bpr": 0.058551407260535586, "weighted_decoder_candidate_mean": -0.855566728930633, "weighted_decoder_candidate_std": 0.07667538587840826}
+2026-10-27 11:19:57 - INFO - Epoch 9 val ON={'recall@50': 0.027787331491708755, 'recall@100': 0.05722855031490326, 'ndcg@50': 0.015560338273644447, 'ndcg@100': 0.022667840123176575} OFF={'recall@50': 0.025776222348213196, 'recall@100': 0.05437462031841278, 'ndcg@50': 0.014654376544058323, 'ndcg@100': 0.02154480293393135}
+ # ----------Val Result---------
+ recall@50: 0.02778733
+ recall@100: 0.05722855
+ ndcg@50: 0.01556034
+ ndcg@100: 0.02266784
+ --> Save Model <-- 
+
+[ Training Epoch 10 ]
+2026-10-27 11:19:57 - INFO - Epoch 10 step 660 eta 00:00:46: loss 4.495
+2026-10-27 11:19:58 - INFO - Epoch 10 step 670 eta 00:00:45: loss 4.534
+2026-10-27 11:19:58 - INFO - Epoch 10 step 680 eta 00:00:45: loss 4.527
+2026-10-27 11:19:58 - INFO - Epoch 10 step 690 eta 00:00:44: loss 4.522
+2026-10-27 11:19:59 - INFO - Epoch 10 step 700 eta 00:00:44: loss 4.521
+2026-10-27 11:19:59 - INFO - Epoch 10 step 710 eta 00:00:44: loss 4.522
+2026-10-27 11:19:59 - INFO - Epoch 10 diagnostics (separate): {"base_bce": 0.10459589050094922, "base_bpr": 0.309664865031166, "base_candidate_mean": -4.742148556447851, "base_candidate_std": 2.7238800352143757, "base_ce": 7.269299430097555, "base_loss": 4.463171170210156, "base_weighted_bce": 0.20919178100189845, "base_weighted_bpr": 0.619329730062332, "base_weighted_ce": 3.6346497150487775, "decoder_bpr": 0.5432551037565359, "distance_gap": 0.1586245903527721, "negative_distance": 2.9900055514200705, "objective": 4.517496694354743, "positive_distance": 2.8313809610672984, "weighted_decoder_bpr": 0.05432551109070688, "weighted_decoder_candidate_mean": -0.9007208228024506, "weighted_decoder_candidate_std": 0.07783446559833417}
+2026-10-27 11:19:59 - INFO - Epoch 10 val ON={'recall@50': 0.057008955627679825, 'recall@100': 0.09538725018501282, 'ndcg@50': 0.030405867844820023, 'ndcg@100': 0.04030635580420494} OFF={'recall@50': 0.05383335053920746, 'recall@100': 0.09008736163377762, 'ndcg@50': 0.02927364781498909, 'ndcg@100': 0.03908640518784523}
+ # ----------Val Result---------
+ recall@50: 0.05700896
+ recall@100: 0.09538725
+ ndcg@50: 0.03040587
+ ndcg@100: 0.04030636
+ --> Save Model <-- 
+
+[ Training Epoch 11 ]
+2026-10-27 11:19:59 - INFO - Epoch 11 step 720 eta 00:00:43: loss 4.230
+2026-10-27 11:20:00 - INFO - Epoch 11 step 730 eta 00:00:43: loss 4.208
+2026-10-27 11:20:00 - INFO - Epoch 11 step 740 eta 00:00:43: loss 4.194
+2026-10-27 11:20:00 - INFO - Epoch 11 step 750 eta 00:00:42: loss 4.165
+2026-10-27 11:20:01 - INFO - Epoch 11 step 760 eta 00:00:42: loss 4.161
+2026-10-27 11:20:01 - INFO - Epoch 11 step 770 eta 00:00:41: loss 4.160
+2026-10-27 11:20:01 - INFO - Epoch 11 step 780 eta 00:00:41: loss 4.152
+2026-10-27 11:20:01 - INFO - Epoch 11 diagnostics (separate): {"base_bce": 0.09217598187668934, "base_bpr": 0.24782028280954116, "base_candidate_mean": -5.04412455271888, "base_candidate_std": 2.825002014434552, "base_ce": 6.833453716553859, "base_loss": 4.096719369097047, "base_weighted_bce": 0.18435196375337867, "base_weighted_bpr": 0.4956405656190823, "base_weighted_ce": 3.4167268582769297, "decoder_bpr": 0.5461046754128143, "distance_gap": 0.17488324032385982, "negative_distance": 3.008554197779189, "objective": 4.151329849600387, "positive_distance": 2.8336709574553294, "weighted_decoder_bpr": 0.05461046841828815, "weighted_decoder_candidate_mean": -0.9097588542507205, "weighted_decoder_candidate_std": 0.07421906002648518}
+2026-10-27 11:20:01 - INFO - Epoch 11 val ON={'recall@50': 0.09187931567430496, 'recall@100': 0.1313539743423462, 'ndcg@50': 0.05392589792609215, 'ndcg@100': 0.06607954949140549} OFF={'recall@50': 0.09108878672122955, 'recall@100': 0.12133115530014038, 'ndcg@50': 0.052224479615688324, 'ndcg@100': 0.06244003027677536}
+ # ----------Val Result---------
+ recall@50: 0.09187932
+ recall@100: 0.13135397
+ ndcg@50: 0.05392590
+ ndcg@100: 0.06607955
+ --> Save Model <-- 
+
+[ Training Epoch 12 ]
+2026-10-27 11:20:02 - INFO - Epoch 12 step 790 eta 00:00:41: loss 3.840
+2026-10-27 11:20:02 - INFO - Epoch 12 step 800 eta 00:00:40: loss 3.814
+2026-10-27 11:20:02 - INFO - Epoch 12 step 810 eta 00:00:40: loss 3.807
+2026-10-27 11:20:03 - INFO - Epoch 12 step 820 eta 00:00:40: loss 3.786
+2026-10-27 11:20:03 - INFO - Epoch 12 step 830 eta 00:00:39: loss 3.765
+2026-10-27 11:20:03 - INFO - Epoch 12 step 840 eta 00:00:39: loss 3.754
+2026-10-27 11:20:04 - INFO - Epoch 12 diagnostics (separate): {"base_bce": 0.08045880327679936, "base_bpr": 0.19222843921022587, "base_candidate_mean": -5.346944193883986, "base_candidate_std": 2.919441913008285, "base_ce": 6.297566572825114, "base_loss": 3.694157775312532, "base_weighted_bce": 0.1609176065535987, "base_weighted_bpr": 0.38445687842045173, "base_weighted_ce": 3.148783286412557, "decoder_bpr": 0.5493339519949575, "distance_gap": 0.18371549224630224, "negative_distance": 3.0147435757311065, "objective": 3.7490911663070228, "positive_distance": 2.8310280834848043, "weighted_decoder_bpr": 0.054933396088070574, "weighted_decoder_candidate_mean": -0.9120237852895451, "weighted_decoder_candidate_std": 0.07409400733848442}
+2026-10-27 11:20:04 - INFO - Epoch 12 val ON={'recall@50': 0.11976353824138641, 'recall@100': 0.18216972053050995, 'ndcg@50': 0.08074197918176651, 'ndcg@100': 0.09735158085823059} OFF={'recall@50': 0.11291990429162979, 'recall@100': 0.17257048189640045, 'ndcg@50': 0.07735585421323776, 'ndcg@100': 0.09328027069568634}
+ # ----------Val Result---------
+ recall@50: 0.11976354
+ recall@100: 0.18216972
+ ndcg@50: 0.08074198
+ ndcg@100: 0.09735158
+ --> Save Model <-- 
+
+[ Training Epoch 13 ]
+2026-10-27 11:20:04 - INFO - Epoch 13 step 850 eta 00:00:39: loss 3.437
+2026-10-27 11:20:04 - INFO - Epoch 13 step 860 eta 00:00:38: loss 3.386
+2026-10-27 11:20:05 - INFO - Epoch 13 step 870 eta 00:00:38: loss 3.373
+2026-10-27 11:20:05 - INFO - Epoch 13 step 880 eta 00:00:37: loss 3.360
+2026-10-27 11:20:05 - INFO - Epoch 13 step 890 eta 00:00:37: loss 3.348
+2026-10-27 11:20:06 - INFO - Epoch 13 step 900 eta 00:00:37: loss 3.340
+2026-10-27 11:20:06 - INFO - Epoch 13 step 910 eta 00:00:36: loss 3.348
+2026-10-27 11:20:06 - INFO - Epoch 13 diagnostics (separate): {"base_bce": 0.06936609056362071, "base_bpr": 0.14968102072871234, "base_candidate_mean": -5.675502401020618, "base_candidate_std": 3.0144500871817503, "base_ce": 5.705772981083781, "base_loss": 3.290980727738515, "base_weighted_bce": 0.13873218112724142, "base_weighted_bpr": 0.2993620414574247, "base_weighted_ce": 2.8528864905418905, "decoder_bpr": 0.5577869386362948, "distance_gap": 0.19179423726883105, "negative_distance": 3.0247503579823514, "objective": 3.3467594219144834, "positive_distance": 2.8329561207135203, "weighted_decoder_bpr": 0.05577869465495995, "weighted_decoder_candidate_mean": -0.9172651104589274, "weighted_decoder_candidate_std": 0.0749771951398171}
+2026-10-27 11:20:06 - INFO - Epoch 13 val ON={'recall@50': 0.15904845297336578, 'recall@100': 0.20401708781719208, 'ndcg@50': 0.10502778738737106, 'ndcg@100': 0.11855245381593704} OFF={'recall@50': 0.1544773429632187, 'recall@100': 0.1948293000459671, 'ndcg@50': 0.10399755835533142, 'ndcg@100': 0.11649664491415024}
+ # ----------Val Result---------
+ recall@50: 0.15904845
+ recall@100: 0.20401709
+ ndcg@50: 0.10502779
+ ndcg@100: 0.11855245
+ --> Save Model <-- 
+
+[ Training Epoch 14 ]
+2026-10-27 11:20:06 - INFO - Epoch 14 step 920 eta 00:00:36: loss 3.037
+2026-10-27 11:20:07 - INFO - Epoch 14 step 930 eta 00:00:36: loss 3.013
+2026-10-27 11:20:07 - INFO - Epoch 14 step 940 eta 00:00:35: loss 3.004
+2026-10-27 11:20:07 - INFO - Epoch 14 step 950 eta 00:00:35: loss 2.983
+2026-10-27 11:20:08 - INFO - Epoch 14 step 960 eta 00:00:35: loss 2.963
+2026-10-27 11:20:08 - INFO - Epoch 14 step 970 eta 00:00:34: loss 2.952
+2026-10-27 11:20:08 - INFO - Epoch 14 diagnostics (separate): {"base_bce": 0.05910389466967645, "base_bpr": 0.11568093013555202, "base_candidate_mean": -6.026868305294216, "base_candidate_std": 3.111692101905671, "base_ce": 5.095854544280976, "base_loss": 2.8974969140653872, "base_weighted_bce": 0.1182077893393529, "base_weighted_bpr": 0.23136186027110403, "base_weighted_ce": 2.547927272140488, "decoder_bpr": 0.5587673929349593, "distance_gap": 0.19494676049381576, "negative_distance": 3.0273605731900957, "objective": 2.9533736607451164, "positive_distance": 2.83241381269628, "weighted_decoder_bpr": 0.05587674039499613, "weighted_decoder_candidate_mean": -0.9184439985686168, "weighted_decoder_candidate_std": 0.07609837996687113}
+2026-10-27 11:20:08 - INFO - Epoch 14 val ON={'recall@50': 0.1867908239364624, 'recall@100': 0.23154935240745544, 'ndcg@50': 0.13105179369449615, 'ndcg@100': 0.14538858830928802} OFF={'recall@50': 0.1832219958305359, 'recall@100': 0.2266196459531784, 'ndcg@50': 0.12826862931251526, 'ndcg@100': 0.14264634251594543}
+ # ----------Val Result---------
+ recall@50: 0.18679082
+ recall@100: 0.23154935
+ ndcg@50: 0.13105179
+ ndcg@100: 0.14538859
+ --> Save Model <-- 
+
+[ Training Epoch 15 ]
+2026-10-27 11:20:08 - INFO - Epoch 15 step 980 eta 00:00:34: loss 2.660
+2026-10-27 11:20:09 - INFO - Epoch 15 step 990 eta 00:00:34: loss 2.619
+2026-10-27 11:20:09 - INFO - Epoch 15 step 1000 eta 00:00:33: loss 2.629
+2026-10-27 11:20:09 - INFO - Epoch 15 step 1010 eta 00:00:33: loss 2.609
+2026-10-27 11:20:10 - INFO - Epoch 15 step 1020 eta 00:00:32: loss 2.609
+2026-10-27 11:20:10 - INFO - Epoch 15 step 1030 eta 00:00:32: loss 2.599
+2026-10-27 11:20:10 - INFO - Epoch 15 step 1040 eta 00:00:32: loss 2.590
+2026-10-27 11:20:10 - INFO - Epoch 15 diagnostics (separate): {"base_bce": 0.05071067137120419, "base_bpr": 0.09135816430637757, "base_candidate_mean": -6.358782149703106, "base_candidate_std": 3.1961650645368485, "base_ce": 4.507483900547721, "base_loss": 2.5378796316245875, "base_weighted_bce": 0.10142134274240838, "base_weighted_bpr": 0.18271632861275514, "base_weighted_ce": 2.2537419502738607, "decoder_bpr": 0.5637551050403637, "distance_gap": 0.19743731403529052, "negative_distance": 3.0328450924628747, "objective": 2.594255157722425, "positive_distance": 2.835407778427584, "weighted_decoder_bpr": 0.05637551155456463, "weighted_decoder_candidate_mean": -0.9214420230396739, "weighted_decoder_candidate_std": 0.07747120774237638}
+2026-10-27 11:20:11 - INFO - Epoch 15 val ON={'recall@50': 0.1966690719127655, 'recall@100': 0.23991325497627258, 'ndcg@50': 0.14124879240989685, 'ndcg@100': 0.15566135942935944} OFF={'recall@50': 0.19329316914081573, 'recall@100': 0.23835039138793945, 'ndcg@50': 0.1389639675617218, 'ndcg@100': 0.15387815237045288}
+ # ----------Val Result---------
+ recall@50: 0.19666907
+ recall@100: 0.23991325
+ ndcg@50: 0.14124879
+ ndcg@100: 0.15566136
+ --> Save Model <-- 
+
+[ Training Epoch 16 ]
+2026-10-27 11:20:11 - INFO - Epoch 16 step 1050 eta 00:00:31: loss 2.232
+2026-10-27 11:20:11 - INFO - Epoch 16 step 1060 eta 00:00:31: loss 2.248
+2026-10-27 11:20:12 - INFO - Epoch 16 step 1070 eta 00:00:31: loss 2.253
+2026-10-27 11:20:12 - INFO - Epoch 16 step 1080 eta 00:00:30: loss 2.276
+2026-10-27 11:20:12 - INFO - Epoch 16 step 1090 eta 00:00:30: loss 2.271
+2026-10-27 11:20:13 - INFO - Epoch 16 step 1100 eta 00:00:30: loss 2.266
+2026-10-27 11:20:13 - INFO - Epoch 16 diagnostics (separate): {"base_bce": 0.04363245104540325, "base_bpr": 0.07367013864425245, "base_candidate_mean": -6.68128130610622, "base_candidate_std": 3.2740694576533658, "base_ce": 3.9458878949566527, "base_loss": 2.2075491319403726, "base_weighted_bce": 0.0872649020908065, "base_weighted_bpr": 0.1473402772885049, "base_weighted_ce": 1.9729439474783264, "decoder_bpr": 0.5815098622596016, "distance_gap": 0.18750385410728443, "negative_distance": 3.030141531916422, "objective": 2.2657001148086913, "positive_distance": 2.8426376778091376, "weighted_decoder_bpr": 0.058150987121403534, "weighted_decoder_candidate_mean": -0.9198029923647252, "weighted_decoder_candidate_std": 0.07690583713341835}
+2026-10-27 11:20:13 - INFO - Epoch 16 val ON={'recall@50': 0.2101466804742813, 'recall@100': 0.2526800036430359, 'ndcg@50': 0.15696996450424194, 'ndcg@100': 0.17120778560638428} OFF={'recall@50': 0.210257425904274, 'recall@100': 0.25243496894836426, 'ndcg@50': 0.15538327395915985, 'ndcg@100': 0.16937536001205444}
+ # ----------Val Result---------
+ recall@50: 0.21014668
+ recall@100: 0.25268000
+ ndcg@50: 0.15696996
+ ndcg@100: 0.17120779
+ --> Save Model <-- 
+
+[ Training Epoch 17 ]
+2026-10-27 11:20:13 - INFO - Epoch 17 step 1110 eta 00:00:29: loss 1.964
+2026-10-27 11:20:13 - INFO - Epoch 17 step 1120 eta 00:00:29: loss 1.988
+2026-10-27 11:20:14 - INFO - Epoch 17 step 1130 eta 00:00:29: loss 1.988
+2026-10-27 11:20:14 - INFO - Epoch 17 step 1140 eta 00:00:28: loss 1.989
+2026-10-27 11:20:14 - INFO - Epoch 17 step 1150 eta 00:00:28: loss 1.988
+2026-10-27 11:20:15 - INFO - Epoch 17 step 1160 eta 00:00:27: loss 1.983
+2026-10-27 11:20:15 - INFO - Epoch 17 step 1170 eta 00:00:27: loss 1.975
+2026-10-27 11:20:15 - INFO - Epoch 17 diagnostics (separate): {"base_bce": 0.0380444328442093, "base_bpr": 0.06211032098803573, "base_candidate_mean": -6.981255020463657, "base_candidate_std": 3.3439877752769576, "base_ce": 3.4326456585652267, "base_loss": 1.9166323358372888, "base_weighted_bce": 0.0760888656884186, "base_weighted_bpr": 0.12422064197607147, "base_weighted_ce": 1.7163228292826134, "decoder_bpr": 0.5955796523732736, "distance_gap": 0.18383119733595477, "negative_distance": 3.033774499999344, "objective": 1.9761902997934488, "positive_distance": 2.849943302663389, "weighted_decoder_bpr": 0.05955796647041472, "weighted_decoder_candidate_mean": -0.9218200771684846, "weighted_decoder_candidate_std": 0.07729036641324799}
+2026-10-27 11:20:15 - INFO - Epoch 17 val ON={'recall@50': 0.21671371161937714, 'recall@100': 0.2627931833267212, 'ndcg@50': 0.16425591707229614, 'ndcg@100': 0.17927876114845276} OFF={'recall@50': 0.2140435129404068, 'recall@100': 0.26306381821632385, 'ndcg@50': 0.16210736334323883, 'ndcg@100': 0.17758314311504364}
+ # ----------Val Result---------
+ recall@50: 0.21671371
+ recall@100: 0.26279318
+ ndcg@50: 0.16425592
+ ndcg@100: 0.17927876
+ --> Save Model <-- 
+
+[ Training Epoch 18 ]
+2026-10-27 11:20:16 - INFO - Epoch 18 step 1180 eta 00:00:27: loss 1.743
+2026-10-27 11:20:16 - INFO - Epoch 18 step 1190 eta 00:00:26: loss 1.761
+2026-10-27 11:20:16 - INFO - Epoch 18 step 1200 eta 00:00:26: loss 1.725
+2026-10-27 11:20:17 - INFO - Epoch 18 step 1210 eta 00:00:26: loss 1.723
+2026-10-27 11:20:17 - INFO - Epoch 18 step 1220 eta 00:00:25: loss 1.722
+2026-10-27 11:20:17 - INFO - Epoch 18 step 1230 eta 00:00:25: loss 1.724
+2026-10-27 11:20:17 - INFO - Epoch 18 diagnostics (separate): {"base_bce": 0.033727759474591106, "base_bpr": 0.05195015098416996, "base_candidate_mean": -7.248147961701195, "base_candidate_std": 3.4026941363525762, "base_ce": 2.9769590428475903, "base_loss": 1.6598353470950842, "base_weighted_bce": 0.06745551894918221, "base_weighted_bpr": 0.10390030196833992, "base_weighted_ce": 1.4884795214237951, "decoder_bpr": 0.6043342357986705, "distance_gap": 0.17921312128147582, "negative_distance": 3.032387245460706, "objective": 1.720268770539026, "positive_distance": 2.85317412417923, "weighted_decoder_bpr": 0.06043342452845141, "weighted_decoder_candidate_mean": -0.9208141806807002, "weighted_decoder_candidate_std": 0.07757238023550635}
+2026-10-27 11:20:18 - INFO - Epoch 18 val ON={'recall@50': 0.21898500621318817, 'recall@100': 0.2672184109687805, 'ndcg@50': 0.1677493005990982, 'ndcg@100': 0.18362167477607727} OFF={'recall@50': 0.21838214993476868, 'recall@100': 0.26674535870552063, 'ndcg@50': 0.16585290431976318, 'ndcg@100': 0.18165592849254608}
+ # ----------Val Result---------
+ recall@50: 0.21898501
+ recall@100: 0.26721841
+ ndcg@50: 0.16774930
+ ndcg@100: 0.18362167
+ --> Save Model <-- 
+
+[ Training Epoch 19 ]
+2026-10-27 11:20:18 - INFO - Epoch 19 step 1240 eta 00:00:25: loss 1.478
+2026-10-27 11:20:18 - INFO - Epoch 19 step 1250 eta 00:00:24: loss 1.490
+2026-10-27 11:20:18 - INFO - Epoch 19 step 1260 eta 00:00:24: loss 1.496
+2026-10-27 11:20:19 - INFO - Epoch 19 step 1270 eta 00:00:24: loss 1.506
+2026-10-27 11:20:19 - INFO - Epoch 19 step 1280 eta 00:00:23: loss 1.510
+2026-10-27 11:20:19 - INFO - Epoch 19 step 1290 eta 00:00:23: loss 1.512
+2026-10-27 11:20:20 - INFO - Epoch 19 step 1300 eta 00:00:23: loss 1.501
+2026-10-27 11:20:20 - INFO - Epoch 19 diagnostics (separate): {"base_bce": 0.030279572673543226, "base_bpr": 0.04478623246803901, "base_candidate_mean": -7.489330165655737, "base_candidate_std": 3.4568106659635185, "base_ce": 2.5857532244755883, "base_loss": 1.4430082267722362, "base_weighted_bce": 0.06055914534708645, "base_weighted_bpr": 0.08957246493607803, "base_weighted_ce": 1.2928766122377942, "decoder_bpr": 0.6208000459727704, "distance_gap": 0.1719034696582531, "negative_distance": 3.0318016441685356, "objective": 1.5050882345145908, "positive_distance": 2.8598981745102825, "weighted_decoder_bpr": 0.06208000552272519, "weighted_decoder_candidate_mean": -0.9204932740306114, "weighted_decoder_candidate_std": 0.0772145173337522}
+2026-10-27 11:20:20 - INFO - Epoch 19 val ON={'recall@50': 0.22675728797912598, 'recall@100': 0.2682268023490906, 'ndcg@50': 0.17323265969753265, 'ndcg@100': 0.18738329410552979} OFF={'recall@50': 0.22368840873241425, 'recall@100': 0.2662420868873596, 'ndcg@50': 0.17200040817260742, 'ndcg@100': 0.18622159957885742}
+ # ----------Val Result---------
+ recall@50: 0.22675729
+ recall@100: 0.26822680
+ ndcg@50: 0.17323266
+ ndcg@100: 0.18738329
+ --> Save Model <-- 
+
+[ Training Epoch 20 ]
+2026-10-27 11:20:20 - INFO - Epoch 20 step 1310 eta 00:00:22: loss 1.309
+2026-10-27 11:20:21 - INFO - Epoch 20 step 1320 eta 00:00:22: loss 1.319
+2026-10-27 11:20:21 - INFO - Epoch 20 step 1330 eta 00:00:22: loss 1.319
+2026-10-27 11:20:21 - INFO - Epoch 20 step 1340 eta 00:00:21: loss 1.327
+2026-10-27 11:20:22 - INFO - Epoch 20 step 1350 eta 00:00:21: loss 1.331
+2026-10-27 11:20:22 - INFO - Epoch 20 step 1360 eta 00:00:20: loss 1.329
+2026-10-27 11:20:22 - INFO - Epoch 20 diagnostics (separate): {"base_bce": 0.027524173123267655, "base_bpr": 0.040069081283263475, "base_candidate_mean": -7.733933609356757, "base_candidate_std": 3.5210759127273077, "base_ce": 2.261664349844246, "base_loss": 1.2660186861626792, "base_weighted_bce": 0.05504834624653531, "base_weighted_bpr": 0.08013816256652695, "base_weighted_ce": 1.130832174922123, "decoder_bpr": 0.6301627076117522, "distance_gap": 0.16835808249531636, "negative_distance": 3.0328538474538145, "objective": 1.3290349589800847, "positive_distance": 2.864495764958498, "weighted_decoder_bpr": 0.06301627189014966, "weighted_decoder_candidate_mean": -0.921113959624315, "weighted_decoder_candidate_std": 0.07770194877562651}
+2026-10-27 11:20:22 - INFO - Epoch 20 val ON={'recall@50': 0.23334676027297974, 'recall@100': 0.2722693383693695, 'ndcg@50': 0.17658238112926483, 'ndcg@100': 0.1901678889989853} OFF={'recall@50': 0.23287780582904816, 'recall@100': 0.26998820900917053, 'ndcg@50': 0.17525607347488403, 'ndcg@100': 0.18832260370254517}
+ # ----------Val Result---------
+ recall@50: 0.23334676
+ recall@100: 0.27226934
+ ndcg@50: 0.17658238
+ ndcg@100: 0.19016789
+ --> Save Model <-- 
+
+[ Training Epoch 21 ]
+2026-10-27 11:20:22 - INFO - Epoch 21 step 1370 eta 00:00:20: loss 1.177
+2026-10-27 11:20:23 - INFO - Epoch 21 step 1380 eta 00:00:20: loss 1.183
+2026-10-27 11:20:23 - INFO - Epoch 21 step 1390 eta 00:00:19: loss 1.187
+2026-10-27 11:20:24 - INFO - Epoch 21 step 1400 eta 00:00:19: loss 1.186
+2026-10-27 11:20:24 - INFO - Epoch 21 step 1410 eta 00:00:19: loss 1.185
+2026-10-27 11:20:24 - INFO - Epoch 21 step 1420 eta 00:00:18: loss 1.184
+2026-10-27 11:20:25 - INFO - Epoch 21 step 1430 eta 00:00:18: loss 1.188
+2026-10-27 11:20:25 - INFO - Epoch 21 diagnostics (separate): {"base_bce": 0.025588058289511002, "base_bpr": 0.03615332033515902, "base_candidate_mean": -7.900069052822552, "base_candidate_std": 3.5576252365852663, "base_ce": 1.9997220902348074, "base_loss": 1.12334380706267, "base_weighted_bce": 0.051176116579022005, "base_weighted_bpr": 0.07230664067031804, "base_weighted_ce": 0.9998610451174037, "decoder_bpr": 0.6388647865751657, "distance_gap": 0.16265493575955592, "negative_distance": 3.0316703107006986, "objective": 1.1872302821861316, "positive_distance": 2.8690153749411427, "weighted_decoder_bpr": 0.06388647999290932, "weighted_decoder_candidate_mean": -0.9205663614860731, "weighted_decoder_candidate_std": 0.07690062746134474}
+2026-10-27 11:20:25 - INFO - Epoch 21 val ON={'recall@50': 0.23362472653388977, 'recall@100': 0.27185356616973877, 'ndcg@50': 0.17792493104934692, 'ndcg@100': 0.191440150141716} OFF={'recall@50': 0.23264636099338531, 'recall@100': 0.26975464820861816, 'ndcg@50': 0.17621196806430817, 'ndcg@100': 0.1893705278635025}
+ # ----------Val Result---------
+ recall@50: 0.23362473
+ recall@100: 0.27185357
+ ndcg@50: 0.17792493
+ ndcg@100: 0.19144015
+ --> Save Model <-- 
+
+[ Training Epoch 22 ]
+2026-10-27 11:20:25 - INFO - Epoch 22 step 1440 eta 00:00:18: loss 1.082
+2026-10-27 11:20:25 - INFO - Epoch 22 step 1450 eta 00:00:17: loss 1.072
+2026-10-27 11:20:26 - INFO - Epoch 22 step 1460 eta 00:00:17: loss 1.057
+2026-10-27 11:20:26 - INFO - Epoch 22 step 1470 eta 00:00:17: loss 1.063
+2026-10-27 11:20:26 - INFO - Epoch 22 step 1480 eta 00:00:16: loss 1.070
+2026-10-27 11:20:27 - INFO - Epoch 22 step 1490 eta 00:00:16: loss 1.072
+2026-10-27 11:20:27 - INFO - Epoch 22 diagnostics (separate): {"base_bce": 0.02386013306189312, "base_bpr": 0.033014227469415125, "base_candidate_mean": -8.097545806092581, "base_candidate_std": 3.616065394583401, "base_ce": 1.7876306095498098, "base_loss": 1.0075640257905258, "base_weighted_bce": 0.04772026612378624, "base_weighted_bpr": 0.06602845493883025, "base_weighted_ce": 0.8938153047749049, "decoder_bpr": 0.6393101444989371, "distance_gap": 0.1618562207063472, "negative_distance": 3.0310523461286034, "objective": 1.0714950377590617, "positive_distance": 2.869196125422256, "weighted_decoder_bpr": 0.06393101579866207, "weighted_decoder_candidate_mean": -0.9199084752627451, "weighted_decoder_candidate_std": 0.0768550194452857}
+2026-10-27 11:20:27 - INFO - Epoch 22 val ON={'recall@50': 0.2390291392803192, 'recall@100': 0.2776612937450409, 'ndcg@50': 0.18169677257537842, 'ndcg@100': 0.1950324922800064} OFF={'recall@50': 0.23781032860279083, 'recall@100': 0.27604278922080994, 'ndcg@50': 0.18002183735370636, 'ndcg@100': 0.1932004988193512}
+ # ----------Val Result---------
+ recall@50: 0.23902914
+ recall@100: 0.27766129
+ ndcg@50: 0.18169677
+ ndcg@100: 0.19503249
+ --> Save Model <-- 
+
+[ Training Epoch 23 ]
+2026-10-27 11:20:27 - INFO - Epoch 23 step 1500 eta 00:00:16: loss 0.983
+2026-10-27 11:20:28 - INFO - Epoch 23 step 1510 eta 00:00:15: loss 0.982
+2026-10-27 11:20:28 - INFO - Epoch 23 step 1520 eta 00:00:15: loss 0.995
+2026-10-27 11:20:28 - INFO - Epoch 23 step 1530 eta 00:00:14: loss 0.983
+2026-10-27 11:20:29 - INFO - Epoch 23 step 1540 eta 00:00:14: loss 0.988
+2026-10-27 11:20:29 - INFO - Epoch 23 step 1550 eta 00:00:14: loss 0.985
+2026-10-27 11:20:29 - INFO - Epoch 23 step 1560 eta 00:00:13: loss 0.986
+2026-10-27 11:20:29 - INFO - Epoch 23 diagnostics (separate): {"base_bce": 0.022713263280968073, "base_bpr": 0.03080125392199083, "base_candidate_mean": -8.228514036468255, "base_candidate_std": 3.653218898190161, "base_ce": 1.6283279884677093, "base_loss": 0.9211930297405496, "base_weighted_bce": 0.045426526561936145, "base_weighted_bpr": 0.06160250784398166, "base_weighted_ce": 0.8141639942338547, "decoder_bpr": 0.6521707098499078, "distance_gap": 0.15735879616741277, "negative_distance": 3.0305882574676235, "objective": 0.9864101056506598, "positive_distance": 2.8732294613002107, "weighted_decoder_bpr": 0.06521707234568876, "weighted_decoder_candidate_mean": -0.9197949825820849, "weighted_decoder_candidate_std": 0.07694568325237185}
+2026-10-27 11:20:29 - INFO - Epoch 23 val ON={'recall@50': 0.23974978923797607, 'recall@100': 0.27878788113594055, 'ndcg@50': 0.18190783262252808, 'ndcg@100': 0.195280060172081} OFF={'recall@50': 0.238791823387146, 'recall@100': 0.2782214283943176, 'ndcg@50': 0.17940819263458252, 'ndcg@100': 0.192884162068367}
+ # ----------Val Result---------
+ recall@50: 0.23974979
+ recall@100: 0.27878788
+ ndcg@50: 0.18190783
+ ndcg@100: 0.19528006
+ --> Save Model <-- 
+
+[ Training Epoch 24 ]
+2026-10-27 11:20:30 - INFO - Epoch 24 step 1570 eta 00:00:13: loss 0.919
+2026-10-27 11:20:30 - INFO - Epoch 24 step 1580 eta 00:00:13: loss 0.919
+2026-10-27 11:20:30 - INFO - Epoch 24 step 1590 eta 00:00:12: loss 0.917
+2026-10-27 11:20:31 - INFO - Epoch 24 step 1600 eta 00:00:12: loss 0.913
+2026-10-27 11:20:31 - INFO - Epoch 24 step 1610 eta 00:00:12: loss 0.915
+2026-10-27 11:20:31 - INFO - Epoch 24 step 1620 eta 00:00:11: loss 0.913
+2026-10-27 11:20:32 - INFO - Epoch 24 diagnostics (separate): {"base_bce": 0.021894794688612034, "base_bpr": 0.028757783640781576, "base_candidate_mean": -8.345489752518212, "base_candidate_std": 3.691071026074198, "base_ce": 1.5026611066570217, "base_loss": 0.852635711735166, "base_weighted_bce": 0.04378958937722407, "base_weighted_bpr": 0.05751556728156315, "base_weighted_ce": 0.7513305533285108, "decoder_bpr": 0.6441687460896577, "distance_gap": 0.15912056379778106, "negative_distance": 3.031099449210552, "objective": 0.9170525886953484, "positive_distance": 2.871978885412771, "weighted_decoder_bpr": 0.06441687577987458, "weighted_decoder_candidate_mean": -0.9200464878945256, "weighted_decoder_candidate_std": 0.077476823439461}
+2026-10-27 11:20:32 - INFO - Epoch 24 val ON={'recall@50': 0.2386964112520218, 'recall@100': 0.28099220991134644, 'ndcg@50': 0.18312573432922363, 'ndcg@100': 0.1971900314092636} OFF={'recall@50': 0.23747608065605164, 'recall@100': 0.27935609221458435, 'ndcg@50': 0.18111960589885712, 'ndcg@100': 0.1950104683637619}
+ # ----------Val Result---------
+ recall@50: 0.23869641
+ recall@100: 0.28099221
+ ndcg@50: 0.18312573
+ ndcg@100: 0.19719003
+ --> Save Model <-- 
+
+[ Training Epoch 25 ]
+2026-10-27 11:20:32 - INFO - Epoch 25 step 1630 eta 00:00:11: loss 0.853
+2026-10-27 11:20:32 - INFO - Epoch 25 step 1640 eta 00:00:11: loss 0.853
+2026-10-27 11:20:32 - INFO - Epoch 25 step 1650 eta 00:00:10: loss 0.845
+2026-10-27 11:20:33 - INFO - Epoch 25 step 1660 eta 00:00:10: loss 0.846
+2026-10-27 11:20:33 - INFO - Epoch 25 step 1670 eta 00:00:09: loss 0.852
+2026-10-27 11:20:33 - INFO - Epoch 25 step 1680 eta 00:00:09: loss 0.861
+2026-10-27 11:20:34 - INFO - Epoch 25 step 1690 eta 00:00:09: loss 0.871
+2026-10-27 11:20:34 - INFO - Epoch 25 diagnostics (separate): {"base_bce": 0.021207422867583627, "base_bpr": 0.027879706334931822, "base_candidate_mean": -8.434119737246613, "base_candidate_std": 3.72155057973274, "base_ce": 1.415458564501489, "base_loss": 0.8059035417294398, "base_weighted_bce": 0.04241484573516725, "base_weighted_bpr": 0.055759412669863645, "base_weighted_ce": 0.7077292822507445, "decoder_bpr": 0.6547882300681828, "distance_gap": 0.15650887081055131, "negative_distance": 3.0316947017507103, "objective": 0.871382362110299, "positive_distance": 2.875185830940159, "weighted_decoder_bpr": 0.06547882417302754, "weighted_decoder_candidate_mean": -0.9202984776790717, "weighted_decoder_candidate_std": 0.07754485011426122}
+2026-10-27 11:20:34 - INFO - Epoch 25 val ON={'recall@50': 0.24070078134536743, 'recall@100': 0.2796785235404968, 'ndcg@50': 0.18377040326595306, 'ndcg@100': 0.19688870012760162} OFF={'recall@50': 0.2397996485233307, 'recall@100': 0.2781621217727661, 'ndcg@50': 0.1815677285194397, 'ndcg@100': 0.19440707564353943}
+ # ----------Val Result---------
+ recall@50: 0.24070078
+ recall@100: 0.27967852
+ ndcg@50: 0.18377040
+ ndcg@100: 0.19688870
+ --> Save Model <-- 
+
+[ Training Epoch 26 ]
+2026-10-27 11:20:34 - INFO - Epoch 26 step 1700 eta 00:00:08: loss 0.813
+2026-10-27 11:20:35 - INFO - Epoch 26 step 1710 eta 00:00:08: loss 0.825
+2026-10-27 11:20:35 - INFO - Epoch 26 step 1720 eta 00:00:08: loss 0.834
+2026-10-27 11:20:35 - INFO - Epoch 26 step 1730 eta 00:00:07: loss 0.840
+2026-10-27 11:20:36 - INFO - Epoch 26 step 1740 eta 00:00:07: loss 0.845
+2026-10-27 11:20:36 - INFO - Epoch 26 step 1750 eta 00:00:07: loss 0.840
+2026-10-27 11:20:36 - INFO - Epoch 26 diagnostics (separate): {"base_bce": 0.020672756888438695, "base_bpr": 0.02686706531389803, "base_candidate_mean": -8.511191983294683, "base_candidate_std": 3.7491933995227917, "base_ce": 1.3573910704751087, "base_loss": 0.773775175351185, "base_weighted_bce": 0.04134551377687739, "base_weighted_bpr": 0.05373413062779606, "base_weighted_ce": 0.6786955352375543, "decoder_bpr": 0.6593668053937964, "distance_gap": 0.15452576207435564, "negative_distance": 3.031272371480242, "objective": 0.8397118547829189, "positive_distance": 2.8767466094058864, "weighted_decoder_bpr": 0.06593668219361822, "weighted_decoder_candidate_mean": -0.9201960978376119, "weighted_decoder_candidate_std": 0.07735347524032264}
+2026-10-27 11:20:36 - INFO - Epoch 26 val ON={'recall@50': 0.24235285818576813, 'recall@100': 0.2798471450805664, 'ndcg@50': 0.18462082743644714, 'ndcg@100': 0.19751209020614624} OFF={'recall@50': 0.24044997990131378, 'recall@100': 0.2794067859649658, 'ndcg@50': 0.18283423781394958, 'ndcg@100': 0.19601556658744812}
+ # ----------Val Result---------
+ recall@50: 0.24235286
+ recall@100: 0.27984715
+ ndcg@50: 0.18462083
+ ndcg@100: 0.19751209
+ --> Save Model <-- 
+
+[ Training Epoch 27 ]
+2026-10-27 11:20:36 - INFO - Epoch 27 step 1760 eta 00:00:06: loss 0.758
+2026-10-27 11:20:37 - INFO - Epoch 27 step 1770 eta 00:00:06: loss 0.805
+2026-10-27 11:20:37 - INFO - Epoch 27 step 1780 eta 00:00:06: loss 0.821
+2026-10-27 11:20:37 - INFO - Epoch 27 step 1790 eta 00:00:05: loss 0.821
+2026-10-27 11:20:38 - INFO - Epoch 27 step 1800 eta 00:00:05: loss 0.823
+2026-10-27 11:20:38 - INFO - Epoch 27 step 1810 eta 00:00:04: loss 0.819
+2026-10-27 11:20:38 - INFO - Epoch 27 step 1820 eta 00:00:04: loss 0.824
+2026-10-27 11:20:38 - INFO - Epoch 27 diagnostics (separate): {"base_bce": 0.020553267323662795, "base_bpr": 0.026451739643902412, "base_candidate_mean": -8.53497803297973, "base_candidate_std": 3.7589507345896447, "base_ce": 1.3264352429670827, "base_loss": 0.7572276360314196, "base_weighted_bce": 0.04110653464732559, "base_weighted_bpr": 0.052903479287804825, "base_weighted_ce": 0.6632176214835414, "decoder_bpr": 0.6607506146481869, "distance_gap": 0.1539563290384387, "negative_distance": 3.031369277844133, "objective": 0.8233026963654564, "positive_distance": 2.877412948805694, "weighted_decoder_bpr": 0.06607506278864335, "weighted_decoder_candidate_mean": -0.9202946342061528, "weighted_decoder_candidate_std": 0.07740176279840684}
+2026-10-27 11:20:38 - INFO - Epoch 27 val ON={'recall@50': 0.24074937403202057, 'recall@100': 0.28045597672462463, 'ndcg@50': 0.1843043863773346, 'ndcg@100': 0.19772866368293762} OFF={'recall@50': 0.23921313881874084, 'recall@100': 0.27882370352745056, 'ndcg@50': 0.18234393000602722, 'ndcg@100': 0.19572803378105164}
+ # ----------Val Result---------
+ recall@50: 0.24074937
+ recall@100: 0.28045598
+ ndcg@50: 0.18430439
+ ndcg@100: 0.19772866
+ --> No improvement for 1 epochs <-- 
+
+[ Training Epoch 28 ]
+2026-10-27 11:20:39 - INFO - Epoch 28 step 1830 eta 00:00:04: loss 0.796
+2026-10-27 11:20:39 - INFO - Epoch 28 step 1840 eta 00:00:03: loss 0.788
+2026-10-27 11:20:39 - INFO - Epoch 28 step 1850 eta 00:00:03: loss 0.803
+2026-10-27 11:20:40 - INFO - Epoch 28 step 1860 eta 00:00:03: loss 0.808
+2026-10-27 11:20:40 - INFO - Epoch 28 step 1870 eta 00:00:02: loss 0.813
+2026-10-27 11:20:40 - INFO - Epoch 28 step 1880 eta 00:00:02: loss 0.812
+2026-10-27 11:20:41 - INFO - Epoch 28 diagnostics (separate): {"base_bce": 0.020319139228818315, "base_bpr": 0.026338714950802488, "base_candidate_mean": -8.57450897516642, "base_candidate_std": 3.774693876953162, "base_ce": 1.3056843396473254, "base_loss": 0.7461578772231134, "base_weighted_bce": 0.04063827845763663, "base_weighted_bpr": 0.052677429901604976, "base_weighted_ce": 0.6528421698236627, "decoder_bpr": 0.6598289049348456, "distance_gap": 0.1546293107820529, "negative_distance": 3.03196139108004, "objective": 0.8121407670861364, "positive_distance": 2.877332080297987, "weighted_decoder_bpr": 0.06598289192359115, "weighted_decoder_candidate_mean": -0.9204739814588944, "weighted_decoder_candidate_std": 0.07731155011295}
+2026-10-27 11:20:41 - INFO - Epoch 28 val ON={'recall@50': 0.2408951371908188, 'recall@100': 0.2800068259239197, 'ndcg@50': 0.1844712197780609, 'ndcg@100': 0.1976364701986313} OFF={'recall@50': 0.23921313881874084, 'recall@100': 0.2795525789260864, 'ndcg@50': 0.18233241140842438, 'ndcg@100': 0.1958865523338318}
+ # ----------Val Result---------
+ recall@50: 0.24089514
+ recall@100: 0.28000683
+ ndcg@50: 0.18447122
+ ndcg@100: 0.19763647
+ --> No improvement for 2 epochs <-- 
+
+[ Training Epoch 29 ]
+2026-10-27 11:20:41 - INFO - Epoch 29 step 1890 eta 00:00:02: loss 0.840
+2026-10-27 11:20:41 - INFO - Epoch 29 step 1900 eta 00:00:01: loss 0.826
+2026-10-27 11:20:42 - INFO - Epoch 29 step 1910 eta 00:00:01: loss 0.826
+2026-10-27 11:20:42 - INFO - Epoch 29 step 1920 eta 00:00:01: loss 0.825
+2026-10-27 11:20:42 - INFO - Epoch 29 step 1930 eta 00:00:00: loss 0.818
+2026-10-27 11:20:42 - INFO - Epoch 29 step 1940 eta 00:00:00: loss 0.812
+2026-10-27 11:20:43 - INFO - Epoch 29 step 1950 eta 00:00:00: loss 0.808
+2026-10-27 11:20:43 - INFO - Epoch 29 diagnostics (separate): {"base_bce": 0.02027797671771495, "base_bpr": 0.0260634414114199, "base_candidate_mean": -8.582111743397645, "base_candidate_std": 3.778465592473644, "base_ce": 1.299811371086524, "base_loss": 0.7425885196162451, "base_weighted_bce": 0.0405559534354299, "base_weighted_bpr": 0.0521268828228398, "base_weighted_ce": 0.649905685543262, "decoder_bpr": 0.6591037888367277, "distance_gap": 0.15423650899214714, "negative_distance": 3.0313492690177726, "objective": 0.8084989000384754, "positive_distance": 2.8771127600256254, "weighted_decoder_bpr": 0.06591038057044661, "weighted_decoder_candidate_mean": -0.9202428854015022, "weighted_decoder_candidate_std": 0.07733427548454781}
+2026-10-27 11:20:43 - INFO - Epoch 29 val ON={'recall@50': 0.24235285818576813, 'recall@100': 0.2802983522415161, 'ndcg@50': 0.18479806184768677, 'ndcg@100': 0.1977437287569046} OFF={'recall@50': 0.23935891687870026, 'recall@100': 0.2795525789260864, 'ndcg@50': 0.18241329491138458, 'ndcg@100': 0.19589918851852417}
+ # ----------Val Result---------
+ recall@50: 0.24235286
+ recall@100: 0.28029835
+ ndcg@50: 0.18479806
+ ndcg@100: 0.19774373
+ --> Save Model <-- 
+ --> Loaded best model state <-- 
+2026-10-27 11:20:43 - INFO - Final test ON={'recall@50': 0.2592603266239166, 'recall@100': 0.29954689741134644, 'ndcg@50': 0.1961413323879242, 'ndcg@100': 0.2096307873725891} OFF={'recall@50': 0.25660601258277893, 'recall@100': 0.29642364382743835, 'ndcg@50': 0.19440728425979614, 'ndcg@100': 0.2077859342098236}
+
+ #-------Final Results-------
+ recall@50: 0.25926033
+ recall@100: 0.29954690
+ ndcg@50: 0.19614133
+ ndcg@100: 0.20963079
