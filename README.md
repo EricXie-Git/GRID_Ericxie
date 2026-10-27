@@ -174,6 +174,24 @@ python main.py --dataset twitter --decoder_type hyperbolic \
 
 欧氏对照将 `hyperbolic` 改为 `euclidean`。诊断联合训练时，只添加 `--decoder_diagnostics --compare_decoder`，不冻结主干。对比实验应保持数据划分、随机性及早停设置一致。
 
+### 独立损失训练（从头训练）
+
+`separate` 使用 $L=L_{\mathrm{GRID}}(s_{\mathrm{GRID}})+\alpha L_{\mathrm{BPR}}(s_{\mathrm{distance}})$，预测时仍融合两套评分。
+
+```bash
+mkdir -p result_record
+python -u main.py --dataset twitter --decoder_type hyperbolic \
+  --decoder_objective separate --decoder_loss_weight 0.1 --decoder_weight 0.1 \
+  --decoder_detach_backbone --selection_split val --deterministic_eval \
+  --early_stop_after_warmup --decoder_diagnostics --compare_decoder \
+  2>&1 | tee result_record/twitter_separate_detach.log
+```
+
+- `--decoder_loss_weight` 控制分支 BPR 权重；`--decoder_weight` 只控制评分融合。
+- `--decoder_detach_backbone` 阻断分支梯度回传主干，主干仍由原损失训练；去掉它可做联合梯度对照。
+- 本模式不与 `--freeze_backbone` 同用；欧氏对照改为 `euclidean`，并更换日志文件名。
+- 日志中 `base_*` 对应原 GRID 评分，`decoder_bpr` 为分支损失，`objective` 为加权总损失。旧模式及默认行为保持不变。
+
 ## 辅助检查
 
 ```bash

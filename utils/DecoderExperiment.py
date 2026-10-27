@@ -4,6 +4,7 @@ import logging
 from pathlib import Path
 
 import torch
+from module import Combined_Loss, BPR_Loss
 
 
 MODEL_CONFIG_KEYS = ('dataset', 'dim', 'user_num', 'gnn_type', 'gnn_layers',
@@ -17,13 +18,33 @@ def snapshot_state(model):
     return {name: value.detach().cpu().clone() for name, value in model.state_dict().items()}
 
 
+def separate_loss(args, details, previous_mask, labels, label_mask, negatives, neg_mask, first_label):
+    """原评分承担原损失，距离分支只承担排序损失，融合权重不参与训练目标。"""
+    base_loss, components = Combined_Loss(
+        args, details['base_scores'] + previous_mask, labels, label_mask,
+        negatives, neg_mask, first_label, return_components=True)
+    # 分支排序排除 PAD 和历史用户，与预测候选范围一致。
+    eligible = previous_mask == 0
+    positive_mask = label_mask & (labels != 0) & eligible.gather(1, labels)
+    negative_mask = neg_mask & (negatives != 0) & eligible.gather(1, negatives)
+    decoder_bpr = BPR_Loss(args, details['decoder_scores'], labels, positive_mask,
+                           negatives, negative_mask)
+    weighted_bpr = getattr(args, 'decoder_loss_weight', 0.1) * decoder_bpr
+    components = {'base_' + name: value for name, value in components.items()}
+    components.update(base_loss=base_loss, decoder_bpr=decoder_bpr, weighted_decoder_bpr=weighted_bpr)
+    return base_loss + weighted_bpr, components
+
+
 def save_checkpoint(path, state, args, epoch, scores):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     torch.save({'model_state': state,
                 'model_config': {k: getattr(args, k) for k in MODEL_CONFIG_KEYS if hasattr(args, k)},
                 'epoch': epoch, 'selection_split': getattr(args, 'selection_split', 'test'),
-                'selection_scores': scores}, path)
+                'selection_scores': scores,
+                'training_config': {k: getattr(args, k) for k in
+                                    ('decoder_objective', 'decoder_loss_weight', 'decoder_detach_backbone')
+                                    if hasattr(args, k)}}, path)
 
 
 def load_checkpoint(path, model, args):

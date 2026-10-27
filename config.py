@@ -37,7 +37,9 @@ def parse_args(argv=None) -> argparse.Namespace:
     decoder_group.add_argument('--decoder_diagnostics', action='store_true', help="Log loss components, sampled distances and candidate score scales")
     decoder_group.add_argument('--compare_decoder', action='store_true', help="Evaluate fused and original scores in the same forward pass")
     decoder_group.add_argument('--freeze_backbone', action='store_true', help="Load a checkpoint and train only Decoder in a deterministic frozen backbone")
-    decoder_group.add_argument('--decoder_objective', choices=['fused', 'bpr'], default='fused', help="Original fused loss, or decoder-only BPR with a frozen backbone")
+    decoder_group.add_argument('--decoder_objective', choices=['fused', 'bpr', 'separate'], default='fused', help="Fused loss, frozen decoder BPR, or separate GRID loss and decoder BPR")
+    decoder_group.add_argument('--decoder_loss_weight', type=float, default=0.1, help="Decoder BPR weight in separate mode; independent of score fusion")
+    decoder_group.add_argument('--decoder_detach_backbone', action='store_true', help="Block decoder gradients to the backbone in separate mode")
     decoder_group.add_argument('--deterministic_eval', action='store_true', help="Disable KMeans initialization noise during evaluation")
     learning_group.add_argument('--patience', type=int, default=5, help="Early stopping patience in epochs")
     learning_group.add_argument('--early_stop_after_warmup', action='store_true', help="Start counting early stopping patience after warmup")
@@ -61,6 +63,12 @@ def parse_args(argv=None) -> argparse.Namespace:
         parser.error('decoder_temperature must be finite and positive')
     if args.patience < 1:
         parser.error('patience must be positive')
+    if not math.isfinite(args.decoder_loss_weight) or args.decoder_loss_weight < 0:
+        parser.error('decoder_loss_weight must be finite and nonnegative')
+    if args.decoder_objective == 'separate' and (args.decoder_type == 'none' or args.freeze_backbone):
+        parser.error('separate requires an enabled decoder and an unfrozen backbone')
+    if args.decoder_detach_backbone and args.decoder_objective != 'separate':
+        parser.error('decoder_detach_backbone requires separate mode')
     if args.freeze_backbone and (not args.load_checkpoint or args.decoder_type == 'none'):
         parser.error('freeze_backbone requires load_checkpoint and an enabled decoder')
     if args.decoder_objective == 'bpr' and not args.freeze_backbone:

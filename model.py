@@ -82,7 +82,11 @@ class GRID(nn.Module):
             h, user_Embeddings, base_scores = self.encode(args, cascade, cas_mask, graph)
         decoder_scores = None
         if self.Decoder is not None and (self.decoder_weight > 0 or return_details):
-            decoder_scores = self.Decoder(h, user_Embeddings)
+            # 仅隔离分支梯度；主干仍由原 GRID 损失正常训练。
+            if getattr(args, 'decoder_detach_backbone', False):
+                decoder_scores = self.Decoder(h.detach(), user_Embeddings.detach())
+            else:
+                decoder_scores = self.Decoder(h, user_Embeddings)
         pred_users = base_scores
         if decoder_scores is not None and self.decoder_weight > 0:
             pred_users = pred_users + self.decoder_weight * decoder_scores

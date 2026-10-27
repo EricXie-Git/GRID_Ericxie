@@ -16,7 +16,7 @@ from config import parse_args
 
 from model import GRID
 from module import Combined_Loss, BPR_Loss
-from utils.DecoderExperiment import snapshot_state, save_checkpoint, load_checkpoint, DecoderDiagnostics
+from utils.DecoderExperiment import snapshot_state, save_checkpoint, load_checkpoint, DecoderDiagnostics, separate_loss
 
 
 def train(args):
@@ -34,6 +34,7 @@ def train(args):
 
     diagnostics_enabled = getattr(args, 'decoder_diagnostics', False)
     decoder_bpr = getattr(args, 'decoder_objective', 'fused') == 'bpr'
+    decoder_separate = getattr(args, 'decoder_objective', 'fused') == 'separate'
     compare = getattr(args, 'compare_decoder', False)
     selection_split = getattr(args, 'selection_split', 'test')
     selection_loader = val_dataloader if selection_split == 'val' else test_dataloader
@@ -63,12 +64,15 @@ def train(args):
 
         for batch in train_dataloader:
             cascade, cas_mask, labels_padded, label_mask, negative_samples, neg_mask, first_label, previous_mask = batch_process(args, batch)
-            need_details = diagnostics_enabled or decoder_bpr
+            need_details = diagnostics_enabled or decoder_bpr or decoder_separate
             output = model(args, cascade, cas_mask, previous_mask, graph, return_details=need_details)
             pred_users, details = output if need_details else (output, None)
             loss_inputs = (args, pred_users, labels_padded, label_mask, negative_samples, neg_mask, first_label)
             components = {}
-            if decoder_bpr:
+            if decoder_separate:
+                loss, components = separate_loss(args, details, previous_mask, labels_padded,
+                                                 label_mask, negative_samples, neg_mask, first_label)
+            elif decoder_bpr:
                 # 单独训练未乘融合权重的 Decoder 排序，不让 BCE 影响 Decoder。
                 loss = BPR_Loss(args, details['decoder_scores'], labels_padded, label_mask,
                                 negative_samples, neg_mask)
