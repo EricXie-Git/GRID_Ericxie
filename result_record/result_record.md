@@ -205,3 +205,98 @@ python -u main.py --dataset twitter --decoder_type hyperbolic \
 
 3. 当前验证的是“独立损失＋梯度隔离”的整体效果。 两条命令都开启了禁止距离分支的梯度回传 --decoder_detach_backbone，因此尚不能把恢复完全归功于拆分损失。下一步是保持其他配置不变，去掉这个开关：若仍正常，说明拆分损失已足以避免退化；若明显下降，则说明分支 BPR 回传主干仍存在干扰。
 
+
+
+# 20261028
+## 独立损失，允许分支梯度回传主干的实验
+### 1. 欧氏分支：
+运行指令：
+```bash
+# 欧氏：独立损失，允许分支梯度回传主干
+python -u main.py --dataset twitter --decoder_type euclidean \
+  --decoder_objective separate --decoder_loss_weight 0.1 --decoder_weight 0.1 \
+  --selection_split val --deterministic_eval \
+  --early_stop_after_warmup --decoder_diagnostics --compare_decoder \
+  2>&1 | tee result_record/twitter_separate_euclidean_joint.log
+```
+
+结果：
+-------Final Results-------
+ recall@50: 0.21095744
+ recall@100: 0.26164433
+ ndcg@50: 0.15432604
+ ndcg@100: 0.17063250
+
+
+### 2. 双曲分支：
+#### （1）0.1融合
+运行指令：
+```bash
+# 双曲：独立损失，允许分支梯度回传主干
+python -u main.py --dataset twitter --decoder_type hyperbolic \
+  --decoder_objective separate --decoder_loss_weight 0.1 --decoder_weight 0.1 \
+  --selection_split val --deterministic_eval \
+  --early_stop_after_warmup --decoder_diagnostics --compare_decoder \
+  2>&1 | tee result_record/twitter_separate_hyperbolic_joint.log
+```
+
+结果：
+-------Final Results-------
+ recall@50: 0.21462515
+ recall@100: 0.26589060
+ ndcg@50: 0.15485239
+ ndcg@100: 0.17133096
+
+#### （2）0.05融合
+运行指令：
+```bash
+# 双曲：独立损失，允许分支梯度回传主干
+python -u main.py --dataset twitter --decoder_type hyperbolic \
+  --decoder_objective separate --decoder_loss_weight 0.05 --decoder_weight 0.05 \
+  --selection_split val --deterministic_eval \
+  --early_stop_after_warmup --decoder_diagnostics --compare_decoder \
+  2>&1 | tee result_record/twitter_separate_hyperbolic_joint.log
+```
+
+结果：
+-------Final Results-------
+ recall@50: 0.22645959
+ recall@100: 0.27482146
+ ndcg@50: 0.17084217
+ ndcg@100: 0.18653291
+
+#### （3）0.01融合
+运行指令：
+```bash
+# 双曲：独立损失，允许分支梯度回传主干
+python -u main.py --dataset twitter --decoder_type hyperbolic \
+  --decoder_objective separate --decoder_loss_weight 0.01 --decoder_weight 0.01 \
+  --selection_split val --deterministic_eval \
+  --early_stop_after_warmup --decoder_diagnostics --compare_decoder \
+  2>&1 | tee result_record/twitter_separate_hyperbolic_joint.log
+```
+
+结果：
+-------Final Results-------
+ recall@50: 0.24786288
+ recall@100: 0.28757146
+ ndcg@50: 0.18837656
+ ndcg@100: 0.20193994
+
+#### （4）0融合
+运行指令：
+```bash
+# 双曲：独立损失，允许分支梯度回传主干
+python -u main.py --dataset twitter --decoder_type hyperbolic \
+  --decoder_objective separate --decoder_loss_weight 0 --decoder_weight 0 \
+  --selection_split val --deterministic_eval \
+  --early_stop_after_warmup --decoder_diagnostics --compare_decoder \
+  2>&1 | tee result_record/twitter_separate_hyperbolic_joint.log
+```
+
+结果：
+-------Final Results-------
+ recall@50: 0.25538608
+ recall@100: 0.29918081
+ ndcg@50: 0.19420218
+ ndcg@100: 0.20828202
