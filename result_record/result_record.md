@@ -162,6 +162,16 @@ python main.py --dataset twitter --decoder_type hyperbolic \
 # 20261027
 ## 损失分开的实验
 ### 1. 欧氏分支：
+
+运行命令：
+```bash
+python -u main.py --dataset twitter --decoder_type euclidean \
+  --decoder_objective separate --decoder_loss_weight 0.1 --decoder_weight 0.1 \
+  --decoder_detach_backbone --selection_split val --deterministic_eval \
+  --early_stop_after_warmup --decoder_diagnostics --compare_decoder \
+  2>&1 | tee result_record/twitter_separate_detach.log
+```
+
 结果：
 -------Final Results-------
  recall@50: 0.25926033
@@ -170,9 +180,28 @@ python main.py --dataset twitter --decoder_type hyperbolic \
  ndcg@100: 0.20963079
 
 ### 2. 双曲分支：
+
+运行命令：
+```bash
+python -u main.py --dataset twitter --decoder_type hyperbolic \
+  --decoder_objective separate --decoder_loss_weight 0.1 --decoder_weight 0.1 \
+  --decoder_detach_backbone --selection_split val --deterministic_eval \
+  --early_stop_after_warmup --decoder_diagnostics --compare_decoder \
+  2>&1 | tee result_record/twitter_separate_detach.log
+```
+
 结果：
 -------Final Results-------
  recall@50: 0.26024395
  recall@100: 0.29975054
  ndcg@50: 0.19639383
  ndcg@100: 0.20979795
+
+
+可以看到结果：
+1. 无需预训练和冻结主干，也能恢复正常性能。 这次主干从头训练，仅将损失拆开并隔离分支梯度，就从此前 Recall@50 约 0.0457 恢复到 0.26。这说明此前严重退化与评分融合后的训练目标及梯度耦合有关。
+
+2. 双曲提供了一定的正向信号，但当前收益主要仍来自辅助评分。 双曲相对基线的 Recall@50、NDCG@50 分别提升约 1.51%、1.02%；相对欧氏则只提升约 0.38%、0.13%，几乎可以忽略不记。可以认为双曲在当前方案下略有优势，但并没有表现出明显的结构性优势。
+
+3. 当前验证的是“独立损失＋梯度隔离”的整体效果。 两条命令都开启了禁止距离分支的梯度回传 --decoder_detach_backbone，因此尚不能把恢复完全归功于拆分损失。下一步是保持其他配置不变，去掉这个开关：若仍正常，说明拆分损失已足以避免退化；若明显下降，则说明分支 BPR 回传主干仍存在干扰。
+
