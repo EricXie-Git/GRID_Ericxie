@@ -126,71 +126,22 @@ $\delta=(S_{\max}-S_{\mathrm{mid}})/2$，$\delta_G=2\delta_{\mathrm{avg}}/d_{\ma
 
 方法参照：[1]谢文锦.社交与学术网络上的信息传播预测研究[D].西南大学,2025.DOI:10.27684/d.cnki.gxndx.2025.003879.
 
-## 训练与评分分支
+## 训练与测试
 
 ```bash
 python main.py --dataset twitter
-# 增加双曲评分分支；欧氏对照改为 euclidean
-python main.py --dataset twitter --decoder_type hyperbolic --decoder_weight 0.1
-```
-
-默认关闭分支。启用后，评分为 $s=s_{\mathrm{GRID}}-\lambda d^2/\tau$，将级联和用户表示投影后计算欧氏或双曲距离，并使用融合评分训练。
-
-| 参数 | 默认值 | 作用 |
-|---|---|---|
-| `--decoder_type` | `none` | `none` / `euclidean` / `hyperbolic` |
-| `--decoder_dim` | `32` | 分支投影维度 |
-| `--decoder_weight` | `0.1` | 融合权重，0 不参与融合 |
-| `--decoder_temperature` | `1.0` | 距离评分温度 |
-| `--selection_split` | `test` | 模型选择集；新实验建议设为 `val` |
-| `--patience` | `5` | 早停耐心轮数 |
-
-其他参数见 `python main.py --help`。为兼容旧流程，默认仍按测试集选择模型；指定 `--selection_split val` 后，用验证集选择模型，最后评估测试集。
-
-### 冻结主干的诊断实验
-
-先保存基线，再只训练评分分支，比较两种损失。以下命令在 Linux 项目根目录执行：
-
-```bash
-# 1. 训练并保存基线
+# 使用验证集选择模型，并保存最佳权重
 python main.py --dataset twitter --selection_split val \
-  --deterministic_eval --early_stop_after_warmup \
-  --save_checkpoint --ckpt_file checkpoint/twitter_base.pt
-
-# 2. 冻结主干，使用原融合损失
-python main.py --dataset twitter --decoder_type hyperbolic \
-  --load_checkpoint checkpoint/twitter_base.pt --freeze_backbone \
-  --decoder_objective fused --selection_split val --early_stop_after_warmup \
-  --decoder_diagnostics --compare_decoder
-
-# 3. 重复第 2 条命令，将 fused 改为 bpr，仅优化评分分支的 BPR
+  --save_checkpoint --ckpt_file checkpoint/grid_best.pt
 ```
 
-- `--decoder_diagnostics`：记录分项损失、正负例距离和评分尺度。`distance_gap` 为负例距离减正例距离；`objective` 为实际优化的损失。
-- `--compare_decoder`：同一次前向计算分支开启/关闭的指标（ON/OFF）。
-- `--freeze_backbone`：仅更新 Decoder，固定主干及评估随机性；OFF 指标应保持不变。
-- `--decoder_objective bpr`：仅冻结模式可用。日志里的 BCE/BPR/CE 仍描述融合评分，但只有 Decoder 自身的 BPR 参与优化。
-- `--save_checkpoint --ckpt_file 路径`：保存最佳模型；加载只恢复权重，不恢复优化器。输出路径应与基线不同。
+保留 GRID 原有图编码、分组、注意力、预测头和 BCE＋BPR＋CE 混合损失。额外距离评分分支及其专用开关已移除。
 
-欧氏对照将 `hyperbolic` 改为 `euclidean`。诊断联合训练时，只添加 `--decoder_diagnostics --compare_decoder`，不冻结主干。对比实验应保持数据划分、随机性及早停设置一致。
+常用选项：`--patience` 设置早停轮数，`--early_stop_after_warmup` 从预热结束后开始累计早停，`--deterministic_eval` 关闭评估时的分组噪声。默认仍按原流程使用测试集选择模型，新实验建议指定 `--selection_split val`。
 
-### 独立损失训练（从头训练）
+`--load_checkpoint 路径` 加载模型权重（不恢复优化器）。原 GRID 权重及此前保存的无分支基线可加载；含额外分支参数的历史检查点需配合备份代码复现实验。已有检查点、日志和结果记录均保留，保存新结果时使用新的文件名。
 
-`separate` 使用 $L=L_{\mathrm{GRID}}(s_{\mathrm{GRID}})+\alpha L_{\mathrm{BPR}}(s_{\mathrm{distance}})$，预测时仍融合两套评分。
-
-```bash
-mkdir -p result_record
-python -u main.py --dataset twitter --decoder_type hyperbolic \
-  --decoder_objective separate --decoder_loss_weight 0.1 --decoder_weight 0.1 \
-  --decoder_detach_backbone --selection_split val --deterministic_eval \
-  --early_stop_after_warmup --decoder_diagnostics --compare_decoder \
-  2>&1 | tee result_record/twitter_separate_detach.log
-```
-
-- `--decoder_loss_weight` 控制分支 BPR 权重；`--decoder_weight` 只控制评分融合。
-- `--decoder_detach_backbone` 阻断分支梯度回传主干，主干仍由原损失训练；去掉它可做联合梯度对照。
-- 本模式不与 `--freeze_backbone` 同用；欧氏对照改为 `euclidean`，并更换日志文件名。
-- 日志中 `base_*` 对应原 GRID 评分，`decoder_bpr` 为分支损失，`objective` 为加权总损失。旧模式及默认行为保持不变。
+完整参数见 `python main.py --help`。
 
 ## 辅助检查
 

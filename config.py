@@ -1,5 +1,4 @@
 import argparse
-import math
 from typing import List
 from dataclasses import dataclass
 
@@ -29,18 +28,7 @@ def parse_args(argv=None) -> argparse.Namespace:
     model_group.add_argument('--n_heads', type=int, default=6, help="Number of attention heads in the grouped transformer")
     model_group.add_argument('--group_num', type=int, default=20, help="Number of grouped tokens produced by clustering, including the padding group")
 
-    decoder_group = parser.add_argument_group('Auxiliary Decoder')
-    decoder_group.add_argument('--decoder_type', choices=['none', 'euclidean', 'hyperbolic'], default='none', help="Optional distance scoring branch")
-    decoder_group.add_argument('--decoder_dim', type=int, default=32, help="Spatial dimension of the auxiliary decoder")
-    decoder_group.add_argument('--decoder_weight', type=float, default=0.1, help="Nonnegative weight added to the original GRID scores")
-    decoder_group.add_argument('--decoder_temperature', type=float, default=1.0, help="Positive temperature for negative squared distance scores")
-    decoder_group.add_argument('--decoder_diagnostics', action='store_true', help="Log loss components, sampled distances and candidate score scales")
-    decoder_group.add_argument('--compare_decoder', action='store_true', help="Evaluate fused and original scores in the same forward pass")
-    decoder_group.add_argument('--freeze_backbone', action='store_true', help="Load a checkpoint and train only Decoder in a deterministic frozen backbone")
-    decoder_group.add_argument('--decoder_objective', choices=['fused', 'bpr', 'separate'], default='fused', help="Fused loss, frozen decoder BPR, or separate GRID loss and decoder BPR")
-    decoder_group.add_argument('--decoder_loss_weight', type=float, default=0.1, help="Decoder BPR weight in separate mode; independent of score fusion")
-    decoder_group.add_argument('--decoder_detach_backbone', action='store_true', help="Block decoder gradients to the backbone in separate mode")
-    decoder_group.add_argument('--deterministic_eval', action='store_true', help="Disable KMeans initialization noise during evaluation")
+    model_group.add_argument('--deterministic_eval', action='store_true', help="Disable KMeans initialization noise during evaluation")
     learning_group.add_argument('--patience', type=int, default=5, help="Early stopping patience in epochs")
     learning_group.add_argument('--early_stop_after_warmup', action='store_true', help="Start counting early stopping patience after warmup")
     learning_group.add_argument('--selection_split', choices=['test', 'val'], default='test', help="Selection split; use val for new controlled experiments (test preserves legacy behaviour)")
@@ -55,28 +43,8 @@ def parse_args(argv=None) -> argparse.Namespace:
     checkpoint_group.add_argument('--epsilon', type=float, default=0.3, help="Reserved argument; not used by the current training or evaluation pipeline")
 
     args = parser.parse_args(argv)
-    if args.decoder_dim < 1:
-        parser.error('decoder_dim must be positive')
-    if not math.isfinite(args.decoder_weight) or args.decoder_weight < 0:
-        parser.error('decoder_weight must be finite and nonnegative')
-    if not math.isfinite(args.decoder_temperature) or args.decoder_temperature <= 0:
-        parser.error('decoder_temperature must be finite and positive')
     if args.patience < 1:
         parser.error('patience must be positive')
-    if not math.isfinite(args.decoder_loss_weight) or args.decoder_loss_weight < 0:
-        parser.error('decoder_loss_weight must be finite and nonnegative')
-    if args.decoder_objective == 'separate' and (args.decoder_type == 'none' or args.freeze_backbone):
-        parser.error('separate requires an enabled decoder and an unfrozen backbone')
-    if args.decoder_detach_backbone and args.decoder_objective != 'separate':
-        parser.error('decoder_detach_backbone requires separate mode')
-    if args.freeze_backbone and (not args.load_checkpoint or args.decoder_type == 'none'):
-        parser.error('freeze_backbone requires load_checkpoint and an enabled decoder')
-    if args.decoder_objective == 'bpr' and not args.freeze_backbone:
-        parser.error('decoder-only BPR requires freeze_backbone')
-    if args.freeze_backbone and args.decoder_objective == 'fused' and args.decoder_weight == 0:
-        parser.error('frozen fused training requires decoder_weight > 0')
-    if args.freeze_backbone:
-        args.deterministic_eval = True
     return args
 
 

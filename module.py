@@ -2,65 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.init as init
 import torch.nn.functional as F
-import math
 from torch_geometric.nn import GATConv, SAGEConv, GCNConv
-
-
-class DistanceDecoder(nn.Module):
-    """辅助距离评分：[B, D] 和 [U, D] -> [B, U]，由原有损失统一训练。"""
-
-    def __init__(self, args):
-        super(DistanceDecoder, self).__init__()
-        self.decoder_type = getattr(args, 'decoder_type', 'none')
-        self.dim = getattr(args, 'decoder_dim', 32)
-        self.temperature = getattr(args, 'decoder_temperature', 1.0)
-        if self.decoder_type not in ('euclidean', 'hyperbolic'):
-            raise ValueError('DistanceDecoder requires euclidean or hyperbolic mode')
-        if self.dim < 1 or not math.isfinite(self.temperature) or self.temperature <= 0:
-            raise ValueError('Decoder dimension and temperature must be positive and finite')
-        self.W_c = nn.Linear(args.dim, self.dim, bias=False)
-        self.W_u = nn.Linear(args.dim, self.dim, bias=False)
-        # 两种几何使用相同投影和范数上限；限制双曲指数映射的数值范围。
-        self.max_norm = 3.0
-        self.chunk_size = 4096
-
-    def project(self, x, layer):
-        x = F.linear(x.float(), layer.weight.float())
-        norm = torch.linalg.vector_norm(x, dim=-1, keepdim=True)
-        return x * (self.max_norm / norm.clamp_min(self.max_norm))
-
-    def exp_map(self, x):
-        """曲率固定为 -1；空间坐标 D 维，Lorentz 坐标 D+1 维。"""
-        norm = torch.linalg.vector_norm(x, dim=-1, keepdim=True)
-        safe_norm = norm.clamp_min(1e-7)
-        spatial = (torch.sinh(safe_norm) / safe_norm) * x
-        return torch.cat((torch.cosh(norm), spatial), dim=-1)
-
-    def squared_distance(self, query, users):
-        if self.decoder_type == 'euclidean':
-            distance = query.square().sum(-1, keepdim=True) + users.square().sum(-1).unsqueeze(0)
-            return (distance - 2 * query @ users.t()).clamp_min(0.0)
-
-        # d_H^2 = acosh(-<q,z>_L)^2，不使用 Lorentz 弦距离替代测地距离。
-        inner = query[:, :1] @ users[:, :1].t() - query[:, 1:] @ users[:, 1:].t()
-        offset = (inner - 1.0).clamp_min(0.0)
-        # acosh 在 1 处导数发散，但其平方导数有限；近零使用泰勒展开。
-        near = offset.clamp_max(1e-4)
-        approximation = 2 * near - near.square() / 3 + 4 * near.pow(3) / 45
-        regular = torch.acosh(1.0 + offset.clamp_min(1e-4)).square()
-        return torch.where(offset < 1e-4, approximation, regular)
-
-    def forward(self, cascade_h, user_embeddings):
-        # 距离运算保持 float32，避免 autocast 的低精度放大双曲数值误差。
-        with torch.autocast(device_type=cascade_h.device.type, enabled=False):
-            query = self.project(cascade_h, self.W_c)
-            users = self.project(user_embeddings, self.W_u)
-            if self.decoder_type == 'hyperbolic':
-                query = self.exp_map(query)
-                users = self.exp_map(users)
-            scores = [-self.squared_distance(query, block) / self.temperature
-                      for block in users.split(self.chunk_size, dim=0)]
-            return torch.cat(scores, dim=-1)
 
 
 class GroupAttn(nn.Module):
@@ -296,20 +238,7 @@ class KMeansLayer(nn.Module):
         return clustered_x, cluster_mask, cluster_counts
 
 
-def BPR_Loss(args, scores, labels_padded, label_mask, negative_samples, neg_mask):
-    """原有 BPR 公式，可独立监督未融合的 Decoder 分数。"""
-    pos_scores = torch.gather(scores, 1, labels_padded)
-    neg_scores = torch.gather(scores, 1, negative_samples)
-    valid_pairs = label_mask.unsqueeze(2) & (neg_mask & (negative_samples != 0)).unsqueeze(1)
-    if valid_pairs.any():
-        difference = pos_scores.unsqueeze(2) - neg_scores.unsqueeze(1)
-        return F.softplus(-(difference[valid_pairs] - getattr(args, 'bpr_margin', 1.0))).mean()
-    # 无有效正负对时返回可反传的零值。
-    return scores.sum() * 0.0
-
-
-def Combined_Loss(args, pred_users, labels_padded, label_mask, negative_samples, neg_mask, first_label,
-                  return_components=False):
+def Combined_Loss(args, pred_users, labels_padded, label_mask, negative_samples, neg_mask, first_label):
     """
     Hybrid loss: BCE (multi-label) + BPR (ranking) + CE (next-user anchor).
     """
@@ -319,6 +248,7 @@ def Combined_Loss(args, pred_users, labels_padded, label_mask, negative_samples,
     alpha  = getattr(args, 'alpha',      2.0)
     beta   = getattr(args, 'beta',       2.0)
     gamma  = getattr(args, 'gamma',      0.5)
+    margin = getattr(args, 'bpr_margin', 1.0)
 
     target = torch.zeros_like(pred_users)
     valid_batch_idx = torch.arange(batch_size, device=device).unsqueeze(1).expand_as(labels_padded)[label_mask]
@@ -329,16 +259,21 @@ def Combined_Loss(args, pred_users, labels_padded, label_mask, negative_samples,
         pred_users[:, 1:], target[:, 1:], reduction='sum'
     ) / (batch_size * (num_classes - 1))
 
-    bpr_loss = BPR_Loss(args, pred_users, labels_padded, label_mask, negative_samples, neg_mask)
+    pos_scores = torch.gather(pred_users, 1, labels_padded)
+    neg_scores = torch.gather(pred_users, 1, negative_samples)
+
+    combined_neg_mask = neg_mask & (negative_samples != 0)
+    valid_pair_mask = label_mask.unsqueeze(2) & combined_neg_mask.unsqueeze(1)
+
+    if valid_pair_mask.any():
+        score_diff = pos_scores.unsqueeze(2) - neg_scores.unsqueeze(1)
+        bpr_loss = F.softplus(-(score_diff[valid_pair_mask] - margin)).mean()
+    else:
+        bpr_loss = torch.tensor(0.0, device=device)
 
     ce_loss = F.cross_entropy(pred_users, first_label, ignore_index=0)
 
-    loss = alpha * bce_loss + beta * bpr_loss + gamma * ce_loss
-    if return_components:
-        return loss, {'bce': bce_loss, 'bpr': bpr_loss, 'ce': ce_loss,
-                      'weighted_bce': alpha * bce_loss, 'weighted_bpr': beta * bpr_loss,
-                      'weighted_ce': gamma * ce_loss}
-    return loss
+    return alpha * bce_loss + beta * bpr_loss + gamma * ce_loss
 
 
 class WeightedPooling(nn.Module):
