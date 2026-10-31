@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.init as init
 import torch.nn.functional as F
 from torch_geometric.nn import GATConv, SAGEConv, GCNConv
+from utils.Lorentz import exp_map, log_map, lorentz_centroid
 
 
 class GroupAttn(nn.Module):
@@ -443,6 +444,50 @@ class GNNEncoder(nn.Module):
         return final_output
 
 
+class LorentzGNNConv(nn.Module):
+    """借鉴 Hgformer (ICML 2025) 的 LHGCN；沿用 GRID 的有向邻域，不添加自环。"""
+
+    def __init__(self):
+        super(LorentzGNNConv, self).__init__()
+
+    def forward(self, x, edge_index):
+        row, col = edge_index
+        out = torch.zeros_like(x)
+        out.index_add_(0, col, x[row])
+        deg = torch.bincount(col, minlength=x.size(0)).to(x.dtype).clamp(min=1.0)
+        return lorentz_centroid(out / deg.unsqueeze(1))
+
+
+class LorentzGNNEncoder(nn.Module):
+    """双曲聚合后回到切空间，保持原有输出维度、dropout 位置及层间加权策略。"""
+
+    def __init__(self, args):
+        super(LorentzGNNEncoder, self).__init__()
+        self.dim = args.dim
+        self.n_layers = args.gnn_layers
+        if self.n_layers < 1:
+            raise ValueError('LorentzGNNEncoder requires at least one layer')
+        self.layers = nn.ModuleList([LorentzGNNConv() for _ in range(self.n_layers)])
+        self.drop = nn.Dropout(args.dropout)
+        self.layer_weights = nn.Parameter(torch.ones(self.n_layers) / self.n_layers)
+
+    def forward(self, feature, Graph):
+        # 几何计算不使用混合精度；输出恢复原 dtype，兼容现有分组和预测头。
+        with torch.autocast(device_type=feature.device.type, enabled=False):
+            x = exp_map(feature)
+            layer_outputs = []
+            for layer in self.layers:
+                x = layer(x, Graph.edge_index)
+                tangent = self.drop(log_map(x))
+                # dropout 只作用于切空间，再映射回流形；大半径保护也作用于层输出。
+                if self.training and self.drop.p > 0:
+                    x = exp_map(tangent)
+                    tangent = log_map(x)
+                layer_outputs.append(tangent.to(feature.dtype))
+            weights = F.softmax(self.layer_weights, dim=0)
+            return sum(w * out for w, out in zip(weights, layer_outputs))
+
+
 class GraphEncoder(nn.Module):
     def __init__(self, args):
         super(GraphEncoder, self).__init__()
@@ -451,6 +496,8 @@ class GraphEncoder(nn.Module):
 
         if self.gnn_type.lower() == 'lightgcn':
             self.gnn = GNNEncoder(args)
+        elif self.gnn_type.lower() == 'lorentz_lightgcn':
+            self.gnn = LorentzGNNEncoder(args)
         elif self.gnn_type.lower() == 'gat':
             self.gnn = GATConv(self.dim, self.dim)
             self.drop = nn.Dropout(args.dropout)
@@ -467,7 +514,7 @@ class GraphEncoder(nn.Module):
             raise ValueError(f"Unsupported GNN type: {self.gnn_type}")
 
     def forward(self, feature, Graph):
-        if self.gnn_type.lower() == 'lightgcn':
+        if self.gnn_type.lower() in ('lightgcn', 'lorentz_lightgcn'):
             return self.gnn(feature, Graph)
         else:
             x = self.gnn(feature, Graph.edge_index)

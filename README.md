@@ -143,6 +143,22 @@ python main.py --dataset twitter --selection_split val \
 
 完整参数见 `python main.py --help`。
 
+### 可选双曲图编码（第一步）
+
+```bash
+mkdir -p result_record
+python -u main.py --dataset twitter --gnn_type lorentz_lightgcn \
+  --selection_split val --deterministic_eval --early_stop_after_warmup \
+  2>&1 | tee result_record/twitter_lorentz_lightgcn.log
+```
+
+默认仍为 `lightgcn`；对照实验只替换 `--gnn_type` 和日志文件名。
+新增编码器借鉴 [Hgformer（ICML 2025）的 LHGCN](https://proceedings.mlr.press/v267/yang25o.html)：指数映射 → Lorentz 重心聚合 → 对数映射 → 原有层间加权融合。输出维度、欧氏分组、注意力、预测头和原损失保持不变，梯度可回传到用户嵌入。
+
+本实现固定曲率为 −1，沿用 GRID 的边方向，不添加自环，无邻居节点回退到原点；dropout 在切空间执行后映射回来。因此它是适配版本，不是完整复现 Hgformer。几何内部用 float64，切向量范数上限为 5，输出恢复原 dtype；这会增加编码阶段的计算开销。重心采用 Lorentz 归一化，不是精确测地 Fréchet 均值。
+
+需要保存最佳权重时追加 `--save_checkpoint --ckpt_file checkpoint/twitter_lorentz.pt`，默认仅保存上述终端日志。
+
 ## 辅助检查
 
 ```bash

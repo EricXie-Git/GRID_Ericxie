@@ -48,7 +48,7 @@ class GridTest(unittest.TestCase):
                 parse_args(flags)
 
     def test_forward_backward_and_graph_encoders(self):
-        for gnn_type in ('lightgcn', 'gat', 'gcn', 'sage'):
+        for gnn_type in ('lightgcn', 'gat', 'gcn', 'sage', 'lorentz_lightgcn'):
             for clustering in (True, False):
                 with self.subTest(gnn_type=gnn_type, clustering=clustering):
                     args = copy.deepcopy(self.args)
@@ -63,6 +63,7 @@ class GridTest(unittest.TestCase):
                     before = model.Predictor.weight.detach().clone()
                     optimizer, scheduler = build_optimizer(args, model, 2)
                     loss.backward()
+                    self.assertGreater(model.Embed.weight.grad.abs().sum().item(), 0)
                     for parameter in model.parameters():
                         if parameter.grad is not None:
                             self.assertTrue(torch.isfinite(parameter.grad).all())
@@ -98,8 +99,10 @@ class GridTest(unittest.TestCase):
 
     def test_training_and_evaluation(self):
         with tempfile.TemporaryDirectory() as temp:
-            for selection_split in ('test', 'val'):
+            for gnn_type, selection_split in (('lightgcn', 'test'), ('lightgcn', 'val'),
+                                               ('lorentz_lightgcn', 'test'), ('lorentz_lightgcn', 'val')):
                 args = copy.deepcopy(self.args)
+                args.gnn_type = gnn_type
                 args.selection_split = selection_split
                 args.ckpt_file = str(Path(temp) / 'model.pt')
                 with patch.object(main, 'create_dataloaders', return_value=([self.batch], [self.batch], [self.batch])), \

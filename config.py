@@ -24,7 +24,7 @@ def parse_args(argv=None) -> argparse.Namespace:
     model_group.add_argument('--clustering', type=bool, default=True, help="Apply grouping with K-Means before sequence attention")
     model_group.add_argument('--bpr_margin', type=float, default=0.5, help="Margin used by the BPR term in the hybrid loss")
     model_group.add_argument('--neg_num', type=int, default=100, help="Maximum number of negative samples drawn per cascade")
-    model_group.add_argument('--gnn_type', type=str, default='lightgcn', choices=['gat', 'gcn', 'sage', 'lightgcn'], help="Backbone used by the social graph encoder")
+    model_group.add_argument('--gnn_type', type=str, default='lightgcn', choices=['gat', 'gcn', 'sage', 'lightgcn', 'lorentz_lightgcn'], help="Backbone used by the social graph encoder")
     model_group.add_argument('--n_heads', type=int, default=6, help="Number of attention heads in the grouped transformer")
     model_group.add_argument('--group_num', type=int, default=20, help="Number of grouped tokens produced by clustering, including the padding group")
 
