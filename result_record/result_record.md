@@ -323,3 +323,72 @@ python -u main.py --dataset twitter --decoder_type hyperbolic \
 
 第一步可以看看当前方法怎么做的，可以先在图编码阶段改一下，比如修改双曲图编码，输出通过对数映射送入现有分组和预测模块，验证双曲编码是否能提供更好的用户表示。
 
+
+# 20261111
+## 双曲编码器实验
+采用lightHGCN作为编码器替代，将 GRID 原有的欧氏邻居均值聚合替换为 Lorentz 双曲空间中的重心聚合，学习用户表示，再通过对数映射接回原有的分组、注意力和预测模块。保持原损失并端到端训练，先验证双曲图编码本身是否有用。
+
+### twitter数据集-双曲
+```bash
+python -u main.py --dataset twitter --gnn_type lorentz_lightgcn \
+  --selection_split val --deterministic_eval --early_stop_after_warmup \
+  2>&1 | tee result_record/twitter_lorentz_lightgcn.log
+```
+
+实验结果：
+-------Final Results-------
+recall@50: 0.25636342
+recall@100: 0.29817307
+ndcg@50: 0.19506283
+ndcg@100: 0.20903297
+
+
+### twitter数据集-欧氏
+```bash
+python -u main.py --dataset twitter --gnn_type lightgcn \
+  --selection_split val --deterministic_eval --early_stop_after_warmup \
+  2>&1 | tee result_record/twitter_lightgcn.log
+```
+
+实验结果：
+-------Final Results-------
+recall@50: 0.25620976
+recall@100: 0.29928923
+ndcg@50: 0.19415666
+ndcg@100: 0.20825554
+
+
+### douban数据集-双曲
+实验结果：
+-------Final Results-------
+recall@50: 0.16592513
+recall@100: 0.20215558
+ndcg@50: 0.12407889
+ndcg@100: 0.13271783
+
+
+### douban数据集-欧氏
+实验结果：
+-------Final Results-------
+recall@50: 0.16183317
+recall@100: 0.20740366
+ndcg@50: 0.12184194
+ndcg@100: 0.13236372
+
+
+### weibo数据集-双曲
+实验结果：
+-------Final Results-------
+recall@50: 0.05762776
+recall@100: 0.07248323
+ndcg@50: 0.03499420
+ndcg@100: 0.03959607
+
+
+### weibo数据集-欧氏
+实验结果：
+-------Final Results-------
+recall@50: 0.05638088
+recall@100: 0.07248323
+ndcg@50: 0.03471773
+ndcg@100: 0.03959062

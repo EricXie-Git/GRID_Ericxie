@@ -1,0 +1,443 @@
+2026-11-11 01:39:36 - INFO - Training/Testing parameters: Namespace(batch_size=32, best_score=0.0, bpr_margin=0.5, cascade_path_test='dataset/twitter/cascade_test.json', cascade_path_train='dataset/twitter/cascade_train_neg.json', cascade_path_valid='dataset/twitter/cascade_val.json', ckpt_file='checkpoint/model_.bin', clustering=True, dataset='twitter', deterministic_eval=True, device='cuda', dim=128, dropout=0.3, early_stop_after_warmup=True, epsilon=0.3, gnn_layers=2, gnn_type='lorentz_lightgcn', graph_path='dataset/twitter/graph.pt', group_num=20, learning_rate=0.001, load_checkpoint=None, max_epochs=30, max_len=200, metric_k=[50, 100], n_gpu=1, n_heads=6, n_warmup_steps=500, neg_num=100, patience=5, print_steps=10, save_checkpoint=False, saved_model_path='checkpoint/', seed=21, selection_split='val', user_num=12628, weight_decay=0.0001)
+
+[ Training Epoch 0 ]
+2026-11-11 01:39:37 - INFO - Epoch 0 step 10 eta 00:02:42: loss 8.058
+2026-11-11 01:39:37 - INFO - Epoch 0 step 20 eta 00:01:48: loss 8.058
+2026-11-11 01:39:38 - INFO - Epoch 0 step 30 eta 00:01:30: loss 8.056
+2026-11-11 01:39:38 - INFO - Epoch 0 step 40 eta 00:01:19: loss 8.054
+2026-11-11 01:39:38 - INFO - Epoch 0 step 50 eta 00:01:14: loss 8.052
+2026-11-11 01:39:39 - INFO - Epoch 0 step 60 eta 00:01:09: loss 8.049
+ # ----------Val Result---------
+ recall@50: 0.00102808
+ recall@100: 0.00809151
+ ndcg@50: 0.00047808
+ ndcg@100: 0.00243032
+ --> Save Model <-- 
+
+[ Training Epoch 1 ]
+2026-11-11 01:39:39 - INFO - Epoch 1 step 70 eta 00:01:11: loss 8.014
+2026-11-11 01:39:39 - INFO - Epoch 1 step 80 eta 00:01:08: loss 8.005
+2026-11-11 01:39:40 - INFO - Epoch 1 step 90 eta 00:01:06: loss 7.997
+2026-11-11 01:39:40 - INFO - Epoch 1 step 100 eta 00:01:04: loss 7.986
+2026-11-11 01:39:40 - INFO - Epoch 1 step 110 eta 00:01:02: loss 7.975
+2026-11-11 01:39:40 - INFO - Epoch 1 step 120 eta 00:01:01: loss 7.961
+2026-11-11 01:39:41 - INFO - Epoch 1 step 130 eta 00:01:00: loss 7.946
+ # ----------Val Result---------
+ recall@50: 0.00386878
+ recall@100: 0.01753178
+ ndcg@50: 0.00252755
+ ndcg@100: 0.00609806
+ --> Save Model <-- 
+
+[ Training Epoch 2 ]
+2026-11-11 01:39:41 - INFO - Epoch 2 step 140 eta 00:01:01: loss 7.777
+2026-11-11 01:39:41 - INFO - Epoch 2 step 150 eta 00:01:00: loss 7.747
+2026-11-11 01:39:42 - INFO - Epoch 2 step 160 eta 00:00:59: loss 7.711
+2026-11-11 01:39:42 - INFO - Epoch 2 step 170 eta 00:00:58: loss 7.680
+2026-11-11 01:39:42 - INFO - Epoch 2 step 180 eta 00:00:57: loss 7.640
+2026-11-11 01:39:42 - INFO - Epoch 2 step 190 eta 00:00:56: loss 7.600
+ # ----------Val Result---------
+ recall@50: 0.02014503
+ recall@100: 0.03184463
+ ndcg@50: 0.01020239
+ ndcg@100: 0.01400659
+ --> Save Model <-- 
+
+[ Training Epoch 3 ]
+2026-11-11 01:39:43 - INFO - Epoch 3 step 200 eta 00:00:57: loss 7.161
+2026-11-11 01:39:43 - INFO - Epoch 3 step 210 eta 00:00:56: loss 7.105
+2026-11-11 01:39:43 - INFO - Epoch 3 step 220 eta 00:00:56: loss 7.054
+2026-11-11 01:39:44 - INFO - Epoch 3 step 230 eta 00:00:55: loss 6.993
+2026-11-11 01:39:44 - INFO - Epoch 3 step 240 eta 00:00:54: loss 6.937
+2026-11-11 01:39:44 - INFO - Epoch 3 step 250 eta 00:00:54: loss 6.877
+2026-11-11 01:39:45 - INFO - Epoch 3 step 260 eta 00:00:53: loss 6.822
+ # ----------Val Result---------
+ recall@50: 0.02370462
+ recall@100: 0.03362727
+ ndcg@50: 0.01337386
+ ndcg@100: 0.01680222
+ --> Save Model <-- 
+
+[ Training Epoch 4 ]
+2026-11-11 01:39:45 - INFO - Epoch 4 step 270 eta 00:00:54: loss 6.256
+2026-11-11 01:39:45 - INFO - Epoch 4 step 280 eta 00:00:53: loss 6.206
+2026-11-11 01:39:46 - INFO - Epoch 4 step 290 eta 00:00:53: loss 6.150
+2026-11-11 01:39:46 - INFO - Epoch 4 step 300 eta 00:00:52: loss 6.102
+2026-11-11 01:39:46 - INFO - Epoch 4 step 310 eta 00:00:51: loss 6.058
+2026-11-11 01:39:46 - INFO - Epoch 4 step 320 eta 00:00:51: loss 6.024
+ # ----------Val Result---------
+ recall@50: 0.02328734
+ recall@100: 0.03161123
+ ndcg@50: 0.01179659
+ ndcg@100: 0.01482848
+ --> No improvement for 0 epochs <-- 
+
+[ Training Epoch 5 ]
+2026-11-11 01:39:47 - INFO - Epoch 5 step 330 eta 00:00:51: loss 5.600
+2026-11-11 01:39:47 - INFO - Epoch 5 step 340 eta 00:00:51: loss 5.584
+2026-11-11 01:39:47 - INFO - Epoch 5 step 350 eta 00:00:50: loss 5.557
+2026-11-11 01:39:48 - INFO - Epoch 5 step 360 eta 00:00:50: loss 5.545
+2026-11-11 01:39:48 - INFO - Epoch 5 step 370 eta 00:00:49: loss 5.545
+2026-11-11 01:39:48 - INFO - Epoch 5 step 380 eta 00:00:49: loss 5.541
+2026-11-11 01:39:49 - INFO - Epoch 5 step 390 eta 00:00:48: loss 5.542
+ # ----------Val Result---------
+ recall@50: 0.02175984
+ recall@100: 0.03006478
+ ndcg@50: 0.00988971
+ ndcg@100: 0.01263717
+ --> No improvement for 0 epochs <-- 
+
+[ Training Epoch 6 ]
+2026-11-11 01:39:49 - INFO - Epoch 6 step 400 eta 00:00:49: loss 5.261
+2026-11-11 01:39:49 - INFO - Epoch 6 step 410 eta 00:00:48: loss 5.260
+2026-11-11 01:39:50 - INFO - Epoch 6 step 420 eta 00:00:48: loss 5.257
+2026-11-11 01:39:50 - INFO - Epoch 6 step 430 eta 00:00:47: loss 5.265
+2026-11-11 01:39:50 - INFO - Epoch 6 step 440 eta 00:00:47: loss 5.281
+2026-11-11 01:39:51 - INFO - Epoch 6 step 450 eta 00:00:47: loss 5.297
+ # ----------Val Result---------
+ recall@50: 0.02222003
+ recall@100: 0.03237620
+ ndcg@50: 0.00930357
+ ndcg@100: 0.01228698
+ --> No improvement for 0 epochs <-- 
+
+[ Training Epoch 7 ]
+2026-11-11 01:39:51 - INFO - Epoch 7 step 460 eta 00:00:47: loss 5.041
+2026-11-11 01:39:51 - INFO - Epoch 7 step 470 eta 00:00:46: loss 5.044
+2026-11-11 01:39:52 - INFO - Epoch 7 step 480 eta 00:00:46: loss 5.083
+2026-11-11 01:39:52 - INFO - Epoch 7 step 490 eta 00:00:46: loss 5.102
+2026-11-11 01:39:52 - INFO - Epoch 7 step 500 eta 00:00:45: loss 5.126
+2026-11-11 01:39:52 - INFO - Epoch 7 step 510 eta 00:00:45: loss 5.138
+2026-11-11 01:39:53 - INFO - Epoch 7 step 520 eta 00:00:44: loss 5.160
+ # ----------Val Result---------
+ recall@50: 0.01364374
+ recall@100: 0.03195025
+ ndcg@50: 0.00741865
+ ndcg@100: 0.01244446
+ --> No improvement for 1 epochs <-- 
+
+[ Training Epoch 8 ]
+2026-11-11 01:39:53 - INFO - Epoch 8 step 530 eta 00:00:44: loss 4.969
+2026-11-11 01:39:53 - INFO - Epoch 8 step 540 eta 00:00:44: loss 4.915
+2026-11-11 01:39:54 - INFO - Epoch 8 step 550 eta 00:00:43: loss 4.944
+2026-11-11 01:39:54 - INFO - Epoch 8 step 560 eta 00:00:43: loss 4.970
+2026-11-11 01:39:54 - INFO - Epoch 8 step 570 eta 00:00:43: loss 4.979
+2026-11-11 01:39:54 - INFO - Epoch 8 step 580 eta 00:00:42: loss 4.978
+ # ----------Val Result---------
+ recall@50: 0.01680471
+ recall@100: 0.03823829
+ ndcg@50: 0.00944410
+ ndcg@100: 0.01487315
+ --> No improvement for 2 epochs <-- 
+
+[ Training Epoch 9 ]
+2026-11-11 01:39:55 - INFO - Epoch 9 step 590 eta 00:00:42: loss 4.821
+2026-11-11 01:39:55 - INFO - Epoch 9 step 600 eta 00:00:42: loss 4.726
+2026-11-11 01:39:55 - INFO - Epoch 9 step 610 eta 00:00:41: loss 4.739
+2026-11-11 01:39:56 - INFO - Epoch 9 step 620 eta 00:00:41: loss 4.736
+2026-11-11 01:39:56 - INFO - Epoch 9 step 630 eta 00:00:41: loss 4.749
+2026-11-11 01:39:56 - INFO - Epoch 9 step 640 eta 00:00:40: loss 4.750
+2026-11-11 01:39:57 - INFO - Epoch 9 step 650 eta 00:00:40: loss 4.760
+ # ----------Val Result---------
+ recall@50: 0.02539548
+ recall@100: 0.05726319
+ ndcg@50: 0.01569047
+ ndcg@100: 0.02364667
+ --> Save Model <-- 
+
+[ Training Epoch 10 ]
+2026-11-11 01:39:57 - INFO - Epoch 10 step 660 eta 00:00:40: loss 4.431
+2026-11-11 01:39:57 - INFO - Epoch 10 step 670 eta 00:00:39: loss 4.452
+2026-11-11 01:39:58 - INFO - Epoch 10 step 680 eta 00:00:39: loss 4.431
+2026-11-11 01:39:58 - INFO - Epoch 10 step 690 eta 00:00:39: loss 4.444
+2026-11-11 01:39:58 - INFO - Epoch 10 step 700 eta 00:00:38: loss 4.455
+2026-11-11 01:39:58 - INFO - Epoch 10 step 710 eta 00:00:38: loss 4.454
+ # ----------Val Result---------
+ recall@50: 0.06408162
+ recall@100: 0.08692487
+ ndcg@50: 0.03022585
+ ndcg@100: 0.03731581
+ --> Save Model <-- 
+
+[ Training Epoch 11 ]
+2026-11-11 01:39:59 - INFO - Epoch 11 step 720 eta 00:00:38: loss 4.150
+2026-11-11 01:39:59 - INFO - Epoch 11 step 730 eta 00:00:38: loss 4.108
+2026-11-11 01:39:59 - INFO - Epoch 11 step 740 eta 00:00:37: loss 4.081
+2026-11-11 01:40:00 - INFO - Epoch 11 step 750 eta 00:00:37: loss 4.090
+2026-11-11 01:40:00 - INFO - Epoch 11 step 760 eta 00:00:37: loss 4.062
+2026-11-11 01:40:00 - INFO - Epoch 11 step 770 eta 00:00:36: loss 4.073
+2026-11-11 01:40:01 - INFO - Epoch 11 step 780 eta 00:00:36: loss 4.075
+ # ----------Val Result---------
+ recall@50: 0.09437062
+ recall@100: 0.13218716
+ ndcg@50: 0.05550858
+ ndcg@100: 0.06718061
+ --> Save Model <-- 
+
+[ Training Epoch 12 ]
+2026-11-11 01:40:01 - INFO - Epoch 12 step 790 eta 00:00:36: loss 3.701
+2026-11-11 01:40:01 - INFO - Epoch 12 step 800 eta 00:00:35: loss 3.711
+2026-11-11 01:40:02 - INFO - Epoch 12 step 810 eta 00:00:35: loss 3.686
+2026-11-11 01:40:02 - INFO - Epoch 12 step 820 eta 00:00:35: loss 3.683
+2026-11-11 01:40:02 - INFO - Epoch 12 step 830 eta 00:00:34: loss 3.668
+2026-11-11 01:40:02 - INFO - Epoch 12 step 840 eta 00:00:34: loss 3.662
+ # ----------Val Result---------
+ recall@50: 0.13313727
+ recall@100: 0.17563221
+ ndcg@50: 0.08689731
+ ndcg@100: 0.09964696
+ --> Save Model <-- 
+
+[ Training Epoch 13 ]
+2026-11-11 01:40:03 - INFO - Epoch 13 step 850 eta 00:00:34: loss 3.364
+2026-11-11 01:40:03 - INFO - Epoch 13 step 860 eta 00:00:33: loss 3.263
+2026-11-11 01:40:03 - INFO - Epoch 13 step 870 eta 00:00:33: loss 3.270
+2026-11-11 01:40:04 - INFO - Epoch 13 step 880 eta 00:00:33: loss 3.262
+2026-11-11 01:40:04 - INFO - Epoch 13 step 890 eta 00:00:32: loss 3.261
+2026-11-11 01:40:04 - INFO - Epoch 13 step 900 eta 00:00:32: loss 3.251
+2026-11-11 01:40:04 - INFO - Epoch 13 step 910 eta 00:00:32: loss 3.249
+ # ----------Val Result---------
+ recall@50: 0.15743332
+ recall@100: 0.20522285
+ ndcg@50: 0.10453457
+ ndcg@100: 0.11929927
+ --> Save Model <-- 
+
+[ Training Epoch 14 ]
+2026-11-11 01:40:05 - INFO - Epoch 14 step 920 eta 00:00:31: loss 2.877
+2026-11-11 01:40:05 - INFO - Epoch 14 step 930 eta 00:00:31: loss 2.877
+2026-11-11 01:40:05 - INFO - Epoch 14 step 940 eta 00:00:31: loss 2.888
+2026-11-11 01:40:06 - INFO - Epoch 14 step 950 eta 00:00:30: loss 2.892
+2026-11-11 01:40:06 - INFO - Epoch 14 step 960 eta 00:00:30: loss 2.870
+2026-11-11 01:40:06 - INFO - Epoch 14 step 970 eta 00:00:30: loss 2.861
+ # ----------Val Result---------
+ recall@50: 0.18401150
+ recall@100: 0.22126995
+ ndcg@50: 0.12710373
+ ndcg@100: 0.14077601
+ --> Save Model <-- 
+
+[ Training Epoch 15 ]
+2026-11-11 01:40:07 - INFO - Epoch 15 step 980 eta 00:00:30: loss 2.597
+2026-11-11 01:40:07 - INFO - Epoch 15 step 990 eta 00:00:29: loss 2.520
+2026-11-11 01:40:07 - INFO - Epoch 15 step 1000 eta 00:00:29: loss 2.502
+2026-11-11 01:40:08 - INFO - Epoch 15 step 1010 eta 00:00:29: loss 2.507
+2026-11-11 01:40:08 - INFO - Epoch 15 step 1020 eta 00:00:28: loss 2.495
+2026-11-11 01:40:08 - INFO - Epoch 15 step 1030 eta 00:00:28: loss 2.499
+2026-11-11 01:40:09 - INFO - Epoch 15 step 1040 eta 00:00:28: loss 2.497
+ # ----------Val Result---------
+ recall@50: 0.18897441
+ recall@100: 0.22969916
+ ndcg@50: 0.13683420
+ ndcg@100: 0.15031858
+ --> Save Model <-- 
+
+[ Training Epoch 16 ]
+2026-11-11 01:40:09 - INFO - Epoch 16 step 1050 eta 00:00:27: loss 2.196
+2026-11-11 01:40:09 - INFO - Epoch 16 step 1060 eta 00:00:27: loss 2.182
+2026-11-11 01:40:10 - INFO - Epoch 16 step 1070 eta 00:00:27: loss 2.171
+2026-11-11 01:40:10 - INFO - Epoch 16 step 1080 eta 00:00:27: loss 2.170
+2026-11-11 01:40:10 - INFO - Epoch 16 step 1090 eta 00:00:26: loss 2.163
+2026-11-11 01:40:10 - INFO - Epoch 16 step 1100 eta 00:00:26: loss 2.170
+ # ----------Val Result---------
+ recall@50: 0.20433252
+ recall@100: 0.24086960
+ ndcg@50: 0.14872690
+ ndcg@100: 0.16175759
+ --> Save Model <-- 
+
+[ Training Epoch 17 ]
+2026-11-11 01:40:11 - INFO - Epoch 17 step 1110 eta 00:00:26: loss 1.868
+2026-11-11 01:40:11 - INFO - Epoch 17 step 1120 eta 00:00:25: loss 1.865
+2026-11-11 01:40:12 - INFO - Epoch 17 step 1130 eta 00:00:25: loss 1.866
+2026-11-11 01:40:12 - INFO - Epoch 17 step 1140 eta 00:00:25: loss 1.869
+2026-11-11 01:40:12 - INFO - Epoch 17 step 1150 eta 00:00:24: loss 1.867
+2026-11-11 01:40:13 - INFO - Epoch 17 step 1160 eta 00:00:24: loss 1.874
+2026-11-11 01:40:13 - INFO - Epoch 17 step 1170 eta 00:00:24: loss 1.876
+ # ----------Val Result---------
+ recall@50: 0.21146879
+ recall@100: 0.25308082
+ ndcg@50: 0.15863547
+ ndcg@100: 0.17272590
+ --> Save Model <-- 
+
+[ Training Epoch 18 ]
+2026-11-11 01:40:13 - INFO - Epoch 18 step 1180 eta 00:00:24: loss 1.680
+2026-11-11 01:40:14 - INFO - Epoch 18 step 1190 eta 00:00:23: loss 1.633
+2026-11-11 01:40:14 - INFO - Epoch 18 step 1200 eta 00:00:23: loss 1.622
+2026-11-11 01:40:14 - INFO - Epoch 18 step 1210 eta 00:00:23: loss 1.637
+2026-11-11 01:40:14 - INFO - Epoch 18 step 1220 eta 00:00:22: loss 1.630
+2026-11-11 01:40:15 - INFO - Epoch 18 step 1230 eta 00:00:22: loss 1.635
+ # ----------Val Result---------
+ recall@50: 0.21854134
+ recall@100: 0.26007974
+ ndcg@50: 0.16632579
+ ndcg@100: 0.18018284
+ --> Save Model <-- 
+
+[ Training Epoch 19 ]
+2026-11-11 01:40:15 - INFO - Epoch 19 step 1240 eta 00:00:22: loss 1.462
+2026-11-11 01:40:16 - INFO - Epoch 19 step 1250 eta 00:00:21: loss 1.447
+2026-11-11 01:40:16 - INFO - Epoch 19 step 1260 eta 00:00:21: loss 1.435
+2026-11-11 01:40:16 - INFO - Epoch 19 step 1270 eta 00:00:21: loss 1.425
+2026-11-11 01:40:16 - INFO - Epoch 19 step 1280 eta 00:00:20: loss 1.417
+2026-11-11 01:40:17 - INFO - Epoch 19 step 1290 eta 00:00:20: loss 1.419
+2026-11-11 01:40:17 - INFO - Epoch 19 step 1300 eta 00:00:20: loss 1.416
+ # ----------Val Result---------
+ recall@50: 0.22131498
+ recall@100: 0.26674503
+ ndcg@50: 0.16851304
+ ndcg@100: 0.18357065
+ --> Save Model <-- 
+
+[ Training Epoch 20 ]
+2026-11-11 01:40:17 - INFO - Epoch 20 step 1310 eta 00:00:20: loss 1.282
+2026-11-11 01:40:18 - INFO - Epoch 20 step 1320 eta 00:00:19: loss 1.259
+2026-11-11 01:40:18 - INFO - Epoch 20 step 1330 eta 00:00:19: loss 1.259
+2026-11-11 01:40:18 - INFO - Epoch 20 step 1340 eta 00:00:19: loss 1.251
+2026-11-11 01:40:19 - INFO - Epoch 20 step 1350 eta 00:00:18: loss 1.247
+2026-11-11 01:40:19 - INFO - Epoch 20 step 1360 eta 00:00:18: loss 1.241
+ # ----------Val Result---------
+ recall@50: 0.22098820
+ recall@100: 0.26918733
+ ndcg@50: 0.17082985
+ ndcg@100: 0.18619125
+ --> Save Model <-- 
+
+[ Training Epoch 21 ]
+2026-11-11 01:40:19 - INFO - Epoch 21 step 1370 eta 00:00:18: loss 1.042
+2026-11-11 01:40:20 - INFO - Epoch 21 step 1380 eta 00:00:17: loss 1.076
+2026-11-11 01:40:20 - INFO - Epoch 21 step 1390 eta 00:00:17: loss 1.092
+2026-11-11 01:40:20 - INFO - Epoch 21 step 1400 eta 00:00:17: loss 1.103
+2026-11-11 01:40:20 - INFO - Epoch 21 step 1410 eta 00:00:16: loss 1.103
+2026-11-11 01:40:21 - INFO - Epoch 21 step 1420 eta 00:00:16: loss 1.099
+2026-11-11 01:40:21 - INFO - Epoch 21 step 1430 eta 00:00:16: loss 1.095
+ # ----------Val Result---------
+ recall@50: 0.22031017
+ recall@100: 0.26570210
+ ndcg@50: 0.17365779
+ ndcg@100: 0.18849501
+ --> Save Model <-- 
+
+[ Training Epoch 22 ]
+2026-11-11 01:40:21 - INFO - Epoch 22 step 1440 eta 00:00:15: loss 0.990
+2026-11-11 01:40:22 - INFO - Epoch 22 step 1450 eta 00:00:15: loss 0.990
+2026-11-11 01:40:22 - INFO - Epoch 22 step 1460 eta 00:00:15: loss 0.983
+2026-11-11 01:40:22 - INFO - Epoch 22 step 1470 eta 00:00:14: loss 0.986
+2026-11-11 01:40:23 - INFO - Epoch 22 step 1480 eta 00:00:14: loss 0.986
+2026-11-11 01:40:23 - INFO - Epoch 22 step 1490 eta 00:00:14: loss 0.985
+ # ----------Val Result---------
+ recall@50: 0.22686215
+ recall@100: 0.26970059
+ ndcg@50: 0.17649542
+ ndcg@100: 0.19046246
+ --> Save Model <-- 
+
+[ Training Epoch 23 ]
+2026-11-11 01:40:23 - INFO - Epoch 23 step 1500 eta 00:00:14: loss 0.966
+2026-11-11 01:40:24 - INFO - Epoch 23 step 1510 eta 00:00:13: loss 0.909
+2026-11-11 01:40:24 - INFO - Epoch 23 step 1520 eta 00:00:13: loss 0.901
+2026-11-11 01:40:24 - INFO - Epoch 23 step 1530 eta 00:00:13: loss 0.905
+2026-11-11 01:40:24 - INFO - Epoch 23 step 1540 eta 00:00:12: loss 0.908
+2026-11-11 01:40:25 - INFO - Epoch 23 step 1550 eta 00:00:12: loss 0.903
+2026-11-11 01:40:25 - INFO - Epoch 23 step 1560 eta 00:00:12: loss 0.899
+ # ----------Val Result---------
+ recall@50: 0.22962819
+ recall@100: 0.27082276
+ ndcg@50: 0.17878892
+ ndcg@100: 0.19207902
+ --> Save Model <-- 
+
+[ Training Epoch 24 ]
+2026-11-11 01:40:25 - INFO - Epoch 24 step 1570 eta 00:00:11: loss 0.858
+2026-11-11 01:40:26 - INFO - Epoch 24 step 1580 eta 00:00:11: loss 0.844
+2026-11-11 01:40:26 - INFO - Epoch 24 step 1590 eta 00:00:11: loss 0.830
+2026-11-11 01:40:26 - INFO - Epoch 24 step 1600 eta 00:00:10: loss 0.823
+2026-11-11 01:40:27 - INFO - Epoch 24 step 1610 eta 00:00:10: loss 0.829
+2026-11-11 01:40:27 - INFO - Epoch 24 step 1620 eta 00:00:10: loss 0.834
+ # ----------Val Result---------
+ recall@50: 0.23085228
+ recall@100: 0.27288339
+ ndcg@50: 0.17996052
+ ndcg@100: 0.19349010
+ --> Save Model <-- 
+
+[ Training Epoch 25 ]
+2026-11-11 01:40:27 - INFO - Epoch 25 step 1630 eta 00:00:10: loss 0.815
+2026-11-11 01:40:28 - INFO - Epoch 25 step 1640 eta 00:00:09: loss 0.795
+2026-11-11 01:40:28 - INFO - Epoch 25 step 1650 eta 00:00:09: loss 0.786
+2026-11-11 01:40:28 - INFO - Epoch 25 step 1660 eta 00:00:09: loss 0.785
+2026-11-11 01:40:29 - INFO - Epoch 25 step 1670 eta 00:00:08: loss 0.789
+2026-11-11 01:40:29 - INFO - Epoch 25 step 1680 eta 00:00:08: loss 0.787
+2026-11-11 01:40:29 - INFO - Epoch 25 step 1690 eta 00:00:08: loss 0.786
+ # ----------Val Result---------
+ recall@50: 0.22991471
+ recall@100: 0.27684906
+ ndcg@50: 0.17950270
+ ndcg@100: 0.19397074
+ --> Save Model <-- 
+
+[ Training Epoch 26 ]
+2026-11-11 01:40:30 - INFO - Epoch 26 step 1700 eta 00:00:07: loss 0.734
+2026-11-11 01:40:30 - INFO - Epoch 26 step 1710 eta 00:00:07: loss 0.751
+2026-11-11 01:40:30 - INFO - Epoch 26 step 1720 eta 00:00:07: loss 0.751
+2026-11-11 01:40:30 - INFO - Epoch 26 step 1730 eta 00:00:06: loss 0.760
+2026-11-11 01:40:31 - INFO - Epoch 26 step 1740 eta 00:00:06: loss 0.761
+2026-11-11 01:40:31 - INFO - Epoch 26 step 1750 eta 00:00:06: loss 0.753
+ # ----------Val Result---------
+ recall@50: 0.23254037
+ recall@100: 0.27758905
+ ndcg@50: 0.17903182
+ ndcg@100: 0.19311891
+ --> Save Model <-- 
+
+[ Training Epoch 27 ]
+2026-11-11 01:40:31 - INFO - Epoch 27 step 1760 eta 00:00:05: loss 0.754
+2026-11-11 01:40:32 - INFO - Epoch 27 step 1770 eta 00:00:05: loss 0.744
+2026-11-11 01:40:32 - INFO - Epoch 27 step 1780 eta 00:00:05: loss 0.750
+2026-11-11 01:40:32 - INFO - Epoch 27 step 1790 eta 00:00:04: loss 0.743
+2026-11-11 01:40:33 - INFO - Epoch 27 step 1800 eta 00:00:04: loss 0.734
+2026-11-11 01:40:33 - INFO - Epoch 27 step 1810 eta 00:00:04: loss 0.738
+2026-11-11 01:40:33 - INFO - Epoch 27 step 1820 eta 00:00:04: loss 0.737
+ # ----------Val Result---------
+ recall@50: 0.23574334
+ recall@100: 0.27662492
+ ndcg@50: 0.17997879
+ ndcg@100: 0.19322288
+ --> Save Model <-- 
+
+[ Training Epoch 28 ]
+2026-11-11 01:40:34 - INFO - Epoch 28 step 1830 eta 00:00:03: loss 0.707
+2026-11-11 01:40:34 - INFO - Epoch 28 step 1840 eta 00:00:03: loss 0.718
+2026-11-11 01:40:34 - INFO - Epoch 28 step 1850 eta 00:00:03: loss 0.712
+2026-11-11 01:40:35 - INFO - Epoch 28 step 1860 eta 00:00:02: loss 0.726
+2026-11-11 01:40:35 - INFO - Epoch 28 step 1870 eta 00:00:02: loss 0.723
+2026-11-11 01:40:35 - INFO - Epoch 28 step 1880 eta 00:00:02: loss 0.724
+ # ----------Val Result---------
+ recall@50: 0.23574334
+ recall@100: 0.27691647
+ ndcg@50: 0.18007758
+ ndcg@100: 0.19343296
+ --> Save Model <-- 
+
+[ Training Epoch 29 ]
+2026-11-11 01:40:36 - INFO - Epoch 29 step 1890 eta 00:00:01: loss 0.715
+2026-11-11 01:40:36 - INFO - Epoch 29 step 1900 eta 00:00:01: loss 0.731
+2026-11-11 01:40:36 - INFO - Epoch 29 step 1910 eta 00:00:01: loss 0.732
+2026-11-11 01:40:36 - INFO - Epoch 29 step 1920 eta 00:00:00: loss 0.724
+2026-11-11 01:40:37 - INFO - Epoch 29 step 1930 eta 00:00:00: loss 0.723
+2026-11-11 01:40:37 - INFO - Epoch 29 step 1940 eta 00:00:00: loss 0.723
+2026-11-11 01:40:37 - INFO - Epoch 29 step 1950 eta 00:00:00: loss 0.721
+ # ----------Val Result---------
+ recall@50: 0.23574334
+ recall@100: 0.27740240
+ ndcg@50: 0.18009478
+ ndcg@100: 0.19357735
+ --> Save Model <-- 
+ --> Loaded best model state <-- 
+
+ #-------Final Results-------
+ recall@50: 0.25636342
+ recall@100: 0.29817307
+ ndcg@50: 0.19506283
+ ndcg@100: 0.20903297
