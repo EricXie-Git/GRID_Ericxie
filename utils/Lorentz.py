@@ -36,3 +36,12 @@ def lorentz_centroid(mean):
     # 从空间坐标重建时间坐标，保证上半双曲面约束。
     time = torch.sqrt(1.0 + spatial.square().sum(dim=-1, keepdim=True))
     return torch.cat((time, spatial), dim=-1)
+
+
+def lorentz_sqdist(x, centers):
+    """曲率 -1 的成对测地距离平方，[B,L,d+1] × [B,K,d+1] -> [B,L,K]。"""
+    cosh_dist = x[..., :1] * centers[..., 0].unsqueeze(1) - x[..., 1:].bmm(centers[..., 1:].transpose(1, 2))
+    delta = (cosh_dist - 1).clamp_min(0)
+    # acosh(1+t)^2 在 t=0 处导数为 2，近零用展开式避免反传出现 0 × inf。
+    regular = torch.acosh(1 + delta.clamp_min(1e-6)).square()
+    return torch.where(delta < 1e-6, delta * (2 - delta / 3), regular)

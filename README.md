@@ -152,6 +152,9 @@ python -u main.py --dataset twitter --gnn_type lorentz_lightgcn \
   2>&1 | tee result_record/twitter_lorentz_lightgcn.log
 ```
 
+在同一条命令中加 `--grouping_space hyperbolic` 启用双曲软 KMeans，加 `--grouping_space euclidean_matched` 运行相同掩码和迭代流程的欧氏对照。两次请使用不同的日志文件名。默认 `euclidean` 使用原版 GRID 分组。新模式评估时输出平均占用群数、平均最大归属概率和平均节点半径。
+
+
 默认仍为 `lightgcn`；对照实验只替换 `--gnn_type` 和日志文件名。
 新增编码器借鉴 [Hgformer（ICML 2025）的 LHGCN](https://proceedings.mlr.press/v267/yang25o.html)：指数映射 → Lorentz 重心聚合 → 对数映射 → 原有层间加权融合。输出维度、欧氏分组、注意力、预测头和原损失保持不变，梯度可回传到用户嵌入。
 

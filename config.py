@@ -22,6 +22,8 @@ def parse_args(argv=None) -> argparse.Namespace:
 
     model_group = parser.add_argument_group('Model Hyperparameters')
     model_group.add_argument('--clustering', type=bool, default=True, help="Apply grouping with K-Means before sequence attention")
+    model_group.add_argument('--grouping_space', choices=['euclidean', 'euclidean_matched', 'hyperbolic'], default='euclidean',
+                             help='Use original GRID grouping or compare matched Euclidean/Lorentz soft K-Means')
     model_group.add_argument('--bpr_margin', type=float, default=0.5, help="Margin used by the BPR term in the hybrid loss")
     model_group.add_argument('--neg_num', type=int, default=100, help="Maximum number of negative samples drawn per cascade")
     model_group.add_argument('--gnn_type', type=str, default='lightgcn', choices=['gat', 'gcn', 'sage', 'lightgcn', 'lorentz_lightgcn'], help="Backbone used by the social graph encoder")

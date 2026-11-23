@@ -99,10 +99,12 @@ class GridTest(unittest.TestCase):
 
     def test_training_and_evaluation(self):
         with tempfile.TemporaryDirectory() as temp:
-            for gnn_type, selection_split in (('lightgcn', 'test'), ('lightgcn', 'val'),
-                                               ('lorentz_lightgcn', 'test'), ('lorentz_lightgcn', 'val')):
+            for gnn_type, selection_split, space in (('lightgcn', 'test', 'euclidean'), ('lightgcn', 'val', 'euclidean'),
+                    ('lorentz_lightgcn', 'test', 'euclidean'), ('lorentz_lightgcn', 'val', 'euclidean'),
+                    ('lorentz_lightgcn', 'val', 'hyperbolic'), ('lorentz_lightgcn', 'val', 'euclidean_matched')):
                 args = copy.deepcopy(self.args)
                 args.gnn_type = gnn_type
+                args.grouping_space = space
                 args.selection_split = selection_split
                 args.ckpt_file = str(Path(temp) / 'model.pt')
                 with patch.object(main, 'create_dataloaders', return_value=([self.batch], [self.batch], [self.batch])), \

@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from math import sqrt
 
-from module import GroupAttn, KMeansLayer, WeightedPooling, GraphEncoder, SelfAttn, PositionEmbedding
+from module import GroupAttn, KMeansLayer, GeometricKMeansLayer, WeightedPooling, GraphEncoder, SelfAttn, PositionEmbedding
 
 class GRID(nn.Module):
     def __init__(self, args):
@@ -15,7 +15,8 @@ class GRID(nn.Module):
         self.GNN = GraphEncoder(args)
 
         if args.clustering:
-            self.Grouping = KMeansLayer(args)
+            self.geometric_grouping = getattr(args, 'grouping_space', 'euclidean') != 'euclidean'
+            self.Grouping = GeometricKMeansLayer(args) if self.geometric_grouping else KMeansLayer(args)
             self.GroupAttn = GroupAttn(args)
         else:
             self.Attn = SelfAttn(args.dim)
@@ -36,7 +37,9 @@ class GRID(nn.Module):
 
         if args.clustering:
             casEmbed, cluster_mask, cluster_counts = self.Grouping(casEmbed, cas_mask)
-            h_c = self.GroupAttn(casEmbed, cluster_mask, cluster_counts)
+            # 新分组返回有效群掩码；注意力需要 PAD 掩码，池化需要有效群掩码。
+            pad_mask = ~cluster_mask if self.geometric_grouping else cluster_mask
+            h_c = self.GroupAttn(casEmbed, pad_mask, cluster_counts)
             h = self.Pooling(h_c, cluster_mask, cluster_counts)
         else:
             h_c = self.Attn(casEmbed, casEmbed, casEmbed, cas_mask)

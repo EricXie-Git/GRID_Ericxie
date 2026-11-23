@@ -7,7 +7,7 @@ import torch
 
 
 MODEL_CONFIG_KEYS = ('dataset', 'dim', 'user_num', 'gnn_type', 'gnn_layers',
-                     'clustering', 'group_num', 'n_heads', 'max_len', 'dropout',
+                     'clustering', 'grouping_space', 'group_num', 'n_heads', 'max_len', 'dropout',
                      'deterministic_eval')
 
 

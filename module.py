@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.init as init
 import torch.nn.functional as F
 from torch_geometric.nn import GATConv, SAGEConv, GCNConv
-from utils.Lorentz import exp_map, log_map, lorentz_centroid
+from utils.Lorentz import exp_map, log_map, lorentz_centroid, lorentz_sqdist
 
 
 class GroupAttn(nn.Module):
@@ -237,6 +237,71 @@ class KMeansLayer(nn.Module):
             cluster_counts[has_padding, self.max_clusters] = 1.0
 
         return clustered_x, cluster_mask, cluster_counts
+
+
+class GeometricKMeansLayer(nn.Module):
+    """每条级联独立软分组，双曲实验和配套欧氏对照共用同一更新流程。"""
+
+    def __init__(self, args):
+        super().__init__()
+        if args.group_num < 2:
+            raise ValueError('group_num must include at least one real group and one padding slot')
+        self.hyperbolic = args.grouping_space == 'hyperbolic'
+        self.deterministic_eval = getattr(args, 'deterministic_eval', False)
+        self.cluster_centers = nn.Parameter(torch.empty(args.group_num - 1, args.dim))
+        nn.init.xavier_uniform_(self.cluster_centers)
+        self.max_iter = 10
+        self.eps = 1e-6
+        self.eval_stats = None
+
+    def assign(self, points, centers, mask):
+        if self.hyperbolic:
+            distances = lorentz_sqdist(points, centers)
+        else:
+            distances = torch.cdist(points, centers).square()
+        # 必须在 softmax 之后屏蔽，否则 PAD 会均匀分给所有群。
+        return F.softmax(-distances, dim=-1).masked_fill(mask.unsqueeze(-1), 0)
+
+    def update_centers(self, points, weights, centers):
+        counts = weights.sum(dim=1)
+        means = weights.transpose(1, 2).bmm(points) / counts.unsqueeze(-1).clamp_min(self.eps)
+        if self.hyperbolic:
+            means = lorentz_centroid(means)
+        return torch.where(counts.unsqueeze(-1) > self.eps, means, centers), counts
+
+    def forward(self, x, mask):
+        # 只映射当前级联的节点；双曲坐标多一维，送入注意力前再映回 d 维。
+        tangent = x.double().masked_fill(mask.unsqueeze(-1), 0)
+        seeds = self.cluster_centers.double().expand(x.size(0), -1, -1)
+        if self.training or not self.deterministic_eval:
+            size = ((~mask).sum() * x.size(-1)).clamp_min(1)
+            scale = (tangent.detach().square().sum() / size).sqrt().clamp_max(1) * 0.01
+            seeds = seeds + scale * torch.randn_like(seeds)
+        points = exp_map(tangent) if self.hyperbolic else tangent
+        centers = exp_map(seeds) if self.hyperbolic else seeds
+        for _ in range(self.max_iter):
+            weights = self.assign(points, centers, mask)
+            updated, counts = self.update_centers(points, weights, centers)
+            converged = (updated.detach() - centers.detach()).abs().amax() < self.eps
+            centers = updated
+            if converged:
+                break
+
+        active = counts > self.eps
+        groups = log_map(centers) if self.hyperbolic else centers
+        groups = groups.masked_fill(~active.unsqueeze(-1), 0)
+        counts = counts.masked_fill(~active, 0)
+        if not self.training:
+            # 按最大归属概率统计实际占用，另记平均置信度，便于识别近似均匀分配。
+            with torch.no_grad():
+                confidence, index = weights.max(dim=-1)
+                hits = torch.zeros_like(counts).scatter_add_(1, index, (~mask).double())
+                radius = torch.asinh(points[..., 1:].norm(dim=-1)) if self.hyperbolic else tangent.norm(dim=-1)
+                self.eval_stats = torch.stack(((hits > 0).sum(), (~mask).any(dim=1).sum(),
+                                               confidence.sum(), radius.sum(), (~mask).sum())).detach()
+        # 最后一位保留作占位，零权重。真实群的成员总量对应观测用户数。
+        return (F.pad(groups.to(x.dtype), (0, 0, 0, 1)), F.pad(active, (0, 1)),
+                F.pad(counts.to(x.dtype), (0, 1)))
 
 
 def Combined_Loss(args, pred_users, labels_padded, label_mask, negative_samples, neg_mask, first_label):

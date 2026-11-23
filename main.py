@@ -125,6 +125,7 @@ def inference(args, model, dataloader, graph):
         for k in args.metric_k
     })
 
+    grouping_stats = None
     total_samples = 0
 
     with torch.no_grad():
@@ -137,8 +138,15 @@ def inference(args, model, dataloader, graph):
             for metric_name, metric_sum in batch_scores.items():
                 score_sums[metric_name] += metric_sum
 
+            stats = getattr(getattr(model, 'Grouping', None), 'eval_stats', None)
+            if stats is not None:
+                grouping_stats = stats if grouping_stats is None else grouping_stats + stats
             total_samples += batch_size
 
+    if grouping_stats is not None:
+        occupied, cascades, confidence, radius, tokens = grouping_stats.tolist()
+        print(f' Grouping: occupied/cascade={occupied / max(1, cascades):.2f}, '
+              f'mean_max_assignment={confidence / max(1, tokens):.4f}, mean_radius={radius / max(1, tokens):.4f}')
     result = {k: (v / max(1, total_samples)).item() for k, v in score_sums.items()}
     return result
 
