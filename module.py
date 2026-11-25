@@ -253,14 +253,29 @@ class GeometricKMeansLayer(nn.Module):
         self.max_iter = 10
         self.eps = 1e-6
         self.eval_stats = None
+        self.temperature = getattr(args, 'group_temperature', 1.0)
+        self.diagnostics = getattr(args, 'group_diagnostics', False)
+
+    def squared_distances(self, points, centers):
+        if self.hyperbolic:
+            return lorentz_sqdist(points, centers)
+        return torch.cdist(points, centers).square()
 
     def assign(self, points, centers, mask):
-        if self.hyperbolic:
-            distances = lorentz_sqdist(points, centers)
-        else:
-            distances = torch.cdist(points, centers).square()
+        distances = self.squared_distances(points, centers)
         # 必须在 softmax 之后屏蔽，否则 PAD 会均匀分给所有群。
-        return F.softmax(-distances, dim=-1).masked_fill(mask.unsqueeze(-1), 0)
+        return F.softmax(-distances / self.temperature, dim=-1).masked_fill(mask.unsqueeze(-1), 0)
+
+    @torch.no_grad()
+    def next_group_targets(self, next_users, centers, active, first_label):
+        # 标签沿用建群的几何空间；只使用有效群，无法区分最近群时跳过该样本。
+        points = exp_map(next_users) if self.hyperbolic else next_users.double()
+        distances = self.squared_distances(points.unsqueeze(1), centers).squeeze(1)
+        distances = distances.masked_fill(~active, torch.inf)
+        nearest, target = distances.min(dim=1)
+        tied = torch.isclose(distances, nearest.unsqueeze(1), rtol=1e-7, atol=1e-12).sum(dim=1) > 1
+        valid = (first_label > 0) & (active.sum(dim=1) >= 2) & ~tied
+        return target.masked_fill(~valid, -100)
 
     def update_centers(self, points, weights, centers):
         counts = weights.sum(dim=1)
@@ -269,7 +284,14 @@ class GeometricKMeansLayer(nn.Module):
             means = lorentz_centroid(means)
         return torch.where(counts.unsqueeze(-1) > self.eps, means, centers), counts
 
-    def forward(self, x, mask):
+    @torch.no_grad()
+    def center_spacing(self, centers, active):
+        # 只统计同一级联内不同有效群之间的距离。
+        pairs = (active.unsqueeze(1) & active.unsqueeze(2)).triu(1)
+        distances = self.squared_distances(centers, centers).sqrt()
+        return torch.stack((distances.masked_fill(~pairs, 0).sum(), pairs.sum()))
+
+    def forward(self, x, mask, return_centers=False):
         # 只映射当前级联的节点；双曲坐标多一维，送入注意力前再映回 d 维。
         tangent = x.double().masked_fill(mask.unsqueeze(-1), 0)
         seeds = self.cluster_centers.double().expand(x.size(0), -1, -1)
@@ -279,8 +301,12 @@ class GeometricKMeansLayer(nn.Module):
             seeds = seeds + scale * torch.randn_like(seeds)
         points = exp_map(tangent) if self.hyperbolic else tangent
         centers = exp_map(seeds) if self.hyperbolic else seeds
-        for _ in range(self.max_iter):
+        diagnose = self.diagnostics and not self.training
+        for iteration in range(self.max_iter):
             weights = self.assign(points, centers, mask)
+            if diagnose and iteration == 0:
+                initial_confidence = weights.detach().amax(dim=-1).sum()
+                initial_spacing = self.center_spacing(centers, (~mask).any(dim=1, keepdim=True).expand_as(centers[..., 0]))
             updated, counts = self.update_centers(points, weights, centers)
             converged = (updated.detach() - centers.detach()).abs().amax() < self.eps
             centers = updated
@@ -299,9 +325,16 @@ class GeometricKMeansLayer(nn.Module):
                 radius = torch.asinh(points[..., 1:].norm(dim=-1)) if self.hyperbolic else tangent.norm(dim=-1)
                 self.eval_stats = torch.stack(((hits > 0).sum(), (~mask).any(dim=1).sum(),
                                                confidence.sum(), radius.sum(), (~mask).sum())).detach()
+                if diagnose:
+                    # 更新后的最终中心与第一次分配前的种子中心配对比较。
+                    final_confidence = self.assign(points, centers, mask).amax(dim=-1).sum()
+                    self.eval_stats = torch.cat((self.eval_stats, initial_confidence.view(1),
+                                                 final_confidence.view(1), initial_spacing,
+                                                 self.center_spacing(centers, active)))
         # 最后一位保留作占位，零权重。真实群的成员总量对应观测用户数。
-        return (F.pad(groups.to(x.dtype), (0, 0, 0, 1)), F.pad(active, (0, 1)),
-                F.pad(counts.to(x.dtype), (0, 1)))
+        result = (F.pad(groups.to(x.dtype), (0, 0, 0, 1)), F.pad(active, (0, 1)),
+                  F.pad(counts.to(x.dtype), (0, 1)))
+        return (*result, centers.detach()) if return_centers else result
 
 
 def Combined_Loss(args, pred_users, labels_padded, label_mask, negative_samples, neg_mask, first_label):

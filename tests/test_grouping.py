@@ -18,6 +18,23 @@ class GroupingTest(unittest.TestCase):
         distances.sum().backward()
         self.assertTrue(torch.isfinite(tangent.grad).all())
 
+    def test_temperature_and_group_targets(self):
+        for space in ('hyperbolic', 'euclidean_matched'):
+            args = SimpleNamespace(grouping_space=space, dim=1, group_num=4)
+            layer = GeometricKMeansLayer(args)
+            users = torch.tensor([[1.], [-1.], [0.], [1.]], dtype=torch.float64)
+            centers = torch.tensor([[[-1.], [1.], [1.]]], dtype=torch.float64).expand(4, -1, -1)
+            if layer.hyperbolic:
+                centers = exp_map(centers)
+            active = torch.tensor([[True, True, False]] * 3 + [[False, False, False]])
+            targets = layer.next_group_targets(users, centers, active, torch.tensor([1, 2, 3, 4]))
+            self.assertEqual(targets.tolist(), [1, 0, -100, -100])
+            point = exp_map(users[:1]) if layer.hyperbolic else users[:1]
+            inputs = (point.unsqueeze(1), centers[:1, :2], torch.tensor([[False]]))
+            warm = layer.assign(*inputs)
+            layer.temperature = 0.1
+            self.assertGreater(layer.assign(*inputs).max(), warm.max())
+
     def test_padding_and_gradient(self):
         for space in ('hyperbolic', 'euclidean_matched'):
             args = SimpleNamespace(grouping_space=space, dim=3, group_num=3, deterministic_eval=True)

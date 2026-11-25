@@ -1,4 +1,5 @@
 import argparse
+import math
 from typing import List
 from dataclasses import dataclass
 
@@ -24,6 +25,9 @@ def parse_args(argv=None) -> argparse.Namespace:
     model_group.add_argument('--clustering', type=bool, default=True, help="Apply grouping with K-Means before sequence attention")
     model_group.add_argument('--grouping_space', choices=['euclidean', 'euclidean_matched', 'hyperbolic'], default='euclidean',
                              help='Use original GRID grouping or compare matched Euclidean/Lorentz soft K-Means')
+    model_group.add_argument('--group_temperature', type=float, default=1.0, help='Temperature for geometric soft K-Means')
+    model_group.add_argument('--group_loss_weight', type=float, default=0.0, help='Weight of next-group cross entropy (0 disables it)')
+    model_group.add_argument('--group_diagnostics', action='store_true', help='Log initial/final assignment confidence and center distances')
     model_group.add_argument('--bpr_margin', type=float, default=0.5, help="Margin used by the BPR term in the hybrid loss")
     model_group.add_argument('--neg_num', type=int, default=100, help="Maximum number of negative samples drawn per cascade")
     model_group.add_argument('--gnn_type', type=str, default='lightgcn', choices=['gat', 'gcn', 'sage', 'lightgcn', 'lorentz_lightgcn'], help="Backbone used by the social graph encoder")
@@ -47,6 +51,13 @@ def parse_args(argv=None) -> argparse.Namespace:
     args = parser.parse_args(argv)
     if args.patience < 1:
         parser.error('patience must be positive')
+    if not math.isfinite(args.group_temperature) or args.group_temperature <= 0:
+        parser.error('group_temperature must be finite and positive')
+    if not math.isfinite(args.group_loss_weight) or args.group_loss_weight < 0:
+        parser.error('group_loss_weight must be finite and nonnegative')
+    if args.group_temperature != 1 or args.group_loss_weight or args.group_diagnostics:
+        if not args.clustering or args.grouping_space == 'euclidean':
+            parser.error('group experiments require hyperbolic or euclidean_matched grouping')
     return args
 
 

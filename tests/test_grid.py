@@ -97,6 +97,28 @@ class GridTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 load_checkpoint(path, model, args)
 
+    def test_group_prediction_uses_prefix_only(self):
+        args = copy.deepcopy(self.args)
+        args.grouping_space = 'hyperbolic'
+        args.group_loss_weight = 0.1
+        args.group_temperature = 0.01
+        model = GRID(args).eval()
+        cascade, mask, _, _, _, _, first, previous = batch_process(args, self.batch)
+        prefix = (args, cascade, mask, previous, self.graph)
+        users, logits = model(*prefix, return_groups=True)
+        for labels in (first, first.flip(0), torch.zeros_like(first)):
+            predicted, scores, target, _ = model(*prefix, first_label=labels)
+            torch.testing.assert_close(predicted, users)
+            torch.testing.assert_close(scores, logits)
+            if not labels.any():
+                self.assertTrue((target == -100).all())
+        _, scores, target, _ = model(*prefix, first_label=first)
+        self.assertTrue((target >= 0).any())
+        torch.nn.functional.cross_entropy(scores, target).backward()
+        for param in (model.GroupQuery.weight, model.Embed.weight):
+            self.assertTrue(torch.isfinite(param.grad).all())
+            self.assertGreater(param.grad.abs().sum().item(), 0)
+
     def test_training_and_evaluation(self):
         with tempfile.TemporaryDirectory() as temp:
             for gnn_type, selection_split, space in (('lightgcn', 'test', 'euclidean'), ('lightgcn', 'val', 'euclidean'),
@@ -105,6 +127,10 @@ class GridTest(unittest.TestCase):
                 args = copy.deepcopy(self.args)
                 args.gnn_type = gnn_type
                 args.grouping_space = space
+                if space != 'euclidean':
+                    args.group_temperature = 0.05
+                    args.group_loss_weight = 0.1
+                    args.group_diagnostics = True
                 args.selection_split = selection_split
                 args.ckpt_file = str(Path(temp) / 'model.pt')
                 with patch.object(main, 'create_dataloaders', return_value=([self.batch], [self.batch], [self.batch])), \

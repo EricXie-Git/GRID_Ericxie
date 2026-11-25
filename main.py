@@ -52,8 +52,16 @@ def train(args):
 
         for batch in train_dataloader:
             cascade, cas_mask, labels_padded, label_mask, negative_samples, neg_mask, first_label, previous_mask = batch_process(args, batch)
-            pred_users = model(args, cascade, cas_mask, previous_mask, graph)
+            if model.group_loss_weight > 0:
+                pred_users, logits, target, _ = model(args, cascade, cas_mask, previous_mask, graph, first_label)
+            else:
+                pred_users = model(args, cascade, cas_mask, previous_mask, graph)
             loss = Combined_Loss(args, pred_users, labels_padded, label_mask, negative_samples, neg_mask, first_label)
+
+            if model.group_loss_weight > 0:
+                # 按有效样本数归一化，全被忽略时辅助损失为零。
+                group_loss = F.cross_entropy(logits, target, reduction='sum') / (target != -100).sum().clamp_min(1)
+                loss = loss + model.group_loss_weight * group_loss
 
             optimizer.zero_grad()
             loss.backward()
@@ -125,13 +133,19 @@ def inference(args, model, dataloader, graph):
         for k in args.metric_k
     })
 
+    group_hits = torch.zeros(3, device=device, dtype=torch.long) if model.group_loss_weight > 0 else None
     grouping_stats = None
     total_samples = 0
 
     with torch.no_grad():
         for batch in dataloader:
             cascade, cas_mask, labels, _, _, _, first_label, previous_mask = batch_process(args, batch)
-            pred_users = model(args, cascade, cas_mask, previous_mask, graph)
+            if group_hits is not None:
+                pred_users, logits, target, largest = model(args, cascade, cas_mask, previous_mask, graph, first_label)
+                group_hits += torch.stack(((logits.argmax(dim=1) == target).sum(),
+                                           (largest == target).sum(), (target != -100).sum()))
+            else:
+                pred_users = model(args, cascade, cas_mask, previous_mask, graph)
 
             batch_scores, batch_size = metrics.compute_recall_ndcg_multi_label(pred_users, labels)
 
@@ -144,9 +158,17 @@ def inference(args, model, dataloader, graph):
             total_samples += batch_size
 
     if grouping_stats is not None:
-        occupied, cascades, confidence, radius, tokens = grouping_stats.tolist()
+        occupied, cascades, confidence, radius, tokens, *diagnostics = grouping_stats.tolist()
         print(f' Grouping: occupied/cascade={occupied / max(1, cascades):.2f}, '
               f'mean_max_assignment={confidence / max(1, tokens):.4f}, mean_radius={radius / max(1, tokens):.4f}')
+        if diagnostics:
+            first_p, last_p, first_dist, first_pairs, last_dist, last_pairs = diagnostics
+            print(f' Grouping first/final: max_assignment={first_p/max(1, tokens):.5f}/{last_p/max(1, tokens):.5f}, '
+                  f'center_distance={first_dist/max(1, first_pairs):.5f}/{last_dist/max(1, last_pairs):.5f}')
+    if group_hits is not None:
+        correct, baseline, valid = group_hits.tolist()
+        print(f' Next group: accuracy={correct / valid if valid else float("nan"):.4f}, '
+              f'largest_group_accuracy={baseline / valid if valid else float("nan"):.4f}, valid={valid}/{total_samples}')
     result = {k: (v / max(1, total_samples)).item() for k, v in score_sums.items()}
     return result
 
