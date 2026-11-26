@@ -475,3 +475,35 @@ ndcg@100: 0.21565177
 所以我觉得当前的核心瓶颈在于，原有的损失函数只对最终预测目标负责，无法监督双曲结构和群体表示。原 GRID 损失能把梯度传回双曲编码器和分组层，但它只根据最终的用户预测打分，没有直接要求各群学到不同的传播特征。
 
 
+# 20261126
+## 双曲编码+双曲分组温度实验
+### T1.0
+实验结果：
+-------Final Results-------
+ recall@50: 0.27025145
+ recall@100: 0.31240398
+ ndcg@50: 0.20143518
+ ndcg@100: 0.21524009
+Grouping: occupied/cascade=4.21, mean_max_assignment=0.0526, mean_radius=0.2372
+Grouping first/final: max_assignment=0.05582/0.05263, center_distance=0.83671/0.00000
+
+
+### T0.1
+实验结果：
+-------Final Results-------
+ recall@50: 0.26923242
+ recall@100: 0.31366783
+ ndcg@50: 0.20088491
+ ndcg@100: 0.21515815
+Grouping: occupied/cascade=3.07, mean_max_assignment=0.0527, mean_radius=0.2366
+Grouping first/final: max_assignment=0.24391/0.05270, center_distance=0.82497/0.00130
+
+
+## T0.1+群体损失
+实验结果：
+-------Final Results-------
+ recall@50: 0.26476306
+ recall@100: 0.31636521
+ ndcg@50: 0.19622476
+ ndcg@100: 0.21268205
+

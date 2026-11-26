@@ -1,0 +1,536 @@
+2026-11-26 01:42:45 - INFO - Training/Testing parameters: Namespace(batch_size=32, best_score=0.0, bpr_margin=0.5, cascade_path_test='dataset/twitter/cascade_test.json', cascade_path_train='dataset/twitter/cascade_train_neg.json', cascade_path_valid='dataset/twitter/cascade_val.json', ckpt_file='checkpoint/model_.bin', clustering=True, dataset='twitter', deterministic_eval=True, device='cuda', dim=128, dropout=0.3, early_stop_after_warmup=True, epsilon=0.3, gnn_layers=2, gnn_type='lorentz_lightgcn', graph_path='dataset/twitter/graph.pt', group_diagnostics=True, group_loss_weight=0.1, group_num=20, group_temperature=0.1, grouping_space='hyperbolic', learning_rate=0.001, load_checkpoint=None, max_epochs=30, max_len=200, metric_k=[50, 100], n_gpu=1, n_heads=6, n_warmup_steps=500, neg_num=100, patience=5, print_steps=10, save_checkpoint=False, saved_model_path='checkpoint/', seed=21, selection_split='val', user_num=12628, weight_decay=0.0001)
+
+[ Training Epoch 0 ]
+2026-11-26 01:42:46 - INFO - Epoch 0 step 10 eta 00:03:39: loss 8.227
+2026-11-26 01:42:46 - INFO - Epoch 0 step 20 eta 00:02:35: loss 8.213
+2026-11-26 01:42:47 - INFO - Epoch 0 step 30 eta 00:02:14: loss 8.258
+2026-11-26 01:42:47 - INFO - Epoch 0 step 40 eta 00:02:05: loss 8.264
+2026-11-26 01:42:48 - INFO - Epoch 0 step 50 eta 00:01:59: loss 8.273
+2026-11-26 01:42:48 - INFO - Epoch 0 step 60 eta 00:01:54: loss 8.273
+ Grouping: occupied/cascade=3.69, mean_max_assignment=0.0526, mean_radius=0.1057
+ Grouping first/final: max_assignment=0.08156/0.05263, center_distance=0.84559/0.00000
+ Next group: accuracy=0.0000, largest_group_accuracy=0.0000, valid=11/343
+ # ----------Val Result---------
+ recall@50: 0.00359323
+ recall@100: 0.00711707
+ ndcg@50: 0.00189783
+ ndcg@100: 0.00304715
+ --> Save Model <-- 
+
+[ Training Epoch 1 ]
+2026-11-26 01:42:49 - INFO - Epoch 1 step 70 eta 00:01:59: loss 8.296
+2026-11-26 01:42:50 - INFO - Epoch 1 step 80 eta 00:01:55: loss 8.274
+2026-11-26 01:42:50 - INFO - Epoch 1 step 90 eta 00:01:52: loss 8.227
+2026-11-26 01:42:51 - INFO - Epoch 1 step 100 eta 00:01:49: loss 8.218
+2026-11-26 01:42:51 - INFO - Epoch 1 step 110 eta 00:01:47: loss 8.204
+2026-11-26 01:42:52 - INFO - Epoch 1 step 120 eta 00:01:45: loss 8.177
+2026-11-26 01:42:52 - INFO - Epoch 1 step 130 eta 00:01:44: loss 8.157
+ Grouping: occupied/cascade=3.64, mean_max_assignment=0.0526, mean_radius=0.1092
+ Grouping first/final: max_assignment=0.08147/0.05263, center_distance=0.84545/0.00000
+ Next group: accuracy=0.0000, largest_group_accuracy=0.0000, valid=9/343
+ # ----------Val Result---------
+ recall@50: 0.00961016
+ recall@100: 0.02070235
+ ndcg@50: 0.00462693
+ ndcg@100: 0.00753375
+ --> Save Model <-- 
+
+[ Training Epoch 2 ]
+2026-11-26 01:42:53 - INFO - Epoch 2 step 140 eta 00:01:45: loss 7.962
+2026-11-26 01:42:54 - INFO - Epoch 2 step 150 eta 00:01:44: loss 7.939
+2026-11-26 01:42:54 - INFO - Epoch 2 step 160 eta 00:01:42: loss 7.879
+2026-11-26 01:42:54 - INFO - Epoch 2 step 170 eta 00:01:40: loss 7.837
+2026-11-26 01:42:55 - INFO - Epoch 2 step 180 eta 00:01:39: loss 7.815
+2026-11-26 01:42:56 - INFO - Epoch 2 step 190 eta 00:01:38: loss 7.777
+ Grouping: occupied/cascade=3.68, mean_max_assignment=0.0526, mean_radius=0.1236
+ Grouping first/final: max_assignment=0.08163/0.05263, center_distance=0.84526/0.00000
+ Next group: accuracy=0.0000, largest_group_accuracy=0.0000, valid=10/343
+ # ----------Val Result---------
+ recall@50: 0.01975868
+ recall@100: 0.02884445
+ ndcg@50: 0.00828173
+ ndcg@100: 0.01198678
+ --> Save Model <-- 
+
+[ Training Epoch 3 ]
+2026-11-26 01:42:56 - INFO - Epoch 3 step 200 eta 00:01:39: loss 7.437
+2026-11-26 01:42:57 - INFO - Epoch 3 step 210 eta 00:01:38: loss 7.287
+2026-11-26 01:42:57 - INFO - Epoch 3 step 220 eta 00:01:37: loss 7.240
+2026-11-26 01:42:58 - INFO - Epoch 3 step 230 eta 00:01:36: loss 7.176
+2026-11-26 01:42:58 - INFO - Epoch 3 step 240 eta 00:01:35: loss 7.116
+2026-11-26 01:42:59 - INFO - Epoch 3 step 250 eta 00:01:34: loss 7.065
+2026-11-26 01:42:59 - INFO - Epoch 3 step 260 eta 00:01:33: loss 7.017
+ Grouping: occupied/cascade=3.61, mean_max_assignment=0.0526, mean_radius=0.1468
+ Grouping first/final: max_assignment=0.08234/0.05263, center_distance=0.84500/0.00000
+ Next group: accuracy=0.1818, largest_group_accuracy=0.0000, valid=11/343
+ # ----------Val Result---------
+ recall@50: 0.01948017
+ recall@100: 0.03443249
+ ndcg@50: 0.01024592
+ ndcg@100: 0.01549283
+ --> Save Model <-- 
+
+[ Training Epoch 4 ]
+2026-11-26 01:43:00 - INFO - Epoch 4 step 270 eta 00:01:33: loss 6.449
+2026-11-26 01:43:00 - INFO - Epoch 4 step 280 eta 00:01:32: loss 6.390
+2026-11-26 01:43:01 - INFO - Epoch 4 step 290 eta 00:01:31: loss 6.374
+2026-11-26 01:43:01 - INFO - Epoch 4 step 300 eta 00:01:31: loss 6.339
+2026-11-26 01:43:02 - INFO - Epoch 4 step 310 eta 00:01:30: loss 6.307
+2026-11-26 01:43:02 - INFO - Epoch 4 step 320 eta 00:01:29: loss 6.257
+ Grouping: occupied/cascade=3.39, mean_max_assignment=0.0526, mean_radius=0.1656
+ Grouping first/final: max_assignment=0.08529/0.05263, center_distance=0.84485/0.00000
+ Next group: accuracy=0.0556, largest_group_accuracy=0.0000, valid=18/343
+ # ----------Val Result---------
+ recall@50: 0.02249828
+ recall@100: 0.03664256
+ ndcg@50: 0.01107805
+ ndcg@100: 0.01619005
+ --> Save Model <-- 
+
+[ Training Epoch 5 ]
+2026-11-26 01:43:03 - INFO - Epoch 5 step 330 eta 00:01:29: loss 5.842
+2026-11-26 01:43:04 - INFO - Epoch 5 step 340 eta 00:01:28: loss 5.829
+2026-11-26 01:43:04 - INFO - Epoch 5 step 350 eta 00:01:28: loss 5.827
+2026-11-26 01:43:05 - INFO - Epoch 5 step 360 eta 00:01:27: loss 5.811
+2026-11-26 01:43:05 - INFO - Epoch 5 step 370 eta 00:01:26: loss 5.807
+2026-11-26 01:43:06 - INFO - Epoch 5 step 380 eta 00:01:25: loss 5.806
+2026-11-26 01:43:06 - INFO - Epoch 5 step 390 eta 00:01:25: loss 5.798
+ Grouping: occupied/cascade=3.04, mean_max_assignment=0.0526, mean_radius=0.1853
+ Grouping first/final: max_assignment=0.09404/0.05263, center_distance=0.84483/0.00000
+ Next group: accuracy=0.0588, largest_group_accuracy=0.0000, valid=17/343
+ # ----------Val Result---------
+ recall@50: 0.02417923
+ recall@100: 0.03513551
+ ndcg@50: 0.01054495
+ ndcg@100: 0.01412412
+ --> No improvement for 0 epochs <-- 
+
+[ Training Epoch 6 ]
+2026-11-26 01:43:07 - INFO - Epoch 6 step 400 eta 00:01:25: loss 5.582
+2026-11-26 01:43:07 - INFO - Epoch 6 step 410 eta 00:01:24: loss 5.532
+2026-11-26 01:43:08 - INFO - Epoch 6 step 420 eta 00:01:23: loss 5.539
+2026-11-26 01:43:08 - INFO - Epoch 6 step 430 eta 00:01:22: loss 5.543
+2026-11-26 01:43:09 - INFO - Epoch 6 step 440 eta 00:01:22: loss 5.557
+2026-11-26 01:43:09 - INFO - Epoch 6 step 450 eta 00:01:21: loss 5.572
+ Grouping: occupied/cascade=2.57, mean_max_assignment=0.0526, mean_radius=0.2169
+ Grouping first/final: max_assignment=0.10514/0.05263, center_distance=0.85222/0.00000
+ Next group: accuracy=0.0000, largest_group_accuracy=0.0435, valid=23/343
+ # ----------Val Result---------
+ recall@50: 0.01802339
+ recall@100: 0.03398447
+ ndcg@50: 0.00845368
+ ndcg@100: 0.01291210
+ --> No improvement for 0 epochs <-- 
+
+[ Training Epoch 7 ]
+2026-11-26 01:43:10 - INFO - Epoch 7 step 460 eta 00:01:21: loss 5.420
+2026-11-26 01:43:11 - INFO - Epoch 7 step 470 eta 00:01:21: loss 5.381
+2026-11-26 01:43:11 - INFO - Epoch 7 step 480 eta 00:01:20: loss 5.393
+2026-11-26 01:43:12 - INFO - Epoch 7 step 490 eta 00:01:19: loss 5.387
+2026-11-26 01:43:12 - INFO - Epoch 7 step 500 eta 00:01:18: loss 5.409
+2026-11-26 01:43:13 - INFO - Epoch 7 step 510 eta 00:01:18: loss 5.440
+2026-11-26 01:43:13 - INFO - Epoch 7 step 520 eta 00:01:17: loss 5.467
+ Grouping: occupied/cascade=2.28, mean_max_assignment=0.0526, mean_radius=0.2660
+ Grouping first/final: max_assignment=0.10948/0.05263, center_distance=0.86817/0.00003
+ Next group: accuracy=0.0429, largest_group_accuracy=0.1857, valid=70/343
+ # ----------Val Result---------
+ recall@50: 0.01766243
+ recall@100: 0.03527139
+ ndcg@50: 0.00892093
+ ndcg@100: 0.01341970
+ --> No improvement for 1 epochs <-- 
+
+[ Training Epoch 8 ]
+2026-11-26 01:43:14 - INFO - Epoch 8 step 530 eta 00:01:17: loss 5.259
+2026-11-26 01:43:14 - INFO - Epoch 8 step 540 eta 00:01:17: loss 5.232
+2026-11-26 01:43:15 - INFO - Epoch 8 step 550 eta 00:01:16: loss 5.249
+2026-11-26 01:43:15 - INFO - Epoch 8 step 560 eta 00:01:15: loss 5.275
+2026-11-26 01:43:16 - INFO - Epoch 8 step 570 eta 00:01:15: loss 5.284
+2026-11-26 01:43:16 - INFO - Epoch 8 step 580 eta 00:01:14: loss 5.306
+ Grouping: occupied/cascade=2.33, mean_max_assignment=0.0526, mean_radius=0.2875
+ Grouping first/final: max_assignment=0.13556/0.05265, center_distance=0.89510/0.00029
+ Next group: accuracy=0.1057, largest_group_accuracy=0.3089, valid=123/343
+ # ----------Val Result---------
+ recall@50: 0.03078883
+ recall@100: 0.04702733
+ ndcg@50: 0.01417210
+ ndcg@100: 0.01838486
+ --> Save Model <-- 
+
+[ Training Epoch 9 ]
+2026-11-26 01:43:17 - INFO - Epoch 9 step 590 eta 00:01:14: loss 4.994
+2026-11-26 01:43:18 - INFO - Epoch 9 step 600 eta 00:01:13: loss 4.978
+2026-11-26 01:43:18 - INFO - Epoch 9 step 610 eta 00:01:13: loss 5.018
+2026-11-26 01:43:19 - INFO - Epoch 9 step 620 eta 00:01:12: loss 5.037
+2026-11-26 01:43:19 - INFO - Epoch 9 step 630 eta 00:01:11: loss 5.032
+2026-11-26 01:43:20 - INFO - Epoch 9 step 640 eta 00:01:11: loss 5.035
+2026-11-26 01:43:20 - INFO - Epoch 9 step 650 eta 00:01:10: loss 5.040
+ Grouping: occupied/cascade=2.44, mean_max_assignment=0.0527, mean_radius=0.2865
+ Grouping first/final: max_assignment=0.14452/0.05266, center_distance=0.91390/0.00058
+ Next group: accuracy=0.0890, largest_group_accuracy=0.3014, valid=146/343
+ # ----------Val Result---------
+ recall@50: 0.05855843
+ recall@100: 0.07821102
+ ndcg@50: 0.02530561
+ ndcg@100: 0.03006326
+ --> Save Model <-- 
+
+[ Training Epoch 10 ]
+2026-11-26 01:43:21 - INFO - Epoch 10 step 660 eta 00:01:10: loss 4.748
+2026-11-26 01:43:21 - INFO - Epoch 10 step 670 eta 00:01:09: loss 4.719
+2026-11-26 01:43:22 - INFO - Epoch 10 step 680 eta 00:01:09: loss 4.688
+2026-11-26 01:43:23 - INFO - Epoch 10 step 690 eta 00:01:08: loss 4.672
+2026-11-26 01:43:23 - INFO - Epoch 10 step 700 eta 00:01:08: loss 4.660
+2026-11-26 01:43:24 - INFO - Epoch 10 step 710 eta 00:01:07: loss 4.662
+ Grouping: occupied/cascade=2.44, mean_max_assignment=0.0527, mean_radius=0.2760
+ Grouping first/final: max_assignment=0.14247/0.05267, center_distance=0.91614/0.00077
+ Next group: accuracy=0.1429, largest_group_accuracy=0.3071, valid=140/343
+ # ----------Val Result---------
+ recall@50: 0.07398786
+ recall@100: 0.10240924
+ ndcg@50: 0.03861608
+ ndcg@100: 0.04563678
+ --> Save Model <-- 
+
+[ Training Epoch 11 ]
+2026-11-26 01:43:24 - INFO - Epoch 11 step 720 eta 00:01:07: loss 4.335
+2026-11-26 01:43:25 - INFO - Epoch 11 step 730 eta 00:01:06: loss 4.263
+2026-11-26 01:43:25 - INFO - Epoch 11 step 740 eta 00:01:06: loss 4.276
+2026-11-26 01:43:26 - INFO - Epoch 11 step 750 eta 00:01:05: loss 4.262
+2026-11-26 01:43:26 - INFO - Epoch 11 step 760 eta 00:01:05: loss 4.251
+2026-11-26 01:43:27 - INFO - Epoch 11 step 770 eta 00:01:04: loss 4.236
+2026-11-26 01:43:28 - INFO - Epoch 11 step 780 eta 00:01:04: loss 4.228
+ Grouping: occupied/cascade=2.47, mean_max_assignment=0.0527, mean_radius=0.2698
+ Grouping first/final: max_assignment=0.15319/0.05269, center_distance=0.91388/0.00111
+ Next group: accuracy=0.0368, largest_group_accuracy=0.2941, valid=136/343
+ # ----------Val Result---------
+ recall@50: 0.12110925
+ recall@100: 0.16255195
+ ndcg@50: 0.06957469
+ ndcg@100: 0.07967677
+ --> Save Model <-- 
+
+[ Training Epoch 12 ]
+2026-11-26 01:43:28 - INFO - Epoch 12 step 790 eta 00:01:03: loss 3.840
+2026-11-26 01:43:29 - INFO - Epoch 12 step 800 eta 00:01:03: loss 3.839
+2026-11-26 01:43:29 - INFO - Epoch 12 step 810 eta 00:01:02: loss 3.808
+2026-11-26 01:43:30 - INFO - Epoch 12 step 820 eta 00:01:01: loss 3.792
+2026-11-26 01:43:30 - INFO - Epoch 12 step 830 eta 00:01:01: loss 3.794
+2026-11-26 01:43:31 - INFO - Epoch 12 step 840 eta 00:01:00: loss 3.775
+ Grouping: occupied/cascade=2.54, mean_max_assignment=0.0527, mean_radius=0.2660
+ Grouping first/final: max_assignment=0.16502/0.05270, center_distance=0.91175/0.00136
+ Next group: accuracy=0.0602, largest_group_accuracy=0.3233, valid=133/343
+ # ----------Val Result---------
+ recall@50: 0.15884665
+ recall@100: 0.19199096
+ ndcg@50: 0.10292590
+ ndcg@100: 0.11372248
+ --> Save Model <-- 
+
+[ Training Epoch 13 ]
+2026-11-26 01:43:32 - INFO - Epoch 13 step 850 eta 00:01:00: loss 3.352
+2026-11-26 01:43:32 - INFO - Epoch 13 step 860 eta 00:00:59: loss 3.390
+2026-11-26 01:43:33 - INFO - Epoch 13 step 870 eta 00:00:59: loss 3.391
+2026-11-26 01:43:33 - INFO - Epoch 13 step 880 eta 00:00:58: loss 3.350
+2026-11-26 01:43:34 - INFO - Epoch 13 step 890 eta 00:00:58: loss 3.347
+2026-11-26 01:43:34 - INFO - Epoch 13 step 900 eta 00:00:57: loss 3.327
+2026-11-26 01:43:35 - INFO - Epoch 13 step 910 eta 00:00:57: loss 3.323
+ Grouping: occupied/cascade=2.58, mean_max_assignment=0.0527, mean_radius=0.2636
+ Grouping first/final: max_assignment=0.16970/0.05270, center_distance=0.90319/0.00140
+ Next group: accuracy=0.0794, largest_group_accuracy=0.3175, valid=126/343
+ # ----------Val Result---------
+ recall@50: 0.17780133
+ recall@100: 0.21198940
+ ndcg@50: 0.12460416
+ ndcg@100: 0.13557042
+ --> Save Model <-- 
+
+[ Training Epoch 14 ]
+2026-11-26 01:43:35 - INFO - Epoch 14 step 920 eta 00:00:56: loss 2.913
+2026-11-26 01:43:36 - INFO - Epoch 14 step 930 eta 00:00:56: loss 2.943
+2026-11-26 01:43:37 - INFO - Epoch 14 step 940 eta 00:00:55: loss 2.939
+2026-11-26 01:43:37 - INFO - Epoch 14 step 950 eta 00:00:54: loss 2.933
+2026-11-26 01:43:38 - INFO - Epoch 14 step 960 eta 00:00:54: loss 2.922
+2026-11-26 01:43:38 - INFO - Epoch 14 step 970 eta 00:00:53: loss 2.917
+ Grouping: occupied/cascade=2.77, mean_max_assignment=0.0527, mean_radius=0.2617
+ Grouping first/final: max_assignment=0.15032/0.05270, center_distance=0.89340/0.00147
+ Next group: accuracy=0.0417, largest_group_accuracy=0.3333, valid=120/343
+ # ----------Val Result---------
+ recall@50: 0.18763135
+ recall@100: 0.23250082
+ ndcg@50: 0.13875759
+ ndcg@100: 0.15314820
+ --> Save Model <-- 
+
+[ Training Epoch 15 ]
+2026-11-26 01:43:39 - INFO - Epoch 15 step 980 eta 00:00:53: loss 2.501
+2026-11-26 01:43:39 - INFO - Epoch 15 step 990 eta 00:00:52: loss 2.545
+2026-11-26 01:43:40 - INFO - Epoch 15 step 1000 eta 00:00:52: loss 2.529
+2026-11-26 01:43:40 - INFO - Epoch 15 step 1010 eta 00:00:51: loss 2.536
+2026-11-26 01:43:41 - INFO - Epoch 15 step 1020 eta 00:00:51: loss 2.544
+2026-11-26 01:43:41 - INFO - Epoch 15 step 1030 eta 00:00:50: loss 2.545
+2026-11-26 01:43:42 - INFO - Epoch 15 step 1040 eta 00:00:49: loss 2.539
+ Grouping: occupied/cascade=2.90, mean_max_assignment=0.0527, mean_radius=0.2602
+ Grouping first/final: max_assignment=0.15123/0.05270, center_distance=0.88661/0.00140
+ Next group: accuracy=0.0565, largest_group_accuracy=0.2984, valid=124/343
+ # ----------Val Result---------
+ recall@50: 0.19943625
+ recall@100: 0.24376144
+ ndcg@50: 0.14831944
+ ndcg@100: 0.16342284
+ --> Save Model <-- 
+
+[ Training Epoch 16 ]
+2026-11-26 01:43:43 - INFO - Epoch 16 step 1050 eta 00:00:49: loss 2.211
+2026-11-26 01:43:43 - INFO - Epoch 16 step 1060 eta 00:00:48: loss 2.227
+2026-11-26 01:43:43 - INFO - Epoch 16 step 1070 eta 00:00:48: loss 2.237
+2026-11-26 01:43:44 - INFO - Epoch 16 step 1080 eta 00:00:47: loss 2.214
+2026-11-26 01:43:44 - INFO - Epoch 16 step 1090 eta 00:00:47: loss 2.225
+2026-11-26 01:43:45 - INFO - Epoch 16 step 1100 eta 00:00:46: loss 2.229
+ Grouping: occupied/cascade=2.97, mean_max_assignment=0.0527, mean_radius=0.2590
+ Grouping first/final: max_assignment=0.16630/0.05271, center_distance=0.88055/0.00148
+ Next group: accuracy=0.0720, largest_group_accuracy=0.2640, valid=125/343
+ # ----------Val Result---------
+ recall@50: 0.20972352
+ recall@100: 0.25220305
+ ndcg@50: 0.15650834
+ ndcg@100: 0.17167585
+ --> Save Model <-- 
+
+[ Training Epoch 17 ]
+2026-11-26 01:43:46 - INFO - Epoch 17 step 1110 eta 00:00:46: loss 2.056
+2026-11-26 01:43:46 - INFO - Epoch 17 step 1120 eta 00:00:45: loss 1.984
+2026-11-26 01:43:47 - INFO - Epoch 17 step 1130 eta 00:00:44: loss 1.962
+2026-11-26 01:43:47 - INFO - Epoch 17 step 1140 eta 00:00:44: loss 1.966
+2026-11-26 01:43:48 - INFO - Epoch 17 step 1150 eta 00:00:43: loss 1.952
+2026-11-26 01:43:48 - INFO - Epoch 17 step 1160 eta 00:00:43: loss 1.945
+2026-11-26 01:43:49 - INFO - Epoch 17 step 1170 eta 00:00:42: loss 1.941
+ Grouping: occupied/cascade=2.99, mean_max_assignment=0.0527, mean_radius=0.2581
+ Grouping first/final: max_assignment=0.18404/0.05271, center_distance=0.87726/0.00160
+ Next group: accuracy=0.0873, largest_group_accuracy=0.2937, valid=126/343
+ # ----------Val Result---------
+ recall@50: 0.21081290
+ recall@100: 0.26184970
+ ndcg@50: 0.15792908
+ ndcg@100: 0.17489098
+ --> Save Model <-- 
+
+[ Training Epoch 18 ]
+2026-11-26 01:43:49 - INFO - Epoch 18 step 1180 eta 00:00:42: loss 1.742
+2026-11-26 01:43:50 - INFO - Epoch 18 step 1190 eta 00:00:41: loss 1.733
+2026-11-26 01:43:50 - INFO - Epoch 18 step 1200 eta 00:00:40: loss 1.720
+2026-11-26 01:43:51 - INFO - Epoch 18 step 1210 eta 00:00:40: loss 1.716
+2026-11-26 01:43:51 - INFO - Epoch 18 step 1220 eta 00:00:39: loss 1.706
+2026-11-26 01:43:52 - INFO - Epoch 18 step 1230 eta 00:00:39: loss 1.708
+ Grouping: occupied/cascade=3.01, mean_max_assignment=0.0527, mean_radius=0.2573
+ Grouping first/final: max_assignment=0.19381/0.05272, center_distance=0.87477/0.00156
+ Next group: accuracy=0.0833, largest_group_accuracy=0.2750, valid=120/343
+ # ----------Val Result---------
+ recall@50: 0.21968204
+ recall@100: 0.26511055
+ ndcg@50: 0.16649906
+ ndcg@100: 0.18215658
+ --> Save Model <-- 
+
+[ Training Epoch 19 ]
+2026-11-26 01:43:53 - INFO - Epoch 19 step 1240 eta 00:00:38: loss 1.528
+2026-11-26 01:43:53 - INFO - Epoch 19 step 1250 eta 00:00:38: loss 1.526
+2026-11-26 01:43:54 - INFO - Epoch 19 step 1260 eta 00:00:37: loss 1.525
+2026-11-26 01:43:54 - INFO - Epoch 19 step 1270 eta 00:00:37: loss 1.525
+2026-11-26 01:43:55 - INFO - Epoch 19 step 1280 eta 00:00:36: loss 1.519
+2026-11-26 01:43:55 - INFO - Epoch 19 step 1290 eta 00:00:36: loss 1.513
+2026-11-26 01:43:56 - INFO - Epoch 19 step 1300 eta 00:00:35: loss 1.508
+ Grouping: occupied/cascade=2.98, mean_max_assignment=0.0527, mean_radius=0.2566
+ Grouping first/final: max_assignment=0.20711/0.05274, center_distance=0.87001/0.00157
+ Next group: accuracy=0.0650, largest_group_accuracy=0.3333, valid=123/343
+ # ----------Val Result---------
+ recall@50: 0.22961484
+ recall@100: 0.27017835
+ ndcg@50: 0.17107476
+ ndcg@100: 0.18518825
+ --> Save Model <-- 
+
+[ Training Epoch 20 ]
+2026-11-26 01:43:56 - INFO - Epoch 20 step 1310 eta 00:00:34: loss 1.344
+2026-11-26 01:43:57 - INFO - Epoch 20 step 1320 eta 00:00:34: loss 1.322
+2026-11-26 01:43:57 - INFO - Epoch 20 step 1330 eta 00:00:33: loss 1.334
+2026-11-26 01:43:58 - INFO - Epoch 20 step 1340 eta 00:00:33: loss 1.346
+2026-11-26 01:43:58 - INFO - Epoch 20 step 1350 eta 00:00:32: loss 1.345
+2026-11-26 01:43:59 - INFO - Epoch 20 step 1360 eta 00:00:32: loss 1.345
+ Grouping: occupied/cascade=3.02, mean_max_assignment=0.0527, mean_radius=0.2559
+ Grouping first/final: max_assignment=0.23385/0.05273, center_distance=0.87075/0.00164
+ Next group: accuracy=0.0656, largest_group_accuracy=0.3279, valid=122/343
+ # ----------Val Result---------
+ recall@50: 0.23172683
+ recall@100: 0.27767566
+ ndcg@50: 0.17482272
+ ndcg@100: 0.19020690
+ --> Save Model <-- 
+
+[ Training Epoch 21 ]
+2026-11-26 01:44:00 - INFO - Epoch 21 step 1370 eta 00:00:31: loss 1.188
+2026-11-26 01:44:00 - INFO - Epoch 21 step 1380 eta 00:00:31: loss 1.210
+2026-11-26 01:44:01 - INFO - Epoch 21 step 1390 eta 00:00:30: loss 1.231
+2026-11-26 01:44:01 - INFO - Epoch 21 step 1400 eta 00:00:29: loss 1.238
+2026-11-26 01:44:02 - INFO - Epoch 21 step 1410 eta 00:00:29: loss 1.231
+2026-11-26 01:44:02 - INFO - Epoch 21 step 1420 eta 00:00:28: loss 1.228
+2026-11-26 01:44:03 - INFO - Epoch 21 step 1430 eta 00:00:28: loss 1.223
+ Grouping: occupied/cascade=3.05, mean_max_assignment=0.0527, mean_radius=0.2554
+ Grouping first/final: max_assignment=0.23580/0.05274, center_distance=0.87057/0.00167
+ Next group: accuracy=0.0640, largest_group_accuracy=0.2960, valid=125/343
+ # ----------Val Result---------
+ recall@50: 0.23080926
+ recall@100: 0.27443966
+ ndcg@50: 0.17527929
+ ndcg@100: 0.19012296
+ --> No improvement for 1 epochs <-- 
+
+[ Training Epoch 22 ]
+2026-11-26 01:44:03 - INFO - Epoch 22 step 1440 eta 00:00:27: loss 1.126
+2026-11-26 01:44:04 - INFO - Epoch 22 step 1450 eta 00:00:27: loss 1.136
+2026-11-26 01:44:05 - INFO - Epoch 22 step 1460 eta 00:00:26: loss 1.124
+2026-11-26 01:44:05 - INFO - Epoch 22 step 1470 eta 00:00:26: loss 1.119
+2026-11-26 01:44:06 - INFO - Epoch 22 step 1480 eta 00:00:25: loss 1.121
+2026-11-26 01:44:06 - INFO - Epoch 22 step 1490 eta 00:00:25: loss 1.125
+ Grouping: occupied/cascade=3.06, mean_max_assignment=0.0527, mean_radius=0.2550
+ Grouping first/final: max_assignment=0.23388/0.05276, center_distance=0.87336/0.00165
+ Next group: accuracy=0.0775, largest_group_accuracy=0.3101, valid=129/343
+ # ----------Val Result---------
+ recall@50: 0.23760574
+ recall@100: 0.27709985
+ ndcg@50: 0.17926356
+ ndcg@100: 0.19299491
+ --> Save Model <-- 
+
+[ Training Epoch 23 ]
+2026-11-26 01:44:07 - INFO - Epoch 23 step 1500 eta 00:00:24: loss 1.049
+2026-11-26 01:44:08 - INFO - Epoch 23 step 1510 eta 00:00:24: loss 1.052
+2026-11-26 01:44:08 - INFO - Epoch 23 step 1520 eta 00:00:23: loss 1.069
+2026-11-26 01:44:09 - INFO - Epoch 23 step 1530 eta 00:00:22: loss 1.060
+2026-11-26 01:44:09 - INFO - Epoch 23 step 1540 eta 00:00:22: loss 1.062
+2026-11-26 01:44:10 - INFO - Epoch 23 step 1550 eta 00:00:21: loss 1.063
+2026-11-26 01:44:10 - INFO - Epoch 23 step 1560 eta 00:00:21: loss 1.059
+ Grouping: occupied/cascade=3.08, mean_max_assignment=0.0527, mean_radius=0.2546
+ Grouping first/final: max_assignment=0.23177/0.05275, center_distance=0.87259/0.00162
+ Next group: accuracy=0.0640, largest_group_accuracy=0.3040, valid=125/343
+ # ----------Val Result---------
+ recall@50: 0.23741844
+ recall@100: 0.27984548
+ ndcg@50: 0.17936864
+ ndcg@100: 0.19378358
+ --> Save Model <-- 
+
+[ Training Epoch 24 ]
+2026-11-26 01:44:11 - INFO - Epoch 24 step 1570 eta 00:00:20: loss 1.042
+2026-11-26 01:44:12 - INFO - Epoch 24 step 1580 eta 00:00:20: loss 1.004
+2026-11-26 01:44:12 - INFO - Epoch 24 step 1590 eta 00:00:19: loss 1.015
+2026-11-26 01:44:13 - INFO - Epoch 24 step 1600 eta 00:00:19: loss 1.009
+2026-11-26 01:44:13 - INFO - Epoch 24 step 1610 eta 00:00:18: loss 1.007
+2026-11-26 01:44:14 - INFO - Epoch 24 step 1620 eta 00:00:18: loss 1.003
+ Grouping: occupied/cascade=3.07, mean_max_assignment=0.0527, mean_radius=0.2544
+ Grouping first/final: max_assignment=0.23108/0.05274, center_distance=0.87146/0.00162
+ Next group: accuracy=0.0806, largest_group_accuracy=0.2984, valid=124/343
+ # ----------Val Result---------
+ recall@50: 0.24017711
+ recall@100: 0.28221911
+ ndcg@50: 0.18163554
+ ndcg@100: 0.19576907
+ --> Save Model <-- 
+
+[ Training Epoch 25 ]
+2026-11-26 01:44:14 - INFO - Epoch 25 step 1630 eta 00:00:17: loss 1.030
+2026-11-26 01:44:15 - INFO - Epoch 25 step 1640 eta 00:00:17: loss 0.983
+2026-11-26 01:44:15 - INFO - Epoch 25 step 1650 eta 00:00:16: loss 0.981
+2026-11-26 01:44:16 - INFO - Epoch 25 step 1660 eta 00:00:15: loss 0.970
+2026-11-26 01:44:17 - INFO - Epoch 25 step 1670 eta 00:00:15: loss 0.960
+2026-11-26 01:44:17 - INFO - Epoch 25 step 1680 eta 00:00:14: loss 0.961
+2026-11-26 01:44:18 - INFO - Epoch 25 step 1690 eta 00:00:14: loss 0.962
+ Grouping: occupied/cascade=3.08, mean_max_assignment=0.0527, mean_radius=0.2542
+ Grouping first/final: max_assignment=0.23021/0.05274, center_distance=0.87098/0.00163
+ Next group: accuracy=0.0738, largest_group_accuracy=0.2787, valid=122/343
+ # ----------Val Result---------
+ recall@50: 0.23970336
+ recall@100: 0.28229371
+ ndcg@50: 0.18254726
+ ndcg@100: 0.19676879
+ --> Save Model <-- 
+
+[ Training Epoch 26 ]
+2026-11-26 01:44:18 - INFO - Epoch 26 step 1700 eta 00:00:13: loss 0.917
+2026-11-26 01:44:19 - INFO - Epoch 26 step 1710 eta 00:00:13: loss 0.940
+2026-11-26 01:44:19 - INFO - Epoch 26 step 1720 eta 00:00:12: loss 0.938
+2026-11-26 01:44:20 - INFO - Epoch 26 step 1730 eta 00:00:12: loss 0.936
+2026-11-26 01:44:20 - INFO - Epoch 26 step 1740 eta 00:00:11: loss 0.938
+2026-11-26 01:44:21 - INFO - Epoch 26 step 1750 eta 00:00:10: loss 0.933
+ Grouping: occupied/cascade=3.08, mean_max_assignment=0.0527, mean_radius=0.2541
+ Grouping first/final: max_assignment=0.23105/0.05273, center_distance=0.87073/0.00163
+ Next group: accuracy=0.0640, largest_group_accuracy=0.2720, valid=125/343
+ # ----------Val Result---------
+ recall@50: 0.24116698
+ recall@100: 0.28064972
+ ndcg@50: 0.18354024
+ ndcg@100: 0.19703446
+ --> Save Model <-- 
+
+[ Training Epoch 27 ]
+2026-11-26 01:44:22 - INFO - Epoch 27 step 1760 eta 00:00:10: loss 0.872
+2026-11-26 01:44:22 - INFO - Epoch 27 step 1770 eta 00:00:09: loss 0.913
+2026-11-26 01:44:23 - INFO - Epoch 27 step 1780 eta 00:00:09: loss 0.917
+2026-11-26 01:44:23 - INFO - Epoch 27 step 1790 eta 00:00:08: loss 0.921
+2026-11-26 01:44:24 - INFO - Epoch 27 step 1800 eta 00:00:08: loss 0.923
+2026-11-26 01:44:24 - INFO - Epoch 27 step 1810 eta 00:00:07: loss 0.920
+2026-11-26 01:44:25 - INFO - Epoch 27 step 1820 eta 00:00:07: loss 0.922
+ Grouping: occupied/cascade=3.10, mean_max_assignment=0.0527, mean_radius=0.2540
+ Grouping first/final: max_assignment=0.23086/0.05273, center_distance=0.87073/0.00164
+ Next group: accuracy=0.0726, largest_group_accuracy=0.2742, valid=124/343
+ # ----------Val Result---------
+ recall@50: 0.24165292
+ recall@100: 0.28251436
+ ndcg@50: 0.18356314
+ ndcg@100: 0.19737458
+ --> Save Model <-- 
+
+[ Training Epoch 28 ]
+2026-11-26 01:44:25 - INFO - Epoch 28 step 1830 eta 00:00:06: loss 0.919
+2026-11-26 01:44:26 - INFO - Epoch 28 step 1840 eta 00:00:06: loss 0.933
+2026-11-26 01:44:26 - INFO - Epoch 28 step 1850 eta 00:00:05: loss 0.919
+2026-11-26 01:44:27 - INFO - Epoch 28 step 1860 eta 00:00:04: loss 0.916
+2026-11-26 01:44:27 - INFO - Epoch 28 step 1870 eta 00:00:04: loss 0.918
+2026-11-26 01:44:28 - INFO - Epoch 28 step 1880 eta 00:00:03: loss 0.913
+ Grouping: occupied/cascade=3.10, mean_max_assignment=0.0527, mean_radius=0.2539
+ Grouping first/final: max_assignment=0.23097/0.05273, center_distance=0.87068/0.00163
+ Next group: accuracy=0.0726, largest_group_accuracy=0.2742, valid=124/343
+ # ----------Val Result---------
+ recall@50: 0.24132897
+ recall@100: 0.28251436
+ ndcg@50: 0.18383899
+ ndcg@100: 0.19777998
+ --> Save Model <-- 
+
+[ Training Epoch 29 ]
+2026-11-26 01:44:29 - INFO - Epoch 29 step 1890 eta 00:00:03: loss 0.906
+2026-11-26 01:44:29 - INFO - Epoch 29 step 1900 eta 00:00:02: loss 0.902
+2026-11-26 01:44:30 - INFO - Epoch 29 step 1910 eta 00:00:02: loss 0.898
+2026-11-26 01:44:30 - INFO - Epoch 29 step 1920 eta 00:00:01: loss 0.904
+2026-11-26 01:44:31 - INFO - Epoch 29 step 1930 eta 00:00:01: loss 0.905
+2026-11-26 01:44:31 - INFO - Epoch 29 step 1940 eta 00:00:00: loss 0.909
+2026-11-26 01:44:32 - INFO - Epoch 29 step 1950 eta 00:00:00: loss 0.912
+ Grouping: occupied/cascade=3.10, mean_max_assignment=0.0527, mean_radius=0.2539
+ Grouping first/final: max_assignment=0.23098/0.05273, center_distance=0.87068/0.00163
+ Next group: accuracy=0.0726, largest_group_accuracy=0.2742, valid=124/343
+ # ----------Val Result---------
+ recall@50: 0.24132897
+ recall@100: 0.28251436
+ ndcg@50: 0.18383706
+ ndcg@100: 0.19778194
+ --> Save Model <-- 
+ --> Loaded best model state <-- 
+ Grouping: occupied/cascade=3.06, mean_max_assignment=0.0527, mean_radius=0.2536
+ Grouping first/final: max_assignment=0.23157/0.05274, center_distance=0.87068/0.00158
+ Next group: accuracy=0.1136, largest_group_accuracy=0.3125, valid=352/1031
+
+ #-------Final Results-------
+ recall@50: 0.26476306
+ recall@100: 0.31636521
+ ndcg@50: 0.19622476
+ ndcg@100: 0.21268205
