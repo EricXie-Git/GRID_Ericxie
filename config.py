@@ -55,7 +55,9 @@ def parse_args(argv=None) -> argparse.Namespace:
         parser.error('group_temperature must be finite and positive')
     if not math.isfinite(args.group_loss_weight) or args.group_loss_weight < 0:
         parser.error('group_loss_weight must be finite and nonnegative')
-    if args.group_temperature != 1 or args.group_loss_weight or args.group_diagnostics:
+    if args.group_diagnostics and not args.clustering:
+        parser.error('group_diagnostics requires clustering')
+    if args.group_temperature != 1 or args.group_loss_weight:
         if not args.clustering or args.grouping_space == 'euclidean':
             parser.error('group experiments require hyperbolic or euclidean_matched grouping')
     return args

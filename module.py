@@ -142,6 +142,15 @@ class KMeansLayer(nn.Module):
         nn.init.xavier_uniform_(self.cluster_centers)
 
         self.layer_norm = nn.LayerNorm(self.dim)
+        self.diagnostics = getattr(args, 'group_diagnostics', False)
+        self.eval_stats = None
+
+    @staticmethod
+    def center_spacing(centers):
+        # ??????????????????????????????
+        bs, k, _ = centers.shape
+        distances = torch.cdist(centers.double(), centers.double(), compute_mode='donot_use_mm_for_euclid_dist')
+        return distances.triu(1).sum(), bs * k * (k - 1) // 2
 
     def compute_distances(self, x, centers):
         """
@@ -173,7 +182,10 @@ class KMeansLayer(nn.Module):
         valid_positions_mask = ~mask
 
         num_valid_tokens = valid_positions_mask.sum(dim=1)
+        diagnose = self.diagnostics and not self.training
         if num_valid_tokens.min() == 0:
+            # ??????????????????????????
+            self.eval_stats = None
             clustered_x = torch.zeros(bs, self.cluster_num, dim, device=device, dtype=x.dtype)
             cluster_mask = torch.zeros(bs, self.cluster_num, device=device, dtype=torch.bool)
             cluster_counts = torch.zeros(bs, self.cluster_num, device=device, dtype=x.dtype)
@@ -191,6 +203,9 @@ class KMeansLayer(nn.Module):
                 distances.masked_fill_(mask.unsqueeze(-1), 1e6)
                 soft_assign = F.softmax(-distances / self.temperature, dim=-1)
 
+                if diagnose and iteration == 0:
+                    first_conf = soft_assign.amax(dim=-1).masked_fill(mask, 0).sum()
+                    first_dist, pairs = self.center_spacing(centers)
                 counts = soft_assign.sum(dim=1)
                 weighted_sum = torch.bmm(soft_assign.transpose(1, 2), x)
                 new_centers = weighted_sum / (counts.unsqueeze(-1) + self.eps)
@@ -213,6 +228,18 @@ class KMeansLayer(nn.Module):
         distances.masked_fill_(mask.unsqueeze(-1), 1e6)
         soft_assign = F.softmax(-distances / self.temperature, dim=-1)
 
+        if diagnose:
+            with torch.no_grad():
+                # ????????????????????? PAD ??????
+                valid = ~mask
+                confidence, index = soft_assign.max(dim=-1)
+                confidence = confidence.masked_fill(mask, 0).sum()
+                hits = x.new_zeros(bs, self.max_clusters).scatter_add_(1, index, valid.to(x.dtype))
+                radius = x.norm(dim=-1).masked_fill(mask, 0).sum()
+                last_dist, _ = self.center_spacing(centers)
+                self.eval_stats = torch.stack(((hits > 0).sum(), valid.any(dim=1).sum(), confidence,
+                                               radius, valid.sum(), first_conf, confidence, first_dist,
+                                               first_dist.new_tensor(pairs), last_dist, last_dist.new_tensor(pairs)))
         final_counts = soft_assign.sum(dim=1)
         clustered_representations = torch.bmm(soft_assign.transpose(1, 2), x)
 
