@@ -500,10 +500,19 @@ Grouping first/final: max_assignment=0.24391/0.05270, center_distance=0.82497/0.
 
 
 ## T0.1+群体损失
+### 群体loss 权重0.1
 实验结果：
 -------Final Results-------
  recall@50: 0.26476306
  recall@100: 0.31636521
  ndcg@50: 0.19622476
  ndcg@100: 0.21268205
+
+### 群体loss 权重0.5
+实验结果：
+-------Final Results-------
+ recall@50: 0.20259370
+ recall@100: 0.25975862
+ ndcg@50: 0.14016797
+ ndcg@100: 0.15655021
 
