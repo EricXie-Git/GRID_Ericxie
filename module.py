@@ -166,7 +166,7 @@ class KMeansLayer(nn.Module):
         distances.clamp_(min=0.0, max=100.0)
         return distances
 
-    def forward(self, x, mask):
+    def forward(self, x, mask, return_assignments=False):
         """
         x: (bs, seq_len, dim)
         mask: (bs, seq_len) bool (True for PAD positions)
@@ -189,6 +189,8 @@ class KMeansLayer(nn.Module):
             clustered_x = torch.zeros(bs, self.cluster_num, dim, device=device, dtype=x.dtype)
             cluster_mask = torch.zeros(bs, self.cluster_num, device=device, dtype=torch.bool)
             cluster_counts = torch.zeros(bs, self.cluster_num, device=device, dtype=x.dtype)
+            if return_assignments:
+                return clustered_x, cluster_mask, cluster_counts, x.new_zeros(bs, seq_len, self.max_clusters)
             return clustered_x, cluster_mask, cluster_counts
 
         with torch.no_grad():
@@ -263,6 +265,8 @@ class KMeansLayer(nn.Module):
             cluster_mask[has_padding, self.max_clusters] = True
             cluster_counts[has_padding, self.max_clusters] = 1.0
 
+        if return_assignments:
+            return clustered_x, cluster_mask, cluster_counts, soft_assign.masked_fill(mask.unsqueeze(-1), 0)
         return clustered_x, cluster_mask, cluster_counts
 
 
