@@ -43,6 +43,9 @@ def train(args):
     best_model_state = None
     best_scores = {}
 
+    sep_weight = getattr(args, 'group_sep_weight', 0.0)
+    pref_weight = getattr(args, 'group_pref_weight', 0.0)
+    use_structure = bool(sep_weight or pref_weight)
     for epoch in range(args.max_epochs):
         print(f'\n[ Training Epoch {epoch} ]')
 
@@ -52,10 +55,15 @@ def train(args):
 
         for batch in train_dataloader:
             cascade, cas_mask, labels_padded, label_mask, negative_samples, neg_mask, first_label, previous_mask = batch_process(args, batch)
+            output = model(args, cascade, cas_mask, previous_mask, graph,
+                           first_label=first_label if model.group_loss_weight > 0 else None,
+                           return_structure=use_structure)
+            if use_structure:
+                output, (sep_loss, pref_loss) = output
             if model.group_loss_weight > 0:
-                pred_users, logits, target, _ = model(args, cascade, cas_mask, previous_mask, graph, first_label)
+                pred_users, logits, target, _ = output
             else:
-                pred_users = model(args, cascade, cas_mask, previous_mask, graph)
+                pred_users = output
             loss = Combined_Loss(args, pred_users, labels_padded, label_mask, negative_samples, neg_mask, first_label)
 
             if model.group_loss_weight > 0:
@@ -63,6 +71,8 @@ def train(args):
                 group_loss = F.cross_entropy(logits, target, reduction='sum') / (target != -100).sum().clamp_min(1)
                 loss = loss + model.group_loss_weight * group_loss
 
+            if use_structure:
+                loss = loss + sep_weight * sep_loss + pref_weight * pref_loss
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -162,9 +172,13 @@ def inference(args, model, dataloader, graph):
         print(f' Grouping: occupied/cascade={occupied / max(1, cascades):.2f}, '
               f'mean_max_assignment={confidence / max(1, tokens):.4f}, mean_radius={radius / max(1, tokens):.4f}')
         if diagnostics:
-            first_p, last_p, first_dist, first_pairs, last_dist, last_pairs = diagnostics
+            first_p, last_p, first_dist, first_pairs, last_dist, last_pairs, *pref = diagnostics
             print(f' Grouping first/final: max_assignment={first_p/max(1, tokens):.5f}/{last_p/max(1, tokens):.5f}, '
                   f'center_distance={first_dist/max(1, first_pairs):.5f}/{last_dist/max(1, last_pairs):.5f}')
+            if pref:
+                reached, eligible = pref
+                print(f' Group preference: ratio_target_met={int(reached)}/{int(eligible)}, '
+                      f'target={model.Grouping.structure.ratio:g}')
     if group_hits is not None:
         correct, baseline, valid = group_hits.tolist()
         print(f' Next group: accuracy={correct / valid if valid else float("nan"):.4f}, '

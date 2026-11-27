@@ -27,6 +27,11 @@ def parse_args(argv=None) -> argparse.Namespace:
                              help='Use original GRID grouping or compare matched Euclidean/Lorentz soft K-Means')
     model_group.add_argument('--group_temperature', type=float, default=1.0, help='Temperature for geometric soft K-Means')
     model_group.add_argument('--group_loss_weight', type=float, default=0.0, help='Weight of next-group cross entropy (0 disables it)')
+    model_group.add_argument('--group_max_iter', type=int, default=10, help='Maximum geometric center updates')
+    model_group.add_argument('--group_sep_weight', type=float, default=0.0, help='Weight of center separation loss')
+    model_group.add_argument('--group_pref_weight', type=float, default=0.0, help='Weight of user preference loss')
+    model_group.add_argument('--group_sep_scale', type=float, default=0.5, help='Margin relative to mean user distance')
+    model_group.add_argument('--group_pref_ratio', type=float, default=2.0, help='Target first/second assignment ratio')
     model_group.add_argument('--group_diagnostics', action='store_true', help='Log initial/final assignment confidence and center distances')
     model_group.add_argument('--bpr_margin', type=float, default=0.5, help="Margin used by the BPR term in the hybrid loss")
     model_group.add_argument('--neg_num', type=int, default=100, help="Maximum number of negative samples drawn per cascade")
@@ -57,7 +62,14 @@ def parse_args(argv=None) -> argparse.Namespace:
         parser.error('group_loss_weight must be finite and nonnegative')
     if args.group_diagnostics and not args.clustering:
         parser.error('group_diagnostics requires clustering')
-    if args.group_temperature != 1 or args.group_loss_weight:
+    if args.group_max_iter < 1 or args.group_pref_ratio <= 1 or not math.isfinite(args.group_pref_ratio):
+        parser.error('group_max_iter must be positive and group_pref_ratio must be finite and > 1')
+    if not math.isfinite(args.group_sep_scale) or args.group_sep_scale <= 0:
+        parser.error('group_sep_scale must be finite and positive')
+    if any(not math.isfinite(w) or w < 0 for w in (args.group_sep_weight, args.group_pref_weight)):
+        parser.error('group structure loss weights must be finite and nonnegative')
+    if (args.group_temperature != 1 or args.group_loss_weight or args.group_max_iter != 10
+            or args.group_sep_weight or args.group_pref_weight):
         if not args.clustering or args.grouping_space == 'euclidean':
             parser.error('group experiments require hyperbolic or euclidean_matched grouping')
     return args

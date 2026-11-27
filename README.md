@@ -156,6 +156,8 @@ python -u main.py --dataset twitter --gnn_type lorentz_lightgcn \
 
 两步对照均使用 `hyperbolic` 或 `euclidean_matched`。先加 `--group_temperature 0.1 --group_diagnostics`，与温度 `1.0` 比较首次和最终的最大归属概率、群中心间距。再固定选定温度，加 `--group_loss_weight 0.1` 启用下一群交叉熵（默认 `0`）。日志中的 `accuracy` 和 `largest_group_accuracy` 在同一批有效伪标签上比较，并报告有效样本数。以上 `0.1` 均为试验起点。
 
+结构损失对照可固定 `--group_temperature 0.1 --group_max_iter 2 --group_diagnostics`，保持 `--group_loss_weight 0`。依次比较 `(group_sep_weight, group_pref_weight)` 为 `(0, 0)`、`(0.1, 0)`、`(0.1, 0.1)` 的结果。前者约束有成员支持的群中心间距（默认目标为本级联用户平均距离的 0.5 倍），后者约束用户首选与次选的概率比（默认 2 倍）。日志 `ratio_target_met` 为达标用户位置数 / 可比较位置数。
+
 
 默认仍为 `lightgcn`；对照实验只替换 `--gnn_type` 和日志文件名。
 新增编码器借鉴 [Hgformer（ICML 2025）的 LHGCN](https://proceedings.mlr.press/v267/yang25o.html)：指数映射 → Lorentz 重心聚合 → 对数映射 → 原有层间加权融合。输出维度、欧氏分组、注意力、预测头和原损失保持不变，梯度可回传到用户嵌入。

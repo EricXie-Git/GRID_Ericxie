@@ -8,7 +8,8 @@ import torch
 
 MODEL_CONFIG_KEYS = ('dataset', 'dim', 'user_num', 'gnn_type', 'gnn_layers',
                      'clustering', 'grouping_space', 'group_num', 'n_heads', 'max_len', 'dropout',
-                     'deterministic_eval', 'group_temperature', 'group_loss_weight')
+                     'deterministic_eval', 'group_temperature', 'group_loss_weight', 'group_max_iter',
+                     'group_sep_weight', 'group_pref_weight', 'group_sep_scale', 'group_pref_ratio')
 
 
 def snapshot_state(model):
@@ -31,7 +32,7 @@ def load_checkpoint(path, model, args):
     config = checkpoint.get('model_config', {})
     if config:
         # 旧版几何分组检查点固定温度为 1，未包含群监督头。
-        config = {'group_temperature': 1.0, 'group_loss_weight': 0.0, **config}
+        config = {'group_temperature': 1.0, 'group_loss_weight': 0.0, 'group_max_iter': 10, **config}
     for key in MODEL_CONFIG_KEYS:
         if key not in config or not hasattr(args, key) or key in ('dropout', 'deterministic_eval'):
             continue

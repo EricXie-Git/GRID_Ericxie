@@ -131,6 +131,10 @@ class GridTest(unittest.TestCase):
                     args.group_temperature = 0.05
                     args.group_loss_weight = 0.1
                     args.group_diagnostics = True
+                    args.group_max_iter = 2
+                    args.group_sep_weight = args.group_pref_weight = 0.1
+                    if space == 'hyperbolic':
+                        args.group_loss_weight = 0.0
                 args.selection_split = selection_split
                 args.ckpt_file = str(Path(temp) / 'model.pt')
                 with patch.object(main, 'create_dataloaders', return_value=([self.batch], [self.batch], [self.batch])), \

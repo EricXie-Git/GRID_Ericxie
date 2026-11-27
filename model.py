@@ -35,7 +35,9 @@ class GRID(nn.Module):
         for weight in self.parameters():
             weight.data.uniform_(-stdv, stdv)
 
-    def forward(self, args, cascade, cas_mask, previous_mask, graph, first_label=None, return_groups=False):
+    def forward(self, args, cascade, cas_mask, previous_mask, graph, first_label=None, return_groups=False, return_structure=False):
+        if return_structure and not getattr(self, 'geometric_grouping', False):
+            raise ValueError('Group structure losses require geometric grouping')
         predict_groups = return_groups or first_label is not None
         if predict_groups and self.group_loss_weight <= 0:
             raise ValueError('Set group_loss_weight > 0 to enable next-group prediction')
@@ -44,8 +46,13 @@ class GRID(nn.Module):
         casEmbed = F.embedding(cascade.long(), user_Embeddings)
 
         if args.clustering:
-            if predict_groups:
-                casEmbed, cluster_mask, cluster_counts, centers = self.Grouping(casEmbed, cas_mask, return_centers=True)
+            if self.geometric_grouping:
+                grouped = self.Grouping(casEmbed, cas_mask, return_centers=predict_groups, return_structure=return_structure)
+                if return_structure:
+                    grouped, structure_losses = grouped
+                if predict_groups:
+                    centers = grouped[3]
+                casEmbed, cluster_mask, cluster_counts = grouped[:3]
             else:
                 casEmbed, cluster_mask, cluster_counts = self.Grouping(casEmbed, cas_mask)
             # 新分组返回有效群掩码；注意力需要 PAD 掩码，池化需要有效群掩码。
@@ -59,16 +66,17 @@ class GRID(nn.Module):
 
         pred_users = self.Predictor(h) + previous_mask
 
+        output = pred_users
         if predict_groups:
             # 最后一位是占位群。预测只依赖当前前缀的级联和群体表示。
             logits = (self.GroupQuery(h).unsqueeze(1) * h_c[:, :-1]).sum(dim=-1) / sqrt(self.dim)
             active = cluster_mask[:, :-1]
             logits = logits.masked_fill(~active, torch.finfo(logits.dtype).min)
-            if first_label is None:
-                return pred_users, logits
-            with torch.no_grad():
-                next_users = F.embedding(first_label.long(), user_Embeddings)
-                target = self.Grouping.next_group_targets(next_users, centers, active, first_label)
-            return pred_users, logits, target, cluster_counts[:, :-1].argmax(dim=1)
-        return pred_users
+            output = (pred_users, logits)
+            if first_label is not None:
+                with torch.no_grad():
+                    next_users = F.embedding(first_label.long(), user_Embeddings)
+                    target = self.Grouping.next_group_targets(next_users, centers, active, first_label)
+                output = (*output, target, cluster_counts[:, :-1].argmax(dim=1))
+        return (output, structure_losses) if return_structure else output
 

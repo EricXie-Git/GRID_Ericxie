@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.init as init
 import torch.nn.functional as F
 from torch_geometric.nn import GATConv, SAGEConv, GCNConv
+from utils.GroupStructure import GroupStructureLoss
 from utils.Lorentz import exp_map, log_map, lorentz_centroid, lorentz_sqdist
 
 
@@ -281,7 +282,8 @@ class GeometricKMeansLayer(nn.Module):
         self.deterministic_eval = getattr(args, 'deterministic_eval', False)
         self.cluster_centers = nn.Parameter(torch.empty(args.group_num - 1, args.dim))
         nn.init.xavier_uniform_(self.cluster_centers)
-        self.max_iter = 10
+        self.max_iter = getattr(args, 'group_max_iter', 10)
+        self.structure = GroupStructureLoss(args)
         self.eps = 1e-6
         self.eval_stats = None
         self.temperature = getattr(args, 'group_temperature', 1.0)
@@ -322,7 +324,7 @@ class GeometricKMeansLayer(nn.Module):
         distances = self.squared_distances(centers, centers).sqrt()
         return torch.stack((distances.masked_fill(~pairs, 0).sum(), pairs.sum()))
 
-    def forward(self, x, mask, return_centers=False):
+    def forward(self, x, mask, return_centers=False, return_structure=False):
         # 只映射当前级联的节点；双曲坐标多一维，送入注意力前再映回 d 维。
         tangent = x.double().masked_fill(mask.unsqueeze(-1), 0)
         seeds = self.cluster_centers.double().expand(x.size(0), -1, -1)
@@ -358,14 +360,22 @@ class GeometricKMeansLayer(nn.Module):
                                                confidence.sum(), radius.sum(), (~mask).sum())).detach()
                 if diagnose:
                     # 更新后的最终中心与第一次分配前的种子中心配对比较。
-                    final_confidence = self.assign(points, centers, mask).amax(dim=-1).sum()
+                    final_sq = self.squared_distances(points, centers)
+                    final_confidence = F.softmax(-final_sq / self.temperature, dim=-1).amax(-1).masked_fill(mask, 0).sum()
+                    preference_stats = self.structure.diagnostics(final_sq, active, mask, self.temperature)
                     self.eval_stats = torch.cat((self.eval_stats, initial_confidence.view(1),
                                                  final_confidence.view(1), initial_spacing,
-                                                 self.center_spacing(centers, active)))
+                                                 self.center_spacing(centers, active), preference_stats))
         # 最后一位保留作占位，零权重。真实群的成员总量对应观测用户数。
         result = (F.pad(groups.to(x.dtype), (0, 0, 0, 1)), F.pad(active, (0, 1)),
                   F.pad(counts.to(x.dtype), (0, 1)))
-        return (*result, centers.detach()) if return_centers else result
+        if return_centers:
+            result = (*result, centers.detach())
+        if return_structure:
+            # 重算更新后中心的距离，结构损失沿中心更新过程反传。
+            losses = self.structure(points, centers, active, mask, self.temperature, self.squared_distances)
+            return result, losses
+        return result
 
 
 def Combined_Loss(args, pred_users, labels_padded, label_mask, negative_samples, neg_mask, first_label):
